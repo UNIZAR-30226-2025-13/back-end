@@ -1,8 +1,40 @@
+DROP TABLE IF EXISTS Listas_de_carpeta;
+DROP TABLE IF EXISTS Carpetas_del_usuario;
+DROP TABLE IF EXISTS Listas_del_usuario;
+DROP TABLE IF EXISTS Usuario_reproduce;
+DROP TABLE IF EXISTS Mensaje;
+DROP TABLE IF EXISTS Token;
+DROP TABLE IF EXISTS Sigue_a_usuario;
+DROP TABLE IF EXISTS Sigue_a_creador;
+DROP TABLE IF EXISTS Usuario;
+DROP TABLE IF EXISTS Canciones_en_playlist;
+DROP TABLE IF EXISTS Playlist;
+DROP TABLE IF EXISTS Episodios_de_lista;
+DROP TABLE IF EXISTS Lista_Episodios;
+DROP TABLE IF EXISTS Lista_reproduccion;
+DROP TABLE IF EXISTS Tiene_podcast;
+DROP TABLE IF EXISTS Podcaster;
+DROP TABLE IF EXISTS Tematica_podcast;
+DROP TABLE IF EXISTS Podcast;
+DROP TABLE IF EXISTS Episodio;
+DROP TABLE IF EXISTS Featuring;
+DROP TABLE IF EXISTS Artista_principal;
+DROP TABLE IF EXISTS Generos;
+DROP TABLE IF EXISTS Cancion;
+DROP TABLE IF EXISTS Idiomas_multimedia;
+DROP TABLE IF EXISTS Contenido_multimedia;
+DROP TABLE IF EXISTS Numero_cancion_en_album;
+DROP TABLE IF EXISTS Artista_posee_albumes;
+DROP TABLE IF EXISTS Album;
+DROP TABLE IF EXISTS Artista;
+DROP TABLE IF EXISTS Creador;
+
+
 CREATE TABLE Creador (
     nombre_creador      VARCHAR(255) PRIMARY KEY,
     biografia           TEXT,
-    link_compartir    VARCHAR(500) NOT NULL,
-    link_imagen       VARCHAR(500) NOT NULL
+    link_compartir      VARCHAR(500) NOT NULL,
+    link_imagen         VARCHAR(500) NOT NULL
 );
 
 CREATE TABLE Artista (
@@ -11,7 +43,7 @@ CREATE TABLE Artista (
 );
 
 CREATE TABLE Album (
-    id_album        INT AUTO_INCREMENT PRIMARY KEY,
+    id_album        INTEGER AUTO_INCREMENT PRIMARY KEY,
     nombre_album    VARCHAR(255) NOT NULL,
     link_imagen     VARCHAR(500),
     link_compartir  VARCHAR(500),
@@ -121,12 +153,12 @@ CREATE TABLE Tiene_podcast (
     FOREIGN KEY (id_podcast) REFERENCES Podcast(id_podcast) ON DELETE CASCADE
 );
 
-CREATE TABLE Episodios_de_lista (
-    id_lista_ep  INT,
-    id_ep        INT,
-    PRIMARY KEY (id_lista, id_ep),
-    FOREIGN KEY (id_lista) REFERENCES Lista_Episodios(id_lista_ep) ON DELETE CASCADE,
-    FOREIGN KEY (id_ep) REFERENCES Episodio(id_ep) ON DELETE CASCADE
+CREATE TABLE Lista_reproduccion (
+    id_lista        INT PRIMARY KEY,
+    nombre          VARCHAR(255) NOT NULL,
+    es_publica      BOOLEAN NOT NULL DEFAULT FALSE,
+    color           VARCHAR(255),
+    link_compartir  VARCHAR(500)
 );
 
 CREATE TABLE Lista_Episodios (
@@ -134,12 +166,12 @@ CREATE TABLE Lista_Episodios (
     FOREIGN KEY (id_lista_ep) REFERENCES Lista_reproduccion(id_lista) ON DELETE CASCADE
 );
 
-CREATE TABLE Lista_reproduccion (
-    id_lista        INT PRIMARY KEY,
-    nombre          VARCHAR(255) NOT NULL,
-    es_publica      BOOLEAN NOT NULL DEFAULT FALSE,
-    color           VARCHAR(255),
-    link_compartir  VARCHAR(500)
+CREATE TABLE Episodios_de_lista (
+    id_lista_ep  INT,
+    id_ep        INT,
+    PRIMARY KEY (id_lista_ep, id_ep),
+    FOREIGN KEY (id_lista_ep) REFERENCES Lista_Episodios(id_lista_ep) ON DELETE CASCADE,
+    FOREIGN KEY (id_ep) REFERENCES Episodio(id_ep) ON DELETE CASCADE
 );
 
 CREATE TABLE Playlist (
@@ -198,7 +230,7 @@ CREATE TABLE Mensaje (
 
 CREATE TABLE Usuario_reproduce (
     nombre_usuario  VARCHAR(255),
-    id_cm           INT,
+    id_cm           INTEGER,
     tiempo          TIME,
     PRIMARY KEY (nombre_usuario, id_cm),
     FOREIGN KEY (nombre_usuario) REFERENCES Usuario(nombre_usuario) ON DELETE CASCADE,
@@ -218,7 +250,7 @@ CREATE TABLE Carpetas_del_usuario (
     id_carpeta      INT AUTO_INCREMENT,
     nombre          VARCHAR(255),
     PRIMARY KEY (nombre_usuario, id_carpeta),
-    FOREIGN KEY (nombre_usuario) REFERENCES Usuario(nombre_usuario) ON DELETE CASCADE,
+    FOREIGN KEY (nombre_usuario) REFERENCES Usuario(nombre_usuario) ON DELETE CASCADE
 );
 
 CREATE TABLE Listas_de_carpeta (
@@ -228,3 +260,87 @@ CREATE TABLE Listas_de_carpeta (
     FOREIGN KEY (id_carpeta) REFERENCES Carpetas_del_usuario(id_carpeta) ON DELETE CASCADE,
     FOREIGN KEY (id_lista) REFERENCES Lista_reproduccion(id_lista) ON DELETE CASCADE
 );
+
+INSERT INTO Creador (nombre_creador, biografia, link_compartir, link_imagen) VALUES
+('Carlos Peguer', 'Carlos Peguer es co-presentador del pódcast español "La Pija y la Quinqui", que ha ganado popularidad entre la generación Z y los millennials.', 'https://example.com/share/carlospeguer', 'https://example.com/img/carlospeguer.jpg'),
+('Mariang Maturana', 'Mariang Maturana es co-presentadora del pódcast "La Pija y la Quinqui", conocido por sus entrevistas a diversas personalidades.', 'https://example.com/share/mariangmaturana', 'https://example.com/img/mariangmaturana.jpg'),
+('Jordi Wild', 'Jordi Wild es un creador de contenido español, conocido por su canal de YouTube "El Rincón de Giorgio" y su pódcast "The Wild Project".', 'https://example.com/share/jordiwild', 'https://example.com/img/jordiwild.jpg'),
+('Cruz Cafuné', 'Carlos Bruñas Zamorín, conocido artísticamente como Cruz Cafuné, es un rapero español originario de Tenerife, Canarias. Ha destacado en la escena musical por su estilo único y ha colaborado en éxitos como "Contando lunares".', 'https://example.com/share/cruzcafune', 'https://example.com/img/cruzcafune.jpg'),
+('Bad Bunny', 'Benito Antonio Martínez Ocasio, conocido como Bad Bunny, es un cantante y compositor puertorriqueño que ha revolucionado la música urbana con su estilo innovador y su fusión de géneros.', 'https://example.com/share/badbunny', 'https://example.com/img/badbunny.jpg'),
+('Lola Índigo', 'Miriam Doblas Muñoz, artísticamente conocida como Lola Índigo, es una cantante y bailarina española que ganó fama tras su participación en "Operación Triunfo" y ha lanzado éxitos en el género pop y urbano.', 'https://example.com/share/lolaindigo', 'https://example.com/img/lolaindigo.jpg'),
+('Sosad.97', 'Sosad.97 es un artista emergente en la escena musical urbana, reconocido por su estilo distintivo y letras introspectivas.', 'https://example.com/share/sosad97', 'https://example.com/img/sosad97.jpg'),
+('Feid', 'Salomón Villada Hoyos, conocido como Feid, es un cantante y compositor colombiano destacado en el género reguetón y música urbana.', 'https://example.com/share/feid', 'https://example.com/img/feid.jpg'),
+('Duki', 'Mauro Ezequiel Lombardo Quiroga, conocido artísticamente como Duki, es un rapero y cantante argentino que ha sido pionero en la escena del trap en su país.', 'https://example.com/share/duki', 'https://example.com/img/duki.jpg'),
+('Bigflo & Oli', 'Bigflo & Oli es un dúo de hermanos franceses, Florian y Olivio Ordonez, que han ganado reconocimiento en la escena del rap francés por sus letras auténticas y ritmos pegajosos.', 'https://example.com/share/bigflooli', 'https://example.com/img/bigflooli.jpg');
+
+INSERT INTO Artista (nombre_artista) VALUES
+('Cruz Cafuné'),
+('Bad Bunny'),
+('Lola Índigo'),
+('Sosad.97'),
+('Feid'),
+('Duki'),
+('Bigflo & Oli');
+
+INSERT INTO Podcaster (nombre_podcaster) VALUES
+('Carlos Peguer'),
+('Mariang Maturana'),
+('Jordi Wild');
+
+INSERT INTO Contenido_multimedia (link_cm, titulo, duracion, link_compartir, link_img, fecha_pub, valoracion) VALUES
+('https://example.com/cruzcafune/minaelhammani', 'Mina el Hammani', '00:03:17', 'https://example.com/shareminaelhammani/', 'https://example.com/img/minaelhammani.jpg', '2019-11-13', 4.7),
+('https://example.com/badbunny/titimen', 'Tití Me Preguntó', '00:04:02', 'https://example.com/share/titimen', 'https://example.com/img/titimen.jpg', '2022-05-06', 4.9),
+('https://example.com/lolaindigo/dna', 'DNA', '00:03:30', 'https://example.com/share/dna', 'https://example.com/img/dna.jpg', '2023-04-21', 4.5),
+('https://example.com/sosad97/sinrazon', 'Sin Razón', '00:02:58', 'https://example.com/share/sinrazon', 'https://example.com/img/sinrazon.jpg', '2022-10-10', 4.2),
+('https://example.com/feid/ferxxocalipsis', 'FerxxoCalipsis', '00:03:55', 'https://example.com/share/ferxxocalipsis', 'https://example.com/img/ferxxocalipsis.jpg', '2023-08-30', 4.8),
+('https://example.com/duki/rockstar', 'Rockstar', '00:03:20', 'https://example.com/share/rockstar', 'https://example.com/img/rockstar.jpg', '2019-11-22', 4.6),
+('https://example.com/bigflooli/domino', 'Domino', '00:04:15', 'https://example.com/share/domino', 'https://example.com/img/domino.jpg', '2021-05-14', 4.3),
+('https://example.com/lapijaylaquinqui/ep1', 'Episodio 1: Bienvenidos', '00:45:00', 'https://example.com/share/ep1', 'https://example.com/img/ep1.jpg', '2024-01-15', 4.4),
+('https://example.com/lapijaylaquinqui/ep2', 'Episodio 2: Redes Sociales y Salud Mental', '01:28:00', 'https://example.com/share/ep2', 'https://example.com/img/ep2.jpg', '2024-02-20', 4.6),
+('https://example.com/jordiwild/ep1', 'Entrevista sobre Salud Mental', '00:35:00', 'https://example.com/share/ep1jordi', 'https://example.com/img/ep1jordi.jpg', '2024-02-22', 4.8),
+('https://example.com/jordiwild/ep2', 'Éxito Personal a Través de la Disciplina', '00:33:00', 'https://example.com/share/ep2jordi', 'https://example.com/img/ep2jordi.jpg', '2024-02-23', 4.6);
+
+INSERT INTO Cancion (id_cancion, n_repros, letra) VALUES
+(1, 1500000, 'Esta es la letra de "Mina el Hammani", un tema cargado de energía que resalta la espiritualidad en la música urbana.'),
+(2, 2000000, 'En "Tití Me Preguntó", Bad Bunny explora la vida y sus experiencias con su estilo único y pegajoso.'),
+(3, 1200000, 'La canción "DNA" de Lola Índigo habla de la conexión con el alma, con un toque de música electrónica y pop.'),
+(4, 800000, 'Sosad.97 nos trae "Sin Razón", una canción de trap y emociones profundas, reflejando una vida sin sentido.'),
+(5, 950000, 'En "FerxxoCalipsis", Feid fusiona reguetón con un estilo único, llevando a sus seguidores en una travesía musical.'),
+(6, 1100000, 'Duki destaca con "Rockstar", una pieza llena de rimas poderosas y una vibra irreverente, ideal para cualquier fiesta.'),
+(7, 700000, 'Bigflo & Oli en "Domino" nos presentan un tema emotivo, con letras que tocan el corazón y un estilo distintivo.');
+
+INSERT INTO Podcast (id_podcast, nombre, link_imagen, link_compartir, descripcion) VALUES
+(1, 'La Pija y la Quinqui', 'https://example.com/img/lapijaylaquinqui.jpg', 'https://example.com/share/lapijaylaquinqui', 'Un podcast donde se exploran temas de actualidad y cultura con humor irreverente.'),
+(2, 'The Wild Project', 'https://example.com/img/thewildproject.jpg', 'https://example.com/share/thewildproject', 'Un podcast conducido por Jordi Wild en el que se tocan temas de crecimiento personal, entrevistas y entretenimiento.');
+
+INSERT INTO Tematica_podcast (id_podcast, tematica) VALUES
+(1, 'Cultura'),
+(1, 'Comedia'),
+(1, 'Sociedad'),
+(2, 'Entrevistas'),
+(2, 'Crecimiento Personal'),
+(2, 'Entretenimiento');
+
+INSERT INTO Tiene_podcast (nombre_podcaster, id_podcast) VALUES
+('Carlos Peguer', 1),
+('Mariang Maturana', 1),
+('Jordi Wild', 2);
+
+INSERT INTO Episodio (id_ep, id_podcast, descripcion) VALUES
+(8, 1, 'En este episodio, hablamos de la última película de terror y analizamos las tendencias actuales de la moda.'),
+(9, 1, 'Un episodio dedicado a nuestras vivencias en el mundo de las redes sociales y cómo afectan la salud mental.'),
+(10, 2, 'Entrevista con un experto en psicología sobre la importancia de la salud mental en el mundo moderno.'),
+(11, 2, 'En este episodio, discutimos cómo lograr el éxito personal a través de la disciplina y el trabajo constante.');
+
+INSERT INTO Idiomas_multimedia (id_cm, idioma) VALUES
+(1, 'Español'),
+(2, 'Español'),
+(3, 'Español'),
+(4, 'Español'),
+(5, 'Español'),
+(6, 'Español'),
+(7, 'Francés'),
+(8, 'Español'),
+(9, 'Español'),
+(10, 'Español'),
+(11, 'Español');
