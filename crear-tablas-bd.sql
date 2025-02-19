@@ -43,7 +43,7 @@ CREATE TABLE Artista (
 );
 
 CREATE TABLE Album (
-    id_album        INTEGER AUTO_INCREMENT PRIMARY KEY,
+    id_album        INTEGER PRIMARY KEY AUTOINCREMENT,
     nombre_album    VARCHAR(255) NOT NULL,
     link_imagen     VARCHAR(500),
     link_compartir  VARCHAR(500),
@@ -53,7 +53,7 @@ CREATE TABLE Album (
 
 CREATE TABLE Artista_posee_albumes (
     nombre_artista  VARCHAR(255),
-    id_album        INT,
+    id_album        INTEGER,
     PRIMARY KEY (nombre_artista, id_album),
     FOREIGN KEY (nombre_artista) REFERENCES Artista(nombre_artista) ON DELETE CASCADE,
     FOREIGN KEY (id_album) REFERENCES Album(id_album) ON DELETE CASCADE
@@ -69,7 +69,7 @@ CREATE TABLE Numero_cancion_en_album (
 );
 
 CREATE TABLE Contenido_multimedia (
-    id_cm           INT AUTO_INCREMENT PRIMARY KEY,
+    id_cm           INTEGER PRIMARY KEY AUTOINCREMENT,
     link_cm         VARCHAR(255) NOT NULL,
     titulo          VARCHAR(255) NOT NULL,
     duracion        TIME NOT NULL,
@@ -80,7 +80,7 @@ CREATE TABLE Contenido_multimedia (
 );
 
 CREATE TABLE Idiomas_multimedia (
-    id_cm   INT,
+    id_cm   INTEGER,
     idioma  VARCHAR(100),
     PRIMARY KEY (id_cm, idioma),
     FOREIGN KEY (id_cm) REFERENCES Contenido_multimedia(id_cm) ON DELETE CASCADE
@@ -219,7 +219,7 @@ CREATE TABLE Token (
 );
 
 CREATE TABLE Mensaje (
-    id_mensaje            INT AUTO_INCREMENT PRIMARY KEY,
+    id_mensaje            INTEGER PRIMARY KEY AUTOINCREMENT,
     nombre_usuario_envia  VARCHAR(255),
     nombre_usuario_recibe VARCHAR(255),
     contenido             TEXT,
@@ -245,12 +245,17 @@ CREATE TABLE Listas_del_usuario (
     FOREIGN KEY (id_lista) REFERENCES Lista_reproduccion(id_lista) ON DELETE CASCADE
 );
 
+CREATE TABLE Carpeta (
+    id_carpeta      INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre          VARCHAR(255)
+);
+
 CREATE TABLE Carpetas_del_usuario (
     nombre_usuario  VARCHAR(255),
-    id_carpeta      INT AUTO_INCREMENT,
-    nombre          VARCHAR(255),
+    id_carpeta      INTEGER,
     PRIMARY KEY (nombre_usuario, id_carpeta),
-    FOREIGN KEY (nombre_usuario) REFERENCES Usuario(nombre_usuario) ON DELETE CASCADE
+    FOREIGN KEY (nombre_usuario) REFERENCES Usuario(nombre_usuario) ON DELETE CASCADE,
+    FOREIGN KEY (id_carpeta) REFERENCES Carpeta(id_carpeta) ON DELETE CASCADE
 );
 
 CREATE TABLE Listas_de_carpeta (
