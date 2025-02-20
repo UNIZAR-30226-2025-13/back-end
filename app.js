@@ -16,7 +16,7 @@ res.status(200).json({ message: "Hola Mundo!" });
 app.get("/products", async (req, res) => {
     try {
       //  SQL a bd Turso
-      const result = await client.execute("SELECT * FROM ???"); // falta añadir tabla de la que hacer consulta
+      const result = await client.execute("SELECT * FROM Creador"); // falta añadir tabla de la que hacer consulta
       // obtienes resultados consulta  
       res.status(200).json(result.filas);  // de momento se asume que los resultados se encuentran en 'filas'
     } catch (error) {
