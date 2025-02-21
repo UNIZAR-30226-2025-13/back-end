@@ -1,0 +1,6 @@
+- gestionar login de manera segura (hashing contraseñas y jsonwebtoken):
+npm install bcrypt jsonwebtoken dotenv
+- instalar node:
+sudo apt install nodejs
+- generar clave aleatoria con node para el cifrado de contraseñas: -> JWT_SECRET en .env
+node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"

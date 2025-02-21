@@ -20,7 +20,10 @@
   "homepage": "https://github.com/UNIZAR-30226-2025-13/back-end#readme",
   "dependencies": {
     "@libsql/client": "^0.14.0",
-    "express": "^4.21.2"
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2"
   },
-  "type":"commonjs"
+  "type": "commonjs"
 }

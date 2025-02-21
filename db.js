@@ -1,3 +1,4 @@
+require('dotenv').config(); // para acceder a las variables de entorno
 const { createClient } = require('@libsql/client');
 
 const client = createClient({
