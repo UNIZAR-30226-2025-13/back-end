@@ -4,3 +4,13 @@ npm install bcrypt jsonwebtoken dotenv
 sudo apt install nodejs
 - generar clave aleatoria con node para el cifrado de contraseñas: -> JWT_SECRET en .env
 node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+
+
+- direccion web:
+http://localhost:8080/autorizacion/register
+- formato prueba:
+{
+    "nombre_usuario":"prueba",
+    "contrasena":"prueba",
+    "correo":"prueba@gmail.com"
+}

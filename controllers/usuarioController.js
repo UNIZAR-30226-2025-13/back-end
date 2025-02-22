@@ -17,4 +17,4 @@ const getPerfil = async (req, res) => {
     }
 };
 
-module.exports = { getPerfil};
+module.exports = { getPerfil };
