@@ -5,7 +5,7 @@ sudo apt install nodejs
 - generar clave aleatoria con node para el cifrado de contraseñas: -> JWT_SECRET en .env
 node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 
-
+PRUEBA register
 - direccion web:
 http://localhost:8080/autorizacion/register
 - formato prueba:
@@ -13,4 +13,39 @@ http://localhost:8080/autorizacion/register
     "nombre_usuario":"prueba",
     "contrasena":"prueba",
     "correo":"prueba@gmail.com"
+}
+(probado también si el correo o el nombre_usuario ya existen -> da fallo de POST -> está bien)
+
+PRUEBA login
+- direccion web:
+http://localhost:8080/autorizacion/login
+- formato prueba:
+{
+    "nombre_usuario": "prueba",
+    "contrasena": "prueba"
+}
+- respuesta obtenida:
+{
+    "message": "Login exitoso",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub21icmVfdXN1YXJpbyI6InBydWViYSIsImlhdCI6MTc0MDMxNzk3NCwiZXhwIjoxNzQwMzIxNTc0fQ.z_EjDXV8gFOXE96gFLEubYMeTcO0iftSyIy0cEotfPQ",
+    "usuario": {
+        "nombre_usuario": "prueba",
+        "correo": "prueba@gmail.com"
+    }
+}
+(el token obtenido se caduca pasado 1h -> si cierras y abres el servidor el token se mantiene)
+
+PRUEBA perfil
+- direccion web:
+http://localhost:8080/usuario/perfil
+- formato prueba:
+Key             Value (Bearer es porque es un token de autorización)
+Authorization   Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub21icmVfdXN1YXJpbyI6InBydWViYSIsImlhdCI6MTc0MDMxNzk3NCwiZXhwIjoxNzQwMzIxNTc0fQ.z_EjDXV8gFOXE96gFLEubYMeTcO0iftSyIy0cEotfPQ
+- respuesta obtenida:
+{
+    "nombre_usuario": "prueba",
+    "contrasena": "$2b$10$lObk.tA61cbJlttAFVC3FeouAzIgppLugOImf0.dB5drpNXOTF1C.",
+    "correo": "prueba@gmail.com",
+    "link_compartir": "",
+    "es_admin": 0
 }

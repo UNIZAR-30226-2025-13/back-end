@@ -2,7 +2,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const client = require('../db');
 
-
 // registrar usuario
 const register = async (req, res) => {
     try {
@@ -15,13 +14,13 @@ const register = async (req, res) => {
       // comprobar si el usuario ya existe
       const result = await client.execute("SELECT * FROM Usuario WHERE nombre_usuario = ?", [nombre_usuario]);
       if (result.rows.length > 0) {
-        return res.status(400).json({ message: "El usuario ya existe" });
+        return res.status(400).json({ message: "El nombre de usuario introducido ya está en uso" });
       }
   
       // comprobar si el correo ya existe
       const result2 = await client.execute("SELECT * FROM Usuario WHERE correo = ?", [correo]);
       if (result2.rows.length > 0) {
-        return res.status(400).json({ message: "El correo ya existe" });
+        return res.status(400).json({ message: "El correo introducido ya está en uso" });
       }
   
       const salt = await bcrypt.genSalt(10); // generamos salt para el hash
@@ -59,9 +58,16 @@ const register = async (req, res) => {
         return res.status(400).json({ message: "Contraseña incorrecta" });
       }
   
-      // generar token
-      const token = jwt.sign({ nombre_usuario: usuario.nombre_usuario }, process.env.SECRET, { expiresIn: "1h" });
-      res.status(200).json({ token });
+      // generar token (es válido solo durante 1h) -> cada vez que se haga login se generará un nuevo token
+      const token = jwt.sign({ nombre_usuario: usuario.nombre_usuario }, process.env.JWT_SECRET, { expiresIn: "1h" });
+      res.status(200).json({ 
+        message: "Login exitoso",
+        token,
+        usuario: {
+          nombre_usuario: usuario.nombre_usuario,
+          correo: usuario.correo
+        }
+      });      
   
     } catch (error) {
       console.error("Error al hacer login:", error);

@@ -12,6 +12,7 @@ app.use(express.json());
 const autorizacion = require("./rutas/autorizacion");
 const usuario = require("./rutas/usuario");
 
+// hace que las rutas de autorizacion y usuario empiecen por esa palabra
 app.use("/autorizacion", autorizacion);
 app.use("/usuario", usuario);
 
