@@ -1,7 +1,7 @@
 const express = require('express');
+const router = express.Router();
 const { getPerfil } = require('../controllers/usuarioController');
 const verificarToken = require('../middleware/autorizacionMiddleware');
-const router = express.Router();
 
 router.get('/perfil', verificarToken, getPerfil);
 

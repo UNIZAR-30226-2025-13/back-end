@@ -4,13 +4,22 @@ const app = express();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+// como el frontend está en otro puerto
+const cors = require("cors");
+app.use(cors());
+
 require("dotenv").config();
 
 app.use(express.json());
-//app.use(express.urlencoded({ extended: true }));
 
 const autorizacion = require("./rutas/autorizacion");
 const usuario = require("./rutas/usuario");
+const artista = require("./rutas/artista");
+
+// hace que las rutas de autorizacion y usuario empiecen por esa palabra
+app.use("/autorizacion", autorizacion);
+app.use("/usuario", usuario);
+
 
 // hace que las rutas de autorizacion y usuario empiecen por esa palabra
 app.use("/autorizacion", autorizacion);

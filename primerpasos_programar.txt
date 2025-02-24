@@ -19,7 +19,7 @@ http://localhost:8080/autorizacion/register
 PRUEBA login
 - direccion web:
 http://localhost:8080/autorizacion/login
-- formato prueba:
+- formato prueba: (Body -> raw -> JSON)
 {
     "nombre_usuario": "prueba",
     "contrasena": "prueba"
@@ -38,7 +38,7 @@ http://localhost:8080/autorizacion/login
 PRUEBA perfil
 - direccion web:
 http://localhost:8080/usuario/perfil
-- formato prueba:
+- formato prueba: (Headers)
 Key             Value (Bearer es porque es un token de autorización)
 Authorization   Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub21icmVfdXN1YXJpbyI6InBydWViYSIsImlhdCI6MTc0MDMxNzk3NCwiZXhwIjoxNzQwMzIxNTc0fQ.z_EjDXV8gFOXE96gFLEubYMeTcO0iftSyIy0cEotfPQ
 - respuesta obtenida:
