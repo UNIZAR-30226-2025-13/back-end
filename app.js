@@ -16,6 +16,22 @@ const usuario = require("./rutas/usuario");
 app.use("/autorizacion", autorizacion);
 app.use("/usuario", usuario);
 
+app.get("/cruzzi", async (req, res) => {
+  try {
+    const result = await client.execute("SELECT link_imagen FROM Creador WHERE nombre_creador = 'Cruz Cafuné'");
+
+    if (!result || !result.rows || result.rows.length === 0) {
+        return res.status(400).json({ message: "El usuario no existe" });
+    }
+
+    res.status(200).json(result.rows[0]); // devolver perfil
+
+  } catch (error) {
+    console.error("Error al obtener la imagen:", error);
+    res.status(500).json({ message: "Hubo un error al obtener la imagen" });
+  }
+});
+
 // prueba inicial
 app.get("/", (req, res) => {
   res.send("Bienvenido a la API de usuarios");
