@@ -1,7 +1,7 @@
 const client = require('../db');
 const bcrypt = require('bcrypt');
 
-const getPerfil = async (req, res) => {
+const getProfile = async (req, res) => {
     try {
         const { nombre_usuario } = req.payload; // obtener nombre_usuario
         const result = await client.execute("SELECT * FROM Usuario WHERE nombre_usuario = ?", [nombre_usuario]); // obtener perfil
@@ -51,4 +51,5 @@ const changePassword = async (req, res) => {
         res.status(500).json({ message: "Hubo un error al cambiar la contraseña" });
     }
 };
-module.exports = { getPerfil, changePassword };
+
+module.exports = { getProfile, changePassword };

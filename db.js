@@ -12,7 +12,6 @@ console.log("TURSO_AUTH_TOKEN desde process.env:", process.env.TURSO_AUTH_TOKEN)
 */
 const client = createClient({
   url: process.env.TURSO_URL,
-  // syncUrl: process.env.TURSO_SYNC_URL, -> se supone que no necesitamos porque no tenemos BD distribuida
   authToken: process.env.TURSO_AUTH_TOKEN
 });
 

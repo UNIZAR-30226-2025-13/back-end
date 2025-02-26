@@ -262,7 +262,7 @@ CREATE TABLE Listas_de_carpeta (
     id_carpeta  INT,
     id_lista    INT,
     PRIMARY KEY (id_carpeta, id_lista),
-    FOREIGN KEY (id_carpeta) REFERENCES Carpetas_del_usuario(id_carpeta) ON DELETE CASCADE,
+    FOREIGN KEY (id_carpeta) REFERENCES Carpeta(id_carpeta) ON DELETE CASCADE,
     FOREIGN KEY (id_lista) REFERENCES Lista_reproduccion(id_lista) ON DELETE CASCADE
 );
 
