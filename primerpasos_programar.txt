@@ -53,11 +53,11 @@ Authorization   Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub21icmVfdXN1YXJp
 
 
 
-PRUEBA change-password-request
-http://localhost:8080/change-passwrd-request
+PRUEBA change-password-request( PUT)
+http://localhost:8080/change-password-request
 - formato prueba
 {
-    "correo": prueba@gmail.com
+    "correo": "prueba@gmail.com"
 }
 - respuesta obtenida (por el momento, luego la respuesta llegará al correo)
 {
@@ -65,9 +65,9 @@ http://localhost:8080/change-passwrd-request
     "token":  	"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub21icmVfdXN1YXJpbyI6InBydWViYSIsImlhdCI6MTc0MDY2MzUzMiwiZXhwIjoxNzQwNjY0NDMyfQ.0R1qWG3ejbs4uZy7RklXRe6ADmZFDS2uBLvAOTiMFdY"
 }
 
-PRUEBA cambiar_contraseña
+PRUEBA change-password (PATCH)
 - direccion web:
-http://localhost:8080/cambiar-contrasena
+http://localhost:8080/change-password
 - formato prueba:
 {
     "token": "token"
