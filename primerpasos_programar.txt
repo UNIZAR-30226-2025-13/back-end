@@ -78,3 +78,64 @@ http://localhost:8080/change-password
 {
     "message": "Contraseña cambiada correctamente"
 }
+
+PRUEBA getArtist (GET)
+- direccion web:
+http://localhost:8080/artist?nombre_artista=Duki
+- formato prueba:
+nada
+- respuesta obtenida:
+{
+    "nombre_artista": "Duki",
+    "biografia": "Mauro Ezequiel Lombardo Quiroga, conocido artísticamente como Duki, es un rapero y cantante argentino que ha sido pionero en la escena del trap en su país.",
+    "link_imagen": "https://drive.google.com/file/d/1jlbl2i-LYVq_CDyG0GY-_D1hcjlg-DUt/view?usp=drive_link",
+    "albumes": [
+        {
+            "id_album": 9,
+            "nombre_album": "Desde el fin del mundo",
+            "link_imagen": "https://example.com/img/desde_el_fin_del_mundo.jpg"
+        }
+    ],
+    "canciones": [
+        {
+            "id_cancion": 22,
+            "titulo": "Party en el Barrio",
+            "n_repros": 150000000,
+            "link_img": "https://example.com/img/party_en_el_barrio.jpg",
+            "duracion": "00:03:50",
+            "fecha_pub": "2022-09-14",
+            "nombre_artista": "Paulo Londra",
+            "artistas_feat": "Duki"
+        },
+        {
+            "id_cancion": 17,
+            "titulo": "Malbec",
+            "n_repros": 250000000,
+            "link_img": "https://example.com/img/malbec.jpg",
+            "duracion": "00:03:45",
+            "fecha_pub": "2021-04-22",
+            "nombre_artista": "Duki",
+            "artistas_feat": ""
+        },
+        {
+            "id_cancion": 4,
+            "titulo": "Rockstar",
+            "n_repros": 1100000,
+            "link_img": "https://example.com/img/rockstar.jpg",
+            "duracion": "00:03:20",
+            "fecha_pub": "2019-11-22",
+            "nombre_artista": "Duki",
+            "artistas_feat": ""
+        },
+        {
+            "id_cancion": 20,
+            "titulo": "Goteo",
+            "n_repros": 200000000,
+            "link_img": "https://example.com/img/goteo.jpg",
+            "duracion": "00:03:10",
+            "fecha_pub": "2019-08-06",
+            "nombre_artista": "Duki",
+            "artistas_feat": ""
+        }
+    ]
+}
