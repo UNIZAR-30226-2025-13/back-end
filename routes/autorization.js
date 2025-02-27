@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.post("/register", register);
 router.post("/login", login);
-router.post("/changePasswordRequest", changePasswordRequest);
+router.put("/change-password-request", changePasswordRequest);
 
 
 module.exports = router;

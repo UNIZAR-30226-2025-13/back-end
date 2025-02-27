@@ -90,39 +90,36 @@ const register = async (req, res) => {
 
         const { nombre_usuario } = result.rows[0];
 
-        // Generar token
+        // Generar token de recuperación con validez de 15 minutos
         const resetToken = jwt.sign({ nombre_usuario }, process.env.JWT_SECRET, { expiresIn: "15m" });
 
         // Guardar token en la base de datos
-        await client.execute("INSERT INTO tokens_recuperacion (nombre_usuario, token, expiracion) VALUES (?, ?, NOW() + INTERVAL 15 MINUTE)", 
-                            [nombre_usuario, resetToken]);
+        // Intentar actualizar el token existente
+        const updateResult = await client.execute(
+          "UPDATE Token SET token = ? WHERE nombre_usuario = ?",
+          [resetToken, nombre_usuario]
+        );
 
-        // Enviar correo con el enlace
-        const resetLink = `http://frontend.com/reset-password?token=${resetToken}`;
-        const transporter = nodemailer.createTransport({
-            service: "gmail",
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS
-            }
+        // Si no se actualizó ninguna fila, insertar un nuevo registro
+        if (updateResult.rowsAffected === 0) {
+          await client.execute(
+              "INSERT INTO Token (nombre_usuario, token) VALUES (?, ?)",
+              [nombre_usuario, resetToken]
+          );
+        }
+
+        // Enviar el token como respuesta
+        res.status(200).json({ 
+            message: "Solicitud de cambio de contraseña exitosa",
+            token: resetToken 
         });
-
-        await transporter.sendMail({
-            from: process.env.EMAIL_USER,
-            to: correo,
-            subject: "Recuperación de contraseña",
-            html: `<p>Haz clic en el siguiente enlace para cambiar tu contraseña:</p>
-                  <a href="${resetLink}">Cambiar contraseña</a>
-                  <p>Este enlace expirará en 15 minutos.</p>`
-        });
-
-        res.status(200).json({ message: "Correo de recuperación enviado" });
 
     } catch (error) {
         console.error("Error al solicitar cambio de contraseña:", error);
         res.status(500).json({ message: "Error al solicitar el cambio de contraseña" });
     }
-  };
+};
+
   
   module.exports = { register, login, changePasswordRequest };
   

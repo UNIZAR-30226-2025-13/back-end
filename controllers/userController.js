@@ -21,25 +21,23 @@ const getProfile = async (req, res) => {
 //Cambiar Contraseña
 const changePassword = async (req, res) => {
     try {
-        const { nombre_usuario } = req.payload; // obtener nombre_usuario
-        const { contrasena_actual, nueva_contrasena } = req.body; // campos
+        const { token, nueva_contrasena } = req.body; // campos
         
-        if (!contrasena_actual || !nueva_contrasena) { // ningun campo vacio
+        if (!token || !nueva_contrasena) { // ningun campo vacio
             return res.status(400).json({ message: "Hay que rellenar todos los campos" });
         }
         
-        const result = await client.execute("SELECT * FROM Usuario WHERE nombre_usuario = ?", [nombre_usuario]); // obtener usuario
-        
+         // Verificar si el token existe en la base de datos
+        const result = await client.execute(
+            "SELECT nombre_usuario FROM Token WHERE token = ?", 
+            [token]
+        );
         if (result.rows.length === 0) {
-            return res.status(400).json({ message: "El usuario no existe" });
+            return res.status(400).json({ message: "Token inválido o expirado" });
         }
+        //const result = await client.execute("SELECT * FROM Usuario WHERE nombre_usuario = ?", [nombre_usuario]); // obtener usuario
+        const { nombre_usuario } = result.rows[0];
         
-        const usuario = result.rows[0]; // usuario encontrado
-        const contrasenaValida = await bcrypt.compare(contrasena_actual, usuario.contrasena); // comprobar si contraseña es la correcta
-        
-        if (!contrasenaValida) {
-            return res.status(400).json({ message: "Contraseña incorrecta" });
-        }
         
         const salt = await bcrypt.genSalt(10); // generamos salt para el hash
         const hashContrasena = await bcrypt.hash(nueva_contrasena, salt); // generamos el hash de la nueva contraseña

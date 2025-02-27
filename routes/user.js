@@ -4,6 +4,6 @@ const { getProfile, changePassword } = require('../controllers/userController');
 const { verifyToken } = require('../middleware/autorizationMiddleware');
 
 router.get("/perfil", verifyToken, getProfile);
-router.post("/cambiar-contrasena", verifyToken, changePassword);
+router.patch("/change-password", verifyToken, changePassword);
 
 module.exports = router;

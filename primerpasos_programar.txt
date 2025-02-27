@@ -51,17 +51,26 @@ Authorization   Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub21icmVfdXN1YXJp
 }
 
 
+
+
+PRUEBA change-password-request
+http://localhost:8080/change-passwrd-request
+- formato prueba
+{
+    "correo": prueba@gmail.com
+}
+- respuesta obtenida (por el momento, luego la respuesta llegará al correo)
+{
+    "message": "Solicitud de cambio de contraseña exitosa",
+    "token":  	"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub21icmVfdXN1YXJpbyI6InBydWViYSIsImlhdCI6MTc0MDY2MzUzMiwiZXhwIjoxNzQwNjY0NDMyfQ.0R1qWG3ejbs4uZy7RklXRe6ADmZFDS2uBLvAOTiMFdY"
+}
+
 PRUEBA cambiar_contraseña
 - direccion web:
-http://localhost:8080/usuario/cambiar-contrasena
-- formato prueba: 
-	(Headers)
-Key             Value (Bearer es porque es un token de autorización)
-Authorization   Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub21icmVfdXN1YXJpbyI6InBydWViYSIsImlhdCI6MTc0MDMxNzk3NCwiZXhwIjoxNzQwMzIxNTc0fQ.z_EjDXV8gFOXE96gFLEubYMeTcO0iftSyIy0cEotfPQ
-	(Body -> raw -> JSON)
-
+http://localhost:8080/cambiar-contrasena
+- formato prueba:
 {
-    "contrasena_actual": "prueba", // La contraseña actual del usuario
+    "token": "token"
     "nueva_contrasena": "nueva_contrasena" // La nueva contraseña que deseas establecer
 }
 
