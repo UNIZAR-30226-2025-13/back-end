@@ -269,22 +269,22 @@ CREATE TABLE Listas_de_carpeta (
 );
 
 INSERT INTO Creador (nombre_creador, biografia, link_compartir, link_imagen) VALUES
-('Carlos Peguer', 'Carlos Peguer es co-presentador del pódcast español "La Pija y la Quinqui", que ha ganado popularidad entre la generación Z y los millennials.', 'https://example.com/share/carlospeguer', 'https://drive.google.com/file/d/1zkQh0RIAExaX7gWWc4Um59jM_aLTfvd7/view?usp=drive_link'),
-('Mariang Maturana', 'Mariang Maturana es co-presentadora del pódcast "La Pija y la Quinqui", conocido por sus entrevistas a diversas personalidades.', 'https://example.com/share/mariangmaturana', 'https://drive.google.com/file/d/1f9PUTi1WtGMI7Wmm0XAmMjAzwdzgDtEq/view?usp=drive_link'),
-('Jordi Wild', 'Jordi Wild es un creador de contenido español, conocido por su canal de YouTube "El Rincón de Giorgio" y su pódcast "The Wild Project".', 'https://example.com/share/jordiwild', 'https://drive.google.com/file/d/1AYVGnh2eFp_-B_uURFoijJUG6vtoAadd/view?usp=drive_link'),
-('Cruz Cafuné', 'Carlos Bruñas Zamorín, conocido artísticamente como Cruz Cafuné, es un rapero español originario de Tenerife, Canarias. Ha destacado en la escena musical por su estilo único y ha colaborado en éxitos como "Contando lunares".', 'https://example.com/share/cruzcafune', 'https://drive.google.com/file/d/1DrAAvrFFtXhdqAPhv2Y09aG0n1fnf3qS/view?usp=drive_link'),
-('Bad Bunny', 'Benito Antonio Martínez Ocasio, conocido como Bad Bunny, es un cantante y compositor puertorriqueño que ha revolucionado la música urbana con su estilo innovador y su fusión de géneros.', 'https://example.com/share/badbunny', 'https://drive.google.com/file/d/1b-VJPuSEoT99sB1iQHKAdm4IQ4egBnkF/view?usp=drive_link'),
-('Lola Índigo', 'Miriam Doblas Muñoz, artísticamente conocida como Lola Índigo, es una cantante y bailarina española que ganó fama tras su participación en "Operación Triunfo" y ha lanzado éxitos en el género pop y urbano.', 'https://example.com/share/lolaindigo', 'https://drive.google.com/file/d/16aL5TA5_UvXeS0nwhwS3jE8JLOUJFt5f/view?usp=drive_link'),
-('Sosad.97', 'Sosad.97 es un artista emergente en la escena musical urbana, reconocido por su estilo distintivo y letras introspectivas.', 'https://example.com/share/sosad97', 'https://drive.google.com/file/d/1OeqIn3sDNCBfokyMa2KH_-Fp_coexAAj/view?usp=drive_link'),
-('Feid', 'Salomón Villada Hoyos, conocido como Feid, es un cantante y compositor colombiano destacado en el género reguetón y música urbana.', 'https://example.com/share/feid', 'https://drive.google.com/file/d/1OT-v0h6TmmUqixVXE5q0C_stcbVMqXvA/view?usp=drive_link'),
-('Duki', 'Mauro Ezequiel Lombardo Quiroga, conocido artísticamente como Duki, es un rapero y cantante argentino que ha sido pionero en la escena del trap en su país.', 'https://example.com/share/duki', 'https://drive.google.com/file/d/1jlbl2i-LYVq_CDyG0GY-_D1hcjlg-DUt/view?usp=drive_link'),
-('Harry Styles', 'Harry Styles es un cantante y compositor británico conocido por su trabajo en la banda One Direction y su exitosa carrera en solitario.', 'https://example.com/share/harrystyles', 'https://drive.google.com/file/d/1K2L3M4N5O6P7Q8R9S0T1U2V3W4X5Y6Z/view?usp=drive_link'),
-('Bigflo & Oli', 'Bigflo & Oli es un dúo de hermanos franceses, Florian y Olivio Ordonez, que han ganado reconocimiento en la escena del rap francés por sus letras auténticas y ritmos pegajosos.', 'https://example.com/share/bigflooli', 'https://drive.google.com/file/d/12MTwS6WRHBUHxS7H0cwZ4tJYqRr_b8G_/view?usp=drive_link'),
-('Paulo Londra', 'Paulo Londra es un rapero y cantante argentino reconocido por su influencia en la escena del trap y reguetón en América Latina.', 'https://example.com/share/paulolondra', 'https://drive.google.com/file/d/1aB2C3D4E5F6G7H8I9J0K1L2M3N4O5P6/view?usp=drive_link'),
-('María Becerra', 'María Becerra es una cantante y compositora argentina que ha ganado popularidad por su versatilidad en géneros como el pop y el reguetón.', 'https://example.com/share/mariabecerra', 'https://drive.google.com/file/d/1P2Q3R4S5T6U7V8W9X0Y1Z2A3B4C5D6E/view?usp=drive_link'),
-('Emilia', 'Emilia Mernes, conocida artísticamente como Emilia, es una cantante argentina destacada en la música urbana y pop.', 'https://example.com/share/emilia', 'https://drive.google.com/file/d/1F2G3H4I5J6K7L8M9N0O1P2Q3R4S5T6U/view?usp=drive_link'),
-('Don Patricio', 'Patricio Martín Díaz, conocido como Don Patricio, es un rapero español que ha alcanzado éxito con su estilo fresco y letras pegajosas.', 'https://example.com/share/donpatricio', 'https://drive.google.com/file/d/1H2I3J4K5L6M7N8O9P0Q1R2S3T4U5V6W/view?usp=drive_link'),
-('Quevedo', 'Pedro Luis Domínguez Quevedo, conocido artísticamente como Quevedo, es un cantante español que ha ganado reconocimiento en la escena urbana.', 'https://example.com/share/quevedo', 'https://drive.google.com/file/d/1N2O3P4Q5R6S7T8U9V0W1X2Y3Z4A5B6C/view?usp=drive_link');
+('Carlos Peguer', 'Carlos Peguer es co-presentador del pódcast español "La Pija y la Quinqui", que ha ganado popularidad entre la generación Z y los millennials.', 'https://example.com/share/carlospeguer', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740765428/carlos-peguer-img_ftskv0.jpg'),
+('Mariang Maturana', 'Mariang Maturana es co-presentadora del pódcast "La Pija y la Quinqui", conocido por sus entrevistas a diversas personalidades.', 'https://example.com/share/mariangmaturana', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740765428/mariang-img_plzhnd.jpg'),
+('Jordi Wild', 'Jordi Wild es un creador de contenido español, conocido por su canal de YouTube "El Rincón de Giorgio" y su pódcast "The Wild Project".', 'https://example.com/share/jordiwild', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740765428/jordi-wild-img_n8qkho.jpg'),
+('Cruz Cafuné', 'Carlos Bruñas Zamorín, conocido artísticamente como Cruz Cafuné, es un rapero español originario de Tenerife, Canarias. Ha destacado en la escena musical por su estilo único y ha colaborado en éxitos como "Contando lunares".', 'https://example.com/share/cruzcafune', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740765429/cruz-cafune-img_kykhvz.jpg'),
+('Bad Bunny', 'Benito Antonio Martínez Ocasio, conocido como Bad Bunny, es un cantante y compositor puertorriqueño que ha revolucionado la música urbana con su estilo innovador y su fusión de géneros.', 'https://example.com/share/badbunny', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740765429/bad-bunny-img_cfhbcm.jpg'),
+('Lola Índigo', 'Miriam Doblas Muñoz, artísticamente conocida como Lola Índigo, es una cantante y bailarina española que ganó fama tras su participación en "Operación Triunfo" y ha lanzado éxitos en el género pop y urbano.', 'https://example.com/share/lolaindigo', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740765429/lola-indigo-img_mvavhu.jpghttps://res.cloudinary.com/djsm3jfht/image/upload/v1740765429/lola-indigo-img_mvavhu.jpg'),
+('Sosad.97', 'Sosad.97 es un artista emergente en la escena musical urbana, reconocido por su estilo distintivo y letras introspectivas.', 'https://example.com/share/sosad97', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740765429/sosad97-img_ootlse.jpg'),
+('Feid', 'Salomón Villada Hoyos, conocido como Feid, es un cantante y compositor colombiano destacado en el género reguetón y música urbana.', 'https://example.com/share/feid', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740765429/feid-img_utb7jk.jpg'),
+('Duki', 'Mauro Ezequiel Lombardo Quiroga, conocido artísticamente como Duki, es un rapero y cantante argentino que ha sido pionero en la escena del trap en su país.', 'https://example.com/share/duki', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740765428/duki-img_vtvdwd.jpg'),
+('Harry Styles', 'Harry Styles es un cantante y compositor británico conocido por su trabajo en la banda One Direction y su exitosa carrera en solitario.', 'https://example.com/share/harrystyles', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740766759/harry-styles-img_szp2fi.jpg'),
+('Bigflo & Oli', 'Bigflo & Oli es un dúo de hermanos franceses, Florian y Olivio Ordonez, que han ganado reconocimiento en la escena del rap francés por sus letras auténticas y ritmos pegajosos.', 'https://example.com/share/bigflo-oli', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740765429/bigflow_oli-img_yzssrb.jpg'),
+('Paulo Londra', 'Paulo Londra es un rapero y cantante argentino reconocido por su influencia en la escena del trap y reguetón en América Latina.', 'https://example.com/share/paulolondra', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740766759/paulo-londra-img_qxrkhz.jpg'),
+('María Becerra', 'María Becerra es una cantante y compositora argentina que ha ganado popularidad por su versatilidad en géneros como el pop y el reguetón.', 'https://example.com/share/mariabecerra', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740766759/maria-becerra-img_dqi1db.jpg'),
+('Emilia', 'Emilia Mernes, conocida artísticamente como Emilia, es una cantante argentina destacada en la música urbana y pop.', 'https://example.com/share/emilia', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740766758/emilia-img_kx5rfj.jpg'),
+('Don Patricio', 'Patricio Martín Díaz, conocido como Don Patricio, es un rapero español que ha alcanzado éxito con su estilo fresco y letras pegajosas.', 'https://example.com/share/donpatricio', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740766758/don-patricio-img_om3dyt.jpg'),
+('Quevedo', 'Pedro Luis Domínguez Quevedo, conocido artísticamente como Quevedo, es un cantante español que ha ganado reconocimiento en la escena urbana.', 'https://example.com/share/quevedo', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740766758/quevedo_j6dz7r.jpg');
 
 INSERT INTO Artista (nombre_artista) VALUES
 ('Cruz Cafuné'),
@@ -293,7 +293,7 @@ INSERT INTO Artista (nombre_artista) VALUES
 ('Sosad.97'),
 ('Feid'),
 ('Duki'),
-('Harry Styles')
+('Harry Styles'),
 ('Bigflo & Oli'),
 ('Paulo Londra'),
 ('María Becerra'),
@@ -302,16 +302,16 @@ INSERT INTO Artista (nombre_artista) VALUES
 ('Quevedo');
 
 INSERT INTO Album (nombre_album, link_imagen, link_compartir, es_disco, fecha_pub) VALUES
-('Me Muevo Con Dios', 'https://example.com/img/memuevocondios.jpg', 'https://example.com/share/memuevocondios', TRUE, '2023-05-25'),
-('DeBÍ TiRAR MáS FOToS', 'https://example.com/img/debitirarmasfotos.jpg', 'https://example.com/share/debitirarmasfotos', TRUE, '2025-01-05'),
-('GRX', 'https://example.com/img/grx.jpg', 'https://example.com/share/grx', TRUE, '2024-02-01'),
-('Nadie Sabe Lo Que Va A Pasar Mañana', 'https://example.com/img/nadiesabeloquepasaramana.jpg', 'https://example.com/share/nadiesabeloquepasaramana', TRUE, '2023-10-13'),
-('La Niña', 'https://example.com/img/lanina.jpg', 'https://example.com/share/lanina', TRUE, '2021-07-02'),
-('Un Verano Sin Ti', 'https://example.com/img/unveranosinti.jpg', 'https://example.com/share/unveranosinti', TRUE, '2022-05-06'),
-('El Último Tour Del Mundo', 'https://example.com/img/elultimotourdelmundo.jpg', 'https://example.com/share/elultimotourdelmundo', TRUE, '2020-11-27'),
-('Feliz cumpleaños, Ferxxo, te pirateamos el álbum', 'https://example.com/img/feliz_cumpleanos_ferxxo.jpg', 'https://example.com/share/feliz_cumpleanos_ferxxo', TRUE, '2022-09-14'),
-('Desde el fin del mundo', 'https://example.com/img/desde_el_fin_del_mundo.jpg', 'https://example.com/share/desde_el_fin_del_mundo', TRUE, '2021-04-22'),
-('Harry''s House', 'https://example.com/img/harrys_house.jpg', 'https://example.com/share/harrys_house', TRUE, '2022-05-20');
+('Me Muevo Con Dios', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768018/mmcd_itztvm.jpg', 'https://example.com/share/memuevocondios', TRUE, '2023-05-25'),
+('DeBÍ TiRAR MáS FOToS', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768017/DTMF_pq1pgl.jpg', 'https://example.com/share/debitirarmasfotos', TRUE, '2025-01-05'),
+('GRX', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768017/grx_pwycc5.jpg', 'https://example.com/share/grx', TRUE, '2024-02-01'),
+('Nadie Sabe Lo Que Va A Pasar Mañana', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768017/nslqvapm_izn6zn.jpg', 'https://example.com/share/nadiesabeloquepasaramana', TRUE, '2023-10-13'),
+('La Niña', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768015/lani%C3%B1a_eqerng.jpg', 'https://example.com/share/lanina', TRUE, '2021-07-02'),
+('Un Verano Sin Ti', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768014/uvst_l2fas0.jpg', 'https://example.com/share/unveranosinti', TRUE, '2022-05-06'),
+('El Último Tour Del Mundo', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768014/eutdm_as8cp5.jpg', 'https://example.com/share/elultimotourdelmundo', TRUE, '2020-11-27'),
+('Feliz cumpleaños, Ferxxo, te pirateamos el álbum', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768014/felizcumpleferxxo_ep1nn3.jpg', 'https://example.com/share/feliz_cumpleanos_ferxxo', TRUE, '2022-09-14'),
+('Desde el fin del mundo', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768013/defdm_hceqs8.jpg', 'https://example.com/share/desde_el_fin_del_mundo', TRUE, '2021-04-22'),
+('Harry''s House', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768013/harryysuvarita_nrkjeq.jpg', 'https://example.com/share/harrys_house', TRUE, '2022-05-20');
 
 INSERT INTO Artista_posee_albumes (nombre_artista, id_album) VALUES
 ('Cruz Cafuné', 1),
@@ -331,31 +331,31 @@ INSERT INTO Podcaster (nombre_podcaster) VALUES
 ('Jordi Wild');
 
 INSERT INTO Contenido_multimedia (link_cm, titulo, duracion, link_compartir, link_img, fecha_pub, valoracion) VALUES
-('https://example.com/cruzcafune/minaelhammani', 'Mina el Hammani', '00:03:17', 'https://example.com/shareminaelhammani/', 'https://example.com/img/minaelhammani.jpg', '2019-11-13', 4.7),
-('https://example.com/badbunny/velda', 'VeLDÁ', '00:03:55', 'https://example.com/share/velda', 'https://example.com/img/velda.jpg', '2025-01-05', 4.9),
-('https://example.com/sosad97/sinrazon', 'Sin Razón', '00:02:58', 'https://example.com/share/sinrazon', 'https://example.com/img/sinrazon.jpg', '2022-10-10', 4.2),
-('https://example.com/duki/rockstar', 'Rockstar', '00:03:20', 'https://example.com/share/rockstar', 'https://example.com/img/rockstar.jpg', '2019-11-22', 4.6),
-('https://example.com/bigflooli/domino', 'Domino', '00:04:15', 'https://example.com/share/domino', 'https://example.com/img/domino.jpg', '2021-05-14', 4.3),
-('https://example.com/lapijaylaquinqui/ep1', 'Episodio 1: Bienvenidos', '00:45:00', 'https://example.com/share/ep1', 'https://example.com/img/ep1.jpg', '2024-01-15', 4.4),
-('https://example.com/lapijaylaquinqui/ep2', 'Episodio 2: Redes Sociales y Salud Mental', '01:28:00', 'https://example.com/share/ep2', 'https://example.com/img/ep2.jpg', '2024-02-20', 4.6),
-('https://example.com/jordiwild/ep1', 'Entrevista sobre Salud Mental', '00:35:00', 'https://example.com/share/ep1jordi', 'https://example.com/img/ep1jordi.jpg', '2024-02-22', 4.8),
-('https://example.com/jordiwild/ep2', 'Éxito Personal a Través de la Disciplina', '00:33:00', 'https://example.com/share/ep2jordi', 'https://example.com/img/ep2jordi.jpg', '2024-02-23', 4.6),
-('https://example.com/badbunny/where_she_goes', 'WHERE SHE GOES', '00:03:50', 'https://example.com/share/where_she_goes', 'https://example.com/img/where_she_goes.jpg', '2023-05-18', 4.8),
-('https://example.com/lolaindigo/lareina', 'La Reina', '00:03:20', 'https://example.com/share/lareina', 'https://example.com/img/lareina.jpg', '2024-06-15', 4.7),
-('https://example.com/badbunny/titi_me_pregunto', 'Tití Me Preguntó', '00:04:03', 'https://example.com/share/titi_me_pregunto', 'https://example.com/img/titi_me_pregunto.jpg', '2022-05-06', 4.9),
-('https://example.com/badbunny/yo_visto_asi', 'Yo Visto Así', '00:03:26', 'https://example.com/share/yo_visto_asi', 'https://example.com/img/yo_visto_asi.jpg', '2020-11-27', 4.6),
-('https://example.com/badbunny/debitiar', 'DeBÍ TiRAR MáS FOToS', '00:03:45', 'https://example.com/share/debitiar', 'https://example.com/img/debitiar.jpg', '2025-01-05', 4.9),
-('https://example.com/lolaindigo/pesadillas', 'Pesadillas', '00:03:15', 'https://example.com/share/pesadillas', 'https://example.com/img/pesadillas.jpg', '2024-09-13', 4.5),
-('https://example.com/feid/normal', 'Normal', '00:03:30', 'https://example.com/share/normal', 'https://example.com/img/normal.jpg', '2022-09-14', 4.8),
-('https://example.com/duki/malbec', 'Malbec', '00:03:45', 'https://example.com/share/malbec', 'https://example.com/img/malbec.jpg', '2021-04-22', 4.7),
-('https://example.com/harrystyles/as_it_was', 'As It Was', '00:02:47', 'https://example.com/share/as_it_was', 'https://example.com/img/as_it_was.jpg', '2022-04-01', 4.9),
-('https://example.com/feid/ferxxo_100', 'Ferxxo 100', '00:03:20', 'https://example.com/share/ferxxo_100', 'https://example.com/img/ferxxo_100.jpg', '2022-07-01', 4.6),
-('https://example.com/duki/goteo', 'Goteo', '00:03:10', 'https://example.com/share/goteo', 'https://example.com/img/goteo.jpg', '2019-08-06', 4.5),
-('https://example.com/harrystyles/watermelon_sugar', 'Watermelon Sugar', '00:02:54', 'https://example.com/share/watermelon_sugar', 'https://example.com/img/watermelon_sugar.jpg', '2019-11-16', 4.8),
-('https://example.com/paulolondra/party_en_el_barrio', 'Party en el Barrio', '00:03:50', 'https://example.com/share/party_en_el_barrio', 'https://example.com/img/party_en_el_barrio.jpg', '2022-09-14', 4.7),
-('https://example.com/lolaindigo/lola_bunny', 'Lola Bunny', '00:03:20', 'https://example.com/share/lola_bunny', 'https://example.com/img/lola_bunny.jpg', '2019-07-31', 4.6),
-('https://example.com/lolaindigo/discoteka', 'Discoteka', '00:03:15', 'https://example.com/share/discoteka', 'https://example.com/img/discoteka.jpg', '2022-09-01', 4.8),
-('https://example.com/lolaindigo/el_tonto', 'El Tonto', '00:03:40', 'https://example.com/share/el_tonto', 'https://example.com/img/el_tonto.jpg', '2023-04-14', 4.9);
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740771781/minaelhammani_i6b7wb.mp3', 'Mina el Hammani', '00:00:39', 'https://example.com/shareminaelhammani/', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770021/mina_f6v0jk.jpg', '2019-11-13', 4.7),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773911/velda_ta5ap7.mp3', 'VeLDÁ', '00:00:33', 'https://example.com/share/velda', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768017/DTMF_pq1pgl.jpg', '2025-01-05', 4.9),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773924/sinrazon_bo3sm5.mp3', 'Sin Razón', '00:00:47', 'https://example.com/share/sinrazon', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770020/sinrazon_nkv3f2.jpg', '2022-10-10', 4.2),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740774205/rockstar_ducbqv.m4a', 'Rockstar', '00:01:00', 'https://example.com/share/rockstar', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770020/rockstar_gihqjy.jpg', '2019-11-22', 4.6),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773965/dommage_bc0vjy.mp3', 'Domino', '00:02:52', 'https://example.com/share/domino', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770020/domino_ychtga.jpg', '2021-05-14', 4.3),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740775397/pedololalolita_borutl.mp3', 'Episodio 1: Bienvenidos', '00:01:16', 'https://example.com/share/ep1', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770862/ep1_v4nuiq.jpg', '2024-01-15', 4.4),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740775464/perrosanchez_hk5amg.mp3', 'Episodio 2: Redes Sociales y Salud Mental', '00:01:17', 'https://example.com/share/ep2', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770863/perrosanchez_f0lg5e.jpg', '2024-02-20', 4.6),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740775464/jordiwild01_ywnwkb.mp3', 'Entrevista sobre Salud Mental', '00:01:11', 'https://example.com/share/ep1jordi', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770862/wild180_a1cf4i.jpg', '2024-02-22', 4.8),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740775457/jordiwild02_yzle4j.mp3', 'Éxito Personal a Través de la Disciplina', '00:01:00', 'https://example.com/share/ep2jordi', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740771000/wild121_piej6g.jpg', '2024-02-23', 4.6),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773796/whereshegoes_awabsi.mp3', 'WHERE SHE GOES', '00:00:27', 'https://example.com/share/where_she_goes', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770020/whereshegoes_urmtrz.jpg', '2023-05-18', 4.8),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773919/lareina_sp8vrs.mp3', 'La Reina', '00:02:07', 'https://example.com/share/lareina', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770020/lareina_n5ccrx.jpg', '2024-06-15', 4.7),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773972/titimepregunto_kizeex.mp3', 'Tití Me Preguntó', '00:03:19', 'https://example.com/share/titi_me_pregunto', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768014/uvst_l2fas0.jpg', '2022-05-06', 4.9),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773864/yovistoasi_lsg9ou.mp3', 'Yo Visto Así', '00:02:38', 'https://example.com/share/yo_visto_asi', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768014/eutdm_as8cp5.jpg', '2020-11-27', 4.6),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740775220/dtmf_l5yszg.mp3', 'DeBÍ TiRAR MáS FOToS', '00:00:19', 'https://example.com/share/debitiar', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768017/DTMF_pq1pgl.jpg', '2025-01-05', 4.9),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773857/pesadillas_rggf1z.mp3', 'Pesadillas', '00:02:22', 'https://example.com/share/pesadillas', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/pesadillas_lg3qnb.jpg', '2024-09-13', 4.5),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773741/normal_niurzh.mp3', 'Normal', '00:01:54', 'https://example.com/share/normal', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/norma_rhzn6l.jpg', '2022-09-14', 4.8),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773646/malbec_zpzjnv.mp3', 'Malbec', '00:00:38', 'https://example.com/share/malbec', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768013/defdm_hceqs8.jpg', '2021-04-22', 4.7),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773737/asitwas_p4fffn.mp3', 'As It Was', '00:02:08', 'https://example.com/share/as_it_was', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768013/harryysuvarita_nrkjeq.jpg', '2022-04-01', 4.9),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773619/ferxoo100_yr75um.mp3', 'Ferxxo 100', '00:00:37', 'https://example.com/share/ferxxo_100', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770020/ferxxo100_jkdul3.jpg', '2022-07-01', 4.6),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773709/goteo_ckg403.mp3', 'Goteo', '00:02:08', 'https://example.com/share/goteo', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770020/goteo_ztww4q.jpg', '2019-08-06', 4.5),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773590/wartermelon_s0o1ri.mp3', 'Watermelon Sugar', '00:00:23', 'https://example.com/share/watermelon_sugar', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/watermelonsugar_rhrf8w.jpg', '2019-11-16', 4.8),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773596/partyenelbarrio_seejoa.mp3', 'Party en el Barrio', '00:00:36', 'https://example.com/share/party_en_el_barrio', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/partyenelbarrio_ecfqxj.jpg', '2022-09-14', 4.7),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773729/lolabunny_vs5kdf.mp3', 'Lola Bunny', '00:02:16', 'https://example.com/share/lola_bunny', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/lolabunny_o38u22.jpg', '2019-07-31', 4.6),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773651/discoteka_blcs7c.mp3', 'Discoteka', '00:01:49', 'https://example.com/share/discoteka', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/diskoteca_gvaos3.jpg', '2022-09-01', 4.8),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773580/eltonto_qoguwp.mp3', 'El Tonto', '00:00:44', 'https://example.com/share/el_tonto', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/eltonto_toogt3.jpg', '2023-04-14', 4.9);
 
 INSERT INTO Cancion (id_cancion, n_repros, letra) VALUES
 (1, 1500000, 'Esta es la letra de "Mina el Hammani", un tema cargado de energía que resalta la espiritualidad en la música urbana.'),
@@ -418,8 +418,8 @@ INSERT INTO Featuring (nombre_artista, id_cancion) VALUES
 ('Quevedo', 25);
 
 INSERT INTO Podcast (id_podcast, nombre, link_imagen, link_compartir, descripcion) VALUES
-(1, 'La Pija y la Quinqui', 'https://example.com/img/lapijaylaquinqui.jpg', 'https://example.com/share/lapijaylaquinqui', 'Un podcast donde se exploran temas de actualidad y cultura con humor irreverente.'),
-(2, 'The Wild Project', 'https://example.com/img/thewildproject.jpg', 'https://example.com/share/thewildproject', 'Un podcast conducido por Jordi Wild en el que se tocan temas de crecimiento personal, entrevistas y entretenimiento.');
+(1, 'La Pija y la Quinqui', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768719/lapijaylaquinqui_vrgwui.jpg', 'https://example.com/share/lapijaylaquinqui', 'Un podcast donde se exploran temas de actualidad y cultura con humor irreverente.'),
+(2, 'The Wild Project', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768719/thewildproject_ufwldg.jpg', 'https://example.com/share/thewildproject', 'Un podcast conducido por Jordi Wild en el que se tocan temas de crecimiento personal, entrevistas y entretenimiento.');
 
 INSERT INTO Tematica_podcast (id_podcast, tematica) VALUES
 (1, 'Cultura'),
