@@ -50,4 +50,36 @@ const changePassword = async (req, res) => {
     }
 };
 
-module.exports = { getProfile, changePassword };
+const getLists = async (req, res) => {
+    try{
+        const { nombre_usuario } = req.body; // obtener nombre_usuario
+         // Obtener listas y carpetas del usuario
+        const listas = await client.execute(
+            'SELECT lr.id_lista, lr.nombre FROM Lista_reproduccion lr JOIN Listas_del_usuario lu ON lr.id_lista = lu.id_lista WHERE lu.nombre_usuario = ?;',
+            [nombre_usuario]
+        );
+        const carpetas = await client.execute(
+            'SELECT c.id_carpeta, c.nombre FROM Carpeta c JOIN Carpetas_del_Usuario cu ON c.id_carpeta = cu.id_carpeta WHERE nombre_usuario = ?;',
+            [nombre_usuario]
+        );
+        const artisitas_favoritos = await client.execute(
+            'SELECT a.nombre_artista FROM Sigue_a_creador sc JOIN Artista a ON sc.nombre_creador = a.nombre_artista WHERE sc.nombre_usuario = ?;',
+            [nombre_usuario]
+        );
+        const podcasts_favoritos = await client.execute(
+            'SELECT p.nombre_podcaster FROM Sigue_a_creador sc JOIN Podcaster p ON sc.nombre_creador = p.nombre_podcaster WHERE sc.nombre_usuario = ?;',
+            [nombre_usuario]
+        );
+        res.status(200).json({
+            listas: listas.rows.length ? listas.rows : "No hay listas",
+            carpetas: carpetas.rows.length ? carpetas.rows : "No hay carpetas",
+            artistas_favoritos: artisitas_favoritos.rows.length ? artisitas_favoritos.rows : "No hay artistas favoritos",
+            podcasts_favoritos: podcasts_favoritos.rows.length ? podcasts_favoritos.rows : "No hay podcasts favoritos"
+        });
+
+    } catch (error) {
+        console.error("Error al obtener listas:", error);
+        res.status(500).json({ message: "Hubo un error al obtener las listas" });
+    }
+}
+module.exports = { getProfile, changePassword, getLists };
