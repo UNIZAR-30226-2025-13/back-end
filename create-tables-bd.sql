@@ -155,7 +155,7 @@ CREATE TABLE Tiene_podcast (
 );
 
 CREATE TABLE Lista_reproduccion (
-    id_lista        INT PRIMARY KEY,
+    id_lista        INT PRIMARY KEY AUTOINCREMENT,
     nombre          VARCHAR(255) NOT NULL,
     es_publica      BOOLEAN NOT NULL DEFAULT FALSE,
     color           VARCHAR(255),

@@ -146,29 +146,33 @@ PRUEBA getLists (GET)
 http://localhost:8080/get-lists
 - formato prueba:
 {
-    "nombre-usuario": "nombre_usuario"
+    "nombre_usuario": "prueba"
 }
 
 - respuesta obtenida:
 {
     "listas": [
-        { "id_lista": 1, "nombre": "Mi lista favorita" },
-        { "id_lista": 2, "nombre": "Listas de rock" }
+        {
+            "id_lista": 1,
+            "nombre": "lista de prueba"
+        }
     ],
-    "carpetas": [
-        { "id_carpeta": 1, "nombre": "Carpeta de artistas" },
-        { "id_carpeta": 2, "nombre": "Carpeta de podcasts" }
-    ],
-    "artistas_favoritos": ["Artista A", "Artista B"],
-    "podcasts_favoritos": ["Podcast 1", "Podcast 2"]
-}
-Si no hay listas:
-{
-    "listas": "No hay listas",
     "carpetas": "No hay carpetas",
-    "artistas_favoritos": "No hay artistas favoritos",
+    "artistas_favoritos": ["Artista A", "Artista B"],
     "podcasts_favoritos": "No hay podcasts favoritos"
 }
 
+PRUEBA createList (POST)
+- direccion web:
+http://localhost:8080/create-list
+- formato prueba:
+{
+    "nombre_lista": "lista de prueba",
+    "nombre_usuario": "prueba"
+}
+- respuesta obtenida:
+{
+    "message": "Lista creada correctamente"
+}
 
 

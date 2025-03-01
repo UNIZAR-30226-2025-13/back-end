@@ -82,4 +82,24 @@ const getLists = async (req, res) => {
         res.status(500).json({ message: "Hubo un error al obtener las listas" });
     }
 }
-module.exports = { getProfile, changePassword, getLists };
+
+const createList = async (req, res) => {
+    try {
+        const { nombre_lista, nombre_usuario } = req.body;
+        if (!nombre_lista || !nombre_usuario) {
+            return res.status(400).json({ message: "Hay que rellenar todos los campos" });
+        }
+        const result = await client.execute("SELECT * FROM Usuario WHERE nombre_usuario = ?", [nombre_usuario]);
+        if (result.rows.length === 0) {
+            return res.status(400).json({ message: "El usuario no existe" });
+        }
+        await client.execute("INSERT INTO Lista_reproduccion (nombre) VALUES (?)", [nombre_lista]);
+        const id_lista = (await client.execute("SELECT id_lista FROM Lista_reproduccion WHERE nombre = ?", [nombre_lista])).rows[0].id_lista;
+        await client.execute("INSERT INTO Listas_del_usuario (id_lista, nombre_usuario) VALUES (?, ?)", [id_lista, nombre_usuario]);
+        res.status(200).json({ message: "Lista creada correctamente" });
+    } catch (error) {
+        console.error("Error al crear lista:", error);
+        res.status(500).json({ message: "Hubo un error al crear la lista" });
+    }
+};
+module.exports = { getProfile, changePassword, getLists, createList };
