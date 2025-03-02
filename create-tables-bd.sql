@@ -531,6 +531,10 @@ INSERT INTO Lista_reproduccion (nombre, es_publica, color, link_compartir) VALUE
 ('This is Quevedo', TRUE, 'Negro', 'https://example.com/share/thisisquevedo'),
 ('This is Cruz Cafuné', TRUE, 'Negro', 'https://example.com/share/thisiscruzcafune');
 
+INSERT INTO Playlist (id_playlist) VALUES
+(1), (2), (3), (4), (5), (6), (7), (8), (9), (10), (11), (12), (13);
+
+
 INSERT INTO Listas_de_carpeta (id_carpeta, id_lista) VALUES
 (1, 1),
 (1, 2),

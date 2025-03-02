@@ -176,7 +176,7 @@ http://localhost:8080/create-list
 }
 
 
-PRUEBA playSong (POST)
+PRUEBA playSong (GET)
 - direccion web:
 http://localhost:8080/play-song?id_cancion=2
 -formato prueba:
@@ -188,4 +188,18 @@ nada
     "duracion": "00:00:33",
     "autor": "Bad Bunny",
     "artistas_featuring": "Dei V, Omar Courtz"
+}
+
+PRUEBA add-song-playlist (POST)
+- direccion web:
+http://localhost:8080/add-song-playlist
+-formato prueba:
+{
+    "id_cancion": "2",
+    "id_playlist": "2"
+}
+
+-respuesta obtenida:
+{
+    "message": "Canción añadida correctamente"
 }
