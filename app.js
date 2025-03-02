@@ -20,6 +20,8 @@ const autorizacion = require("./routes/autorization");
 const usuario = require("./routes/user");
 const artista = require("./routes/artist");
 const home = require("./routes/home");
+const canciones = require("./routes/song");
+
 
 // hace que las rutas empiecen por esa palabra
 // ej: si pones app.use("/usuario", usuario); la ruta para login es http://localhost:8080/usuario/login
@@ -27,6 +29,7 @@ app.use(autorizacion);
 app.use(usuario);
 app.use(artista);
 app.use(home);
+app.use(canciones);
 
 // prueba inicial
 app.get("/", (req, res) => {

@@ -7,4 +7,5 @@ router.get("/perfil", verifyToken, getProfile);
 router.patch("/change-password", verifyToken, changePassword);
 router.get("/get-lists",  getLists);
 router.post("/create-list",  createList);
+
 module.exports = router;

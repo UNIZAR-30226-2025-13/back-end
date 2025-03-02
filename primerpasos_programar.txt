@@ -176,3 +176,16 @@ http://localhost:8080/create-list
 }
 
 
+PRUEBA playSong (POST)
+- direccion web:
+http://localhost:8080/play-song?id_cancion=2
+-formato prueba:
+nada
+-respuesta obtenida:
+{
+    "link_cm": "https://res.cloudinary.com/djsm3jfht/video/upload/v1740773911/velda_ta5ap7.mp3",
+    "titulo": "VeLDÁ",
+    "duracion": "00:00:33",
+    "autor": "Bad Bunny",
+    "artistas_featuring": "Dei V, Omar Courtz"
+}
