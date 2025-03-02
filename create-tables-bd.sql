@@ -75,7 +75,7 @@ CREATE TABLE Contenido_multimedia (
     titulo          VARCHAR(255) NOT NULL,
     duracion        TIME NOT NULL,
     link_compartir  VARCHAR(255),
-    link_img        VARCHAR(255),
+    link_imagen     VARCHAR(255),
     fecha_pub       DATE NOT NULL,
     valoracion      FLOAT CHECK (valoracion BETWEEN 1 AND 5)
 );
@@ -96,8 +96,8 @@ CREATE TABLE Cancion (
 
 CREATE TABLE Generos (
     id_cancion   INT,
-    idioma  VARCHAR(100),
-    PRIMARY KEY (id_cancion, idioma),
+    genero       VARCHAR(100),
+    PRIMARY KEY (id_cancion, genero),
     FOREIGN KEY (id_cancion) REFERENCES Cancion(id_cancion) ON DELETE CASCADE
 );
 
@@ -155,7 +155,7 @@ CREATE TABLE Tiene_podcast (
 );
 
 CREATE TABLE Lista_reproduccion (
-    id_lista        INT PRIMARY KEY AUTOINCREMENT,
+    id_lista        INTEGER PRIMARY KEY AUTOINCREMENT,
     nombre          VARCHAR(255) NOT NULL,
     es_publica      BOOLEAN NOT NULL DEFAULT FALSE,
     color           VARCHAR(255),
@@ -274,7 +274,7 @@ INSERT INTO Creador (nombre_creador, biografia, link_compartir, link_imagen) VAL
 ('Jordi Wild', 'Jordi Wild es un creador de contenido español, conocido por su canal de YouTube "El Rincón de Giorgio" y su pódcast "The Wild Project".', 'https://example.com/share/jordiwild', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740765428/jordi-wild-img_n8qkho.jpg'),
 ('Cruz Cafuné', 'Carlos Bruñas Zamorín, conocido artísticamente como Cruz Cafuné, es un rapero español originario de Tenerife, Canarias. Ha destacado en la escena musical por su estilo único y ha colaborado en éxitos como "Contando lunares".', 'https://example.com/share/cruzcafune', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740765429/cruz-cafune-img_kykhvz.jpg'),
 ('Bad Bunny', 'Benito Antonio Martínez Ocasio, conocido como Bad Bunny, es un cantante y compositor puertorriqueño que ha revolucionado la música urbana con su estilo innovador y su fusión de géneros.', 'https://example.com/share/badbunny', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740765429/bad-bunny-img_cfhbcm.jpg'),
-('Lola Índigo', 'Miriam Doblas Muñoz, artísticamente conocida como Lola Índigo, es una cantante y bailarina española que ganó fama tras su participación en "Operación Triunfo" y ha lanzado éxitos en el género pop y urbano.', 'https://example.com/share/lolaindigo', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740765429/lola-indigo-img_mvavhu.jpghttps://res.cloudinary.com/djsm3jfht/image/upload/v1740765429/lola-indigo-img_mvavhu.jpg'),
+('Lola Índigo', 'Miriam Doblas Muñoz, artísticamente conocida como Lola Índigo, es una cantante y bailarina española que ganó fama tras su participación en "Operación Triunfo" y ha lanzado éxitos en el género pop y urbano.', 'https://example.com/share/lolaindigo', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740765429/lola-indigo-img_mvavhu.jpg'),
 ('Sosad.97', 'Sosad.97 es un artista emergente en la escena musical urbana, reconocido por su estilo distintivo y letras introspectivas.', 'https://example.com/share/sosad97', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740765429/sosad97-img_ootlse.jpg'),
 ('Feid', 'Salomón Villada Hoyos, conocido como Feid, es un cantante y compositor colombiano destacado en el género reguetón y música urbana.', 'https://example.com/share/feid', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740765429/feid-img_utb7jk.jpg'),
 ('Duki', 'Mauro Ezequiel Lombardo Quiroga, conocido artísticamente como Duki, es un rapero y cantante argentino que ha sido pionero en la escena del trap en su país.', 'https://example.com/share/duki', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740765428/duki-img_vtvdwd.jpg'),
@@ -284,7 +284,9 @@ INSERT INTO Creador (nombre_creador, biografia, link_compartir, link_imagen) VAL
 ('María Becerra', 'María Becerra es una cantante y compositora argentina que ha ganado popularidad por su versatilidad en géneros como el pop y el reguetón.', 'https://example.com/share/mariabecerra', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740766759/maria-becerra-img_dqi1db.jpg'),
 ('Emilia', 'Emilia Mernes, conocida artísticamente como Emilia, es una cantante argentina destacada en la música urbana y pop.', 'https://example.com/share/emilia', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740766758/emilia-img_kx5rfj.jpg'),
 ('Don Patricio', 'Patricio Martín Díaz, conocido como Don Patricio, es un rapero español que ha alcanzado éxito con su estilo fresco y letras pegajosas.', 'https://example.com/share/donpatricio', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740766758/don-patricio-img_om3dyt.jpg'),
-('Quevedo', 'Pedro Luis Domínguez Quevedo, conocido artísticamente como Quevedo, es un cantante español que ha ganado reconocimiento en la escena urbana.', 'https://example.com/share/quevedo', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740766758/quevedo_j6dz7r.jpg');
+('Quevedo', 'Pedro Luis Domínguez Quevedo, conocido artísticamente como Quevedo, es un cantante español que ha ganado reconocimiento en la escena urbana.', 'https://example.com/share/quevedo', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740766758/quevedo_j6dz7r.jpg'),
+('Dei V', 'Dei V es un artista emergente en la escena musical urbana, conocido por su estilo distintivo y letras profundas.', 'https://example.com/share/deiv', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740766758/dei-v-img_ayzv9v.jpg'),
+('Omar Courtz', 'Omar Courtz es un cantante y compositor español que ha destacado en la música urbana y reguetón.', 'https://example.com/share/omarcourtz', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740766758/omar-coutz-img_ayzv9v.jpg');
 
 INSERT INTO Artista (nombre_artista) VALUES
 ('Cruz Cafuné'),
@@ -299,7 +301,9 @@ INSERT INTO Artista (nombre_artista) VALUES
 ('María Becerra'),
 ('Emilia'),
 ('Don Patricio'),
-('Quevedo');
+('Quevedo'),
+('Dei V'),
+('Omar Courtz');
 
 INSERT INTO Album (nombre_album, link_imagen, link_compartir, es_disco, fecha_pub) VALUES
 ('Me Muevo Con Dios', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768018/mmcd_itztvm.jpg', 'https://example.com/share/memuevocondios', TRUE, '2023-05-25'),
@@ -330,7 +334,7 @@ INSERT INTO Podcaster (nombre_podcaster) VALUES
 ('Mariang Maturana'),
 ('Jordi Wild');
 
-INSERT INTO Contenido_multimedia (link_cm, titulo, duracion, link_compartir, link_img, fecha_pub, valoracion) VALUES
+INSERT INTO Contenido_multimedia (link_cm, titulo, duracion, link_compartir, link_imagen, fecha_pub, valoracion) VALUES
 ('https://res.cloudinary.com/djsm3jfht/video/upload/v1740771781/minaelhammani_i6b7wb.mp3', 'Mina el Hammani', '00:00:39', 'https://example.com/shareminaelhammani/', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770021/mina_f6v0jk.jpg', '2019-11-13', 4.7),
 ('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773911/velda_ta5ap7.mp3', 'VeLDÁ', '00:00:33', 'https://example.com/share/velda', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768017/DTMF_pq1pgl.jpg', '2025-01-05', 4.9),
 ('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773924/sinrazon_bo3sm5.mp3', 'Sin Razón', '00:00:47', 'https://example.com/share/sinrazon', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770020/sinrazon_nkv3f2.jpg', '2022-10-10', 4.2),
@@ -380,6 +384,29 @@ INSERT INTO Cancion (id_cancion, n_repros, letra) VALUES
 (24, 180000000, 'Letra de "Discoteka" de Lola Índigo y María Becerra.'),
 (25, 200000000, 'Letra de "El Tonto" de Lola Índigo y Quevedo.');
 
+INSERT INTO Generos (id_cancion, genero) VALUES
+(1, 'Rap'),
+(2, 'Reguetón'),
+(3, 'Trap'),
+(4, 'Trap'),
+(5, 'Rap'),
+(10, 'Reguetón'),
+(11, 'Reguetón'),
+(12, 'Reguetón'),
+(13, 'Reguetón'),
+(14, 'Reguetón'),
+(15, 'Reguetón'),
+(16, 'Reguetón'),
+(17, 'Trap'),
+(18, 'Pop'),
+(19, 'Reguetón'),
+(20, 'Trap'),
+(21, 'Pop'),
+(22, 'Trap'),
+(23, 'Reguetón'),
+(24, 'Reguetón'),
+(25, 'Reguetón');
+
 INSERT INTO Numero_cancion_en_album (id_album, id_cancion, numero_cancion) VALUES
 (4, 10, 5),  -- "WHERE SHE GOES" en "Nadie Sabe Lo Que Va A Pasar Mañana"
 (6, 12, 7), -- "Tití Me Preguntó" en "Un Verano Sin Ti"
@@ -412,6 +439,8 @@ INSERT INTO Artista_principal (nombre_artista, id_cancion) VALUES
 ('Lola Índigo', 25);
 
 INSERT INTO Featuring (nombre_artista, id_cancion) VALUES
+('Dei V', 2),
+('Omar Courtz', 2),
 ('Duki', 22),
 ('Don Patricio', 23),
 ('María Becerra', 24),
@@ -466,3 +495,53 @@ INSERT INTO Idiomas_multimedia (id_cm, idioma) VALUES
 (23, 'Español'),  -- "Lola Bunny" de Lola Índigo y Don Patricio.
 (24, 'Español'),  -- "Discoteka" de Lola Índigo y María Becerra.
 (25, 'Español');  -- "El Tonto" de Lola Índigo y Quevedo.
+
+INSERT INTO Sigue_a_creador (nombre_usuario, nombre_creador) VALUES
+('jorge', 'Cruz Cafuné'),
+('jorge', 'Bad Bunny');
+
+UPDATE Usuario SET es_admin = TRUE WHERE nombre_usuario = 'spongefy';
+
+INSERT INTO Carpeta (nombre) VALUES
+('Idiomas'),
+('Géneros'),
+('Artistas'),
+('Canciones'),
+('Episodios');
+
+INSERT INTO Carpetas_del_usuario (nombre_usuario, id_carpeta) VALUES
+('spongefy', 1),
+('spongefy', 2),
+('spongefy', 3),
+('spongefy', 4),
+('spongefy', 5);
+
+INSERT INTO Lista_reproduccion (nombre, es_publica, color, link_compartir) VALUES
+('Español', TRUE, 'Azul', 'https://example.com/share/español'),
+('Francés', TRUE, 'Rojo', 'https://example.com/share/frances'),
+('Inglés', TRUE, 'Verde', 'https://example.com/share/ingles'),
+('Rap', TRUE, 'Amarillo', 'https://example.com/share/rap'),
+('Reguetón', TRUE, 'Morado', 'https://example.com/share/regueton'),
+('Trap', TRUE, 'Naranja', 'https://example.com/share/trap'),
+('Pop', TRUE, 'Azul', 'https://example.com/share/pop'),
+('This is Bad Bunny', TRUE, 'Negro', 'https://example.com/share/thisisbadbunny'),
+('This is Feid', TRUE, 'Negro', 'https://example.com/share/thisisfeid'),
+('This is Duki', TRUE, 'Negro', 'https://example.com/share/thisisduki'),
+('This is Lola Índigo', TRUE, 'Negro', 'https://example.com/share/thisislolaindigo'),
+('This is Quevedo', TRUE, 'Negro', 'https://example.com/share/thisisquevedo'),
+('This is Cruz Cafuné', TRUE, 'Negro', 'https://example.com/share/thisiscruzcafune');
+
+INSERT INTO Listas_de_carpeta (id_carpeta, id_lista) VALUES
+(1, 1),
+(1, 2),
+(1, 3),
+(2, 4),
+(2, 5),
+(2, 6),
+(2, 7),
+(3, 8),
+(3, 9),
+(3, 10),
+(3, 11),
+(3, 12),
+(3, 13);

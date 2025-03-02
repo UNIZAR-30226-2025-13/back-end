@@ -3,7 +3,7 @@ const client = require('../db');
 const getArtist = async (req, res) => {
     try {
         const { nombre_artista } = req.query; // obtener nombre del artista
-        console.log("Buscando artista:", nombre_artista); // Verifica el parámetro recibido
+        // console.log("Buscando artista:", nombre_artista); // Verifica el parámetro recibido
         const result_artista = await client.execute("SELECT * FROM Artista WHERE nombre_artista = ?", [nombre_artista]); // obtener perfil
         if (result_artista.rows.length === 0) {
             return res.status(400).json({ message: "El artista no existe" });
@@ -11,11 +11,7 @@ const getArtist = async (req, res) => {
 
         // obtener información del artista
         const creador_result = await client.execute("SELECT * FROM Creador WHERE nombre_creador = ?", [nombre_artista]);
-        /*
-        if (creador_result.rows.length == 0) { // verificacion por si acaso
-            return res.status(400).json({ message: "El creador no existe" });
-        }
-        */
+
         const creador = creador_result.rows[0];
         const biografia = creador.biografia;
         // const link_compartir = creador.link_compartir;
@@ -52,14 +48,14 @@ const getArtist = async (req, res) => {
             const dynamic = list_canciones.map(() => "?").join(",");
             // se obtiene la informacion necesaria únicamente de las canciones
             // si una cancion no tiene artistas feat, se devuelve la cadena vacía
-            const query = ` SELECT c.id_cancion, cm.titulo, c.n_repros, cm.link_img, cm.duracion, cm.fecha_pub,
+            const query = ` SELECT c.id_cancion, cm.titulo, c.n_repros, cm.link_imagen, cm.duracion, cm.fecha_pub,
                                    ap.nombre_artista, COALESCE(GROUP_CONCAT(DISTINCT f.nombre_artista), '') AS artistas_feat
                             FROM Cancion c
                             JOIN Contenido_multimedia cm ON c.id_cancion = cm.id_cm
                             JOIN Artista_principal ap ON ap.id_cancion = c.id_cancion
                             LEFT JOIN Featuring f ON f.id_cancion = c.id_cancion
                             WHERE c.id_cancion IN (${dynamic})
-                            GROUP BY c.id_cancion, cm.titulo, c.n_repros, cm.link_img, 
+                            GROUP BY c.id_cancion, cm.titulo, c.n_repros, cm.link_imagen, 
                                      cm.duracion, cm.fecha_pub, ap.nombre_artista
                             ORDER BY cm.fecha_pub DESC;
                             `;
@@ -69,13 +65,19 @@ const getArtist = async (req, res) => {
             canciones_info = canciones_info_result.rows;
         }
 
+        // obtener número de seguidores del artista
+        const seguidores_result = await client.execute("SELECT COUNT(*) AS seguidores FROM Sigue_a_creador WHERE nombre_creador = ?", [nombre_artista]);
+
+        const num_seguidores = seguidores_result.rows[0].seguidores;
+
         res.status(200).json({ // devolver todo el perfil del artista
             nombre_artista: result_artista.rows[0].nombre_artista,
             biografia: biografia,
             // link_compartir: link_compartir,
             link_imagen: link_imagen,
             albumes: albumes_info,
-            canciones: canciones_info
+            canciones: canciones_info,
+            seguidores: num_seguidores
         });
 
     } catch (error) {
