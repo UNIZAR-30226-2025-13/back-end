@@ -113,6 +113,8 @@ const getHomeMusic = async (req, res) => {
             listas_aleatorio_info = listas_aleatorio_info_result.rows;
         }
 
+        
+
         res.status(200).json({ 
             podcasts: podcasts_info.rows,
             listas_genero_info: listas_genero_info,
