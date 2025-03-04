@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto')
 const client = require('../db');
 
 // registrar usuario
@@ -74,12 +75,13 @@ const register = async (req, res) => {
       res.status(500).json({ message: "Hubo un error al hacer login" });
     }
   };
-  
 
   // Solicitar cambio de contraseña
   const changePasswordRequest = async (req, res) => {
     try {
-        const { correo } = req.body;
+        const { correo } = req.query;
+
+        console.log(correo);
 
         // Verificar si el correo existe
         const result = await client.execute("SELECT nombre_usuario FROM Usuario WHERE correo = ?", [correo]);
@@ -90,28 +92,29 @@ const register = async (req, res) => {
 
         const { nombre_usuario } = result.rows[0];
 
-        // Generar token de recuperación con validez de 15 minutos
-        const resetToken = jwt.sign({ nombre_usuario }, process.env.JWT_SECRET, { expiresIn: "15m" });
+        // Generar token aleatorio
+        const token = crypto.randomBytes(32).toString("hex");
+        
+        // Establecer tiempo de expiración (ej. 1 hora desde la generación)
+        const fechaExp = new Date();
+        fechaExp.setHours(fechaExp.getHours() + 2);
+        const fechaExpISO = fechaExp.toISOString();
+
+        console.log("fecha de exp: " + fechaExpISO);
+        console.log("fecha de exp: " + fechaExpISO);
+
 
         // Guardar token en la base de datos
-        // Intentar actualizar el token existente
-        const updateResult = await client.execute(
-          "UPDATE Token SET token = ? WHERE nombre_usuario = ?",
-          [resetToken, nombre_usuario]
+        // Insertar en la base de datos o actualizar si ya existe
+        await client.execute(
+          "INSERT INTO Token (nombre_usuario, token, fecha_exp) VALUES (?, ?, ?) ON CONFLICT (nombre_usuario) DO UPDATE SET token = ?, fecha_exp = ?", 
+          [nombre_usuario, token, fechaExpISO, token, fechaExpISO]
         );
-
-        // Si no se actualizó ninguna fila, insertar un nuevo registro
-        if (updateResult.rowsAffected === 0) {
-          await client.execute(
-              "INSERT INTO Token (nombre_usuario, token) VALUES (?, ?)",
-              [nombre_usuario, resetToken]
-          );
-        }
 
         // Enviar el token como respuesta
         res.status(200).json({ 
             message: "Solicitud de cambio de contraseña exitosa",
-            token: resetToken 
+            token: token 
         });
 
     } catch (error) {
@@ -120,6 +123,5 @@ const register = async (req, res) => {
     }
 };
 
-  
-  module.exports = { register, login, changePasswordRequest };
+module.exports = { register, login, changePasswordRequest };
   

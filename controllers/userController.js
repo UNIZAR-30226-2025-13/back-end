@@ -18,32 +18,49 @@ const getProfile = async (req, res) => {
     }
 };
 
-//Cambiar Contraseña
+// Cambiar Contraseña dado un usuario, su token de cambio de contraseña y su nueva contraseña se actualiza
+// su contraseña antigüa por la nueva dada
 const changePassword = async (req, res) => {
     try {
-        const { token, nueva_contrasena } = req.body; // campos
-        
-        if (!token || !nueva_contrasena) { // ningun campo vacio
+        const { nombre_usuario, token, nueva_contrasena } = req.body; // Campos
+
+        if (!nombre_usuario || !token || !nueva_contrasena) { // Ningún campo vacío
             return res.status(400).json({ message: "Hay que rellenar todos los campos" });
         }
-        
-         // Verificar si el token existe en la base de datos
-        const result = await client.execute(
-            "SELECT nombre_usuario FROM Token WHERE token = ?", 
-            [token]
+
+        // Verificar si el token existe en la base de datos
+        const result_token = await client.execute(
+            "SELECT token, fecha_exp FROM Token WHERE nombre_usuario = ?", 
+            [nombre_usuario]
         );
-        if (result.rows.length === 0) {
-            return res.status(400).json({ message: "Token inválido o expirado" });
+
+        if (result_token.rows.length === 0) {
+            return res.status(400).json({ message: "El usuario no tiene ningún token asociado" });
         }
-        //const result = await client.execute("SELECT * FROM Usuario WHERE nombre_usuario = ?", [nombre_usuario]); // obtener usuario
-        const { nombre_usuario } = result.rows[0];
-        
-        
-        const salt = await bcrypt.genSalt(10); // generamos salt para el hash
-        const hashContrasena = await bcrypt.hash(nueva_contrasena, salt); // generamos el hash de la nueva contraseña
-        
-        await client.execute("UPDATE Usuario SET contrasena = ? WHERE nombre_usuario = ?", [hashContrasena, nombre_usuario]); // cambiar contraseña
-        res.status(200).json({ message: "Contraseña cambiada correctamente" }); // mensaje de correcto cambio
+
+        const storedToken = result_token.rows[0].token;
+        const fechaExp = new Date(result_token.rows[0].fecha_exp);
+        const fechaActual = new Date();
+
+        // Comprobar que el token coincide
+        if (storedToken !== token) {
+            return res.status(400).json({ message: "El token suministrado no es válido" });
+        }
+
+        // Comprobar que no se ha caducado el token
+        if (fechaExp < fechaActual) {
+            return res.status(400).json({ message: "El token ha caducado" });
+        }
+
+        const salt = await bcrypt.genSalt(10); // Generamos salt para el hash
+        const hashContrasena = await bcrypt.hash(nueva_contrasena, salt); // Generamos el hash de la nueva contraseña
+
+        await client.execute("UPDATE Usuario SET contrasena = ? WHERE nombre_usuario = ?", 
+            [hashContrasena, nombre_usuario]
+        ); // Cambiar contraseña
+
+        res.status(200).json({ message: "Contraseña cambiada correctamente" }); // Mensaje de éxito
+    
     } catch (error) {
         console.error("Error al cambiar contraseña:", error);
         res.status(500).json({ message: "Hubo un error al cambiar la contraseña" });

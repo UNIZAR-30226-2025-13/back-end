@@ -4,7 +4,7 @@ const { getProfile, changePassword, getLists, createList } = require('../control
 const { verifyToken } = require('../middleware/autorizationMiddleware');
 
 router.get("/perfil", verifyToken, getProfile);
-router.patch("/change-password", verifyToken, changePassword);
+router.post("/change-password", changePassword);
 router.get("/get-lists",  getLists);
 router.post("/create-list",  createList);
 
