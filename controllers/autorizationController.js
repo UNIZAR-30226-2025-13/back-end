@@ -28,6 +28,20 @@ const register = async (req, res) => {
   
       // insertar usuario
       await client.execute("INSERT INTO Usuario (nombre_usuario, contrasena, correo, link_compartir, es_admin) VALUES (?, ?, ?, ?, ?)", [nombre_usuario, hashContrasena, correo , "", false]);
+      
+      // se crean las listas por defecto -> canciones y episodios favoritos
+      await client.execute("INSERT INTO Lista_reproduccion (nombre, es_publica, color, link_compartir) VALUES (?, ?, ?, ?)", 
+          ["Tus canciones favoritas", false, "#A200F4", null]);
+      const id_lista_favoritas = (await client.execute("SELECT last_insert_rowid() AS id")).rows[0].id;
+
+      await client.execute("INSERT INTO Lista_reproduccion (nombre, es_publica, color, link_compartir) VALUES (?, ?, ?, ?)", 
+          ["Tus episodios favoritos", false, "#341146", null]);
+      const id_lista_episodios = (await client.execute("SELECT last_insert_rowid() AS id")).rows[0].id;
+
+      // Asociar listas al usuario
+      await client.execute("INSERT INTO Listas_del_usuario (nombre_usuario, id_lista) VALUES (?, ?), (?, ?)", 
+          [nombre_usuario, id_lista_favoritas, nombre_usuario, id_lista_episodios]);
+      
       // mensaje de correcto registro
       res.status(201).json({ message: "Usuario registrado correctamente" });
     
