@@ -1,10 +1,18 @@
+/*
+A MOSTRAR:
+- TODO LO DEL HOME NORMAL (menos los podcasts)
+- de 1 carpeta de spongefy llamada ALEATORIO CANCIONES:
+    obtener 6 listas de reproducción aleatorias
+- de un artista aleatorio:
+        - su foto
+        - su nombre
+        - las 5 cosas más recientes (ya sean canciones o albumes)
+*/
+
 const client = require('../db');
 
-const getHome = async (req, res) => {
+const getHomeMusic = async (req, res) => {
     try {
-        // sacar id,nombre,foto de 10 podcasts
-        const podcasts_info = await client.execute("SELECT id_podcast, nombre, link_imagen FROM Podcast LIMIT 10");
-
         // sacar 10 listas de reproduccion de géneros
         const carpeta_genero_result = await client.execute("SELECT c.id_carpeta FROM Carpeta c, Carpetas_del_usuario u WHERE c.nombre = 'Géneros' AND c.id_carpeta = u.id_carpeta AND u.nombre_usuario = 'spongefy'");
         let list_listas_genero = [];
@@ -85,18 +93,38 @@ const getHome = async (req, res) => {
                 };
             });
         }
+        
+        // sacar 6 listas de reproduccion de canciones aleatorias
+        const carpeta_aleatorio_result = await client.execute("SELECT c.id_carpeta FROM Carpeta c, Carpetas_del_usuario u WHERE nombre = 'Aleatorio Canciones' AND c.id_carpeta = u.id_carpeta AND u.nombre_usuario = 'spongefy'");
+        const listas_aleatorio_result = await client.execute("SELECT id_lista FROM Listas_de_carpeta WHERE id_carpeta = ? LIMIT 6", [carpeta_aleatorio_result.rows[0].id_carpeta]);
+        let list_listas_aleatorio = [];
+        let listas_aleatorio_info = [];
+        if (listas_aleatorio_result.rows.length > 0) {
+            list_listas_aleatorio = listas_aleatorio_result.rows.map((row) => row.id_lista);
+
+            // sacar información de las listas de reproduccion aleatorias
+            const dynamic_aleatorio = list_listas_aleatorio.map(() => "?").join(",");
+            const query_aleatorio = ` SELECT id_lista, nombre, color 
+                            FROM Lista_reproduccion 
+                            WHERE id_lista IN (${dynamic_aleatorio})
+                            LIMIT 6;
+                            `;
+            const listas_aleatorio_info_result = await client.execute(query_aleatorio, list_listas_aleatorio);
+            listas_aleatorio_info = listas_aleatorio_info_result.rows;
+        }
 
         res.status(200).json({ 
             podcasts: podcasts_info.rows,
             listas_genero_info: listas_genero_info,
             listas_idioma_info: listas_idioma_info,
-            listas_artistas_info: listas_artistas_final
+            listas_artistas_info: listas_artistas_final,
+            listas_aleatorio_info: listas_aleatorio_info
         });
 
     } catch (error) {
-        console.error("Error al obtener home", error);
-        res.status(500).json({ message: "Hubo un error al obtener home" });
+        console.error("Error al obtener home de música", error);
+        res.status(500).json({ message: "Hubo un error al obtener home de música" });
     }
 };
 
-module.exports = { getHome };
+module.exports = { getHomeMusic };

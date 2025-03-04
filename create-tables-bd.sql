@@ -23,10 +23,11 @@ DROP TABLE IF EXISTS Artista_principal;
 DROP TABLE IF EXISTS Generos;
 DROP TABLE IF EXISTS Cancion;
 DROP TABLE IF EXISTS Idiomas_multimedia;
-DROP TABLE IF EXISTS Contenido_multimedia;
 DROP TABLE IF EXISTS Numero_cancion_en_album;
 DROP TABLE IF EXISTS Artista_posee_albumes;
 DROP TABLE IF EXISTS Album;
+DROP TABLE IF EXISTS Valoraciones;
+DROP TABLE IF EXISTS Contenido_multimedia;
 DROP TABLE IF EXISTS Artista;
 DROP TABLE IF EXISTS Creador;
 
@@ -76,8 +77,16 @@ CREATE TABLE Contenido_multimedia (
     duracion        TIME NOT NULL,
     link_compartir  VARCHAR(255),
     link_imagen     VARCHAR(255),
-    fecha_pub       DATE NOT NULL,
-    valoracion      FLOAT CHECK (valoracion BETWEEN 1 AND 5)
+    fecha_pub       DATE NOT NULL
+);
+
+CREATE TABLE Valoraciones (
+    nombre_usuario  VARCHAR(255),
+    id_cm           INTEGER,
+    valoracion      FLOAT CHECK (valoracion BETWEEN 1 AND 5),
+    PRIMARY KEY (nombre_usuario, id_cm),
+    FOREIGN KEY (nombre_usuario) REFERENCES Usuario(nombre_usuario) ON DELETE CASCADE,
+    FOREIGN KEY (id_cm) REFERENCES Contenido_multimedia(id_cm) ON DELETE CASCADE
 );
 
 CREATE TABLE Idiomas_multimedia (
@@ -268,6 +277,8 @@ CREATE TABLE Listas_de_carpeta (
     FOREIGN KEY (id_lista) REFERENCES Lista_reproduccion(id_lista) ON DELETE CASCADE
 );
 
+-- CREAR LOS USUARIOS spongefy y jorge DESDE LA APLICACIÓN (así las contraseñas se guardan cifradas)
+
 INSERT INTO Creador (nombre_creador, biografia, link_compartir, link_imagen) VALUES
 ('Carlos Peguer', 'Carlos Peguer es co-presentador del pódcast español "La Pija y la Quinqui", que ha ganado popularidad entre la generación Z y los millennials.', 'https://example.com/share/carlospeguer', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740765428/carlos-peguer-img_ftskv0.jpg'),
 ('Mariang Maturana', 'Mariang Maturana es co-presentadora del pódcast "La Pija y la Quinqui", conocido por sus entrevistas a diversas personalidades.', 'https://example.com/share/mariangmaturana', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740765428/mariang-img_plzhnd.jpg'),
@@ -334,32 +345,36 @@ INSERT INTO Podcaster (nombre_podcaster) VALUES
 ('Mariang Maturana'),
 ('Jordi Wild');
 
-INSERT INTO Contenido_multimedia (link_cm, titulo, duracion, link_compartir, link_imagen, fecha_pub, valoracion) VALUES
-('https://res.cloudinary.com/djsm3jfht/video/upload/v1740771781/minaelhammani_i6b7wb.mp3', 'Mina el Hammani', '00:00:39', 'https://example.com/shareminaelhammani/', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770021/mina_f6v0jk.jpg', '2019-11-13', 4.7),
-('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773911/velda_ta5ap7.mp3', 'VeLDÁ', '00:00:33', 'https://example.com/share/velda', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768017/DTMF_pq1pgl.jpg', '2025-01-05', 4.9),
-('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773924/sinrazon_bo3sm5.mp3', 'Sin Razón', '00:00:47', 'https://example.com/share/sinrazon', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770020/sinrazon_nkv3f2.jpg', '2022-10-10', 4.2),
-('https://res.cloudinary.com/djsm3jfht/video/upload/v1740774205/rockstar_ducbqv.m4a', 'Rockstar', '00:01:00', 'https://example.com/share/rockstar', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770020/rockstar_gihqjy.jpg', '2019-11-22', 4.6),
-('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773965/dommage_bc0vjy.mp3', 'Domino', '00:02:52', 'https://example.com/share/domino', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770020/domino_ychtga.jpg', '2021-05-14', 4.3),
-('https://res.cloudinary.com/djsm3jfht/video/upload/v1740775397/pedololalolita_borutl.mp3', 'Episodio 1: Bienvenidos', '00:01:16', 'https://example.com/share/ep1', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770862/ep1_v4nuiq.jpg', '2024-01-15', 4.4),
-('https://res.cloudinary.com/djsm3jfht/video/upload/v1740775464/perrosanchez_hk5amg.mp3', 'Episodio 2: Redes Sociales y Salud Mental', '00:01:17', 'https://example.com/share/ep2', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770863/perrosanchez_f0lg5e.jpg', '2024-02-20', 4.6),
-('https://res.cloudinary.com/djsm3jfht/video/upload/v1740775464/jordiwild01_ywnwkb.mp3', 'Entrevista sobre Salud Mental', '00:01:11', 'https://example.com/share/ep1jordi', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770862/wild180_a1cf4i.jpg', '2024-02-22', 4.8),
-('https://res.cloudinary.com/djsm3jfht/video/upload/v1740775457/jordiwild02_yzle4j.mp3', 'Éxito Personal a Través de la Disciplina', '00:01:00', 'https://example.com/share/ep2jordi', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740771000/wild121_piej6g.jpg', '2024-02-23', 4.6),
-('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773796/whereshegoes_awabsi.mp3', 'WHERE SHE GOES', '00:00:27', 'https://example.com/share/where_she_goes', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770020/whereshegoes_urmtrz.jpg', '2023-05-18', 4.8),
-('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773919/lareina_sp8vrs.mp3', 'La Reina', '00:02:07', 'https://example.com/share/lareina', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770020/lareina_n5ccrx.jpg', '2024-06-15', 4.7),
-('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773972/titimepregunto_kizeex.mp3', 'Tití Me Preguntó', '00:03:19', 'https://example.com/share/titi_me_pregunto', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768014/uvst_l2fas0.jpg', '2022-05-06', 4.9),
-('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773864/yovistoasi_lsg9ou.mp3', 'Yo Visto Así', '00:02:38', 'https://example.com/share/yo_visto_asi', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768014/eutdm_as8cp5.jpg', '2020-11-27', 4.6),
-('https://res.cloudinary.com/djsm3jfht/video/upload/v1740775220/dtmf_l5yszg.mp3', 'DeBÍ TiRAR MáS FOToS', '00:00:19', 'https://example.com/share/debitiar', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768017/DTMF_pq1pgl.jpg', '2025-01-05', 4.9),
-('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773857/pesadillas_rggf1z.mp3', 'Pesadillas', '00:02:22', 'https://example.com/share/pesadillas', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/pesadillas_lg3qnb.jpg', '2024-09-13', 4.5),
-('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773741/normal_niurzh.mp3', 'Normal', '00:01:54', 'https://example.com/share/normal', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/norma_rhzn6l.jpg', '2022-09-14', 4.8),
-('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773646/malbec_zpzjnv.mp3', 'Malbec', '00:00:38', 'https://example.com/share/malbec', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768013/defdm_hceqs8.jpg', '2021-04-22', 4.7),
-('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773737/asitwas_p4fffn.mp3', 'As It Was', '00:02:08', 'https://example.com/share/as_it_was', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768013/harryysuvarita_nrkjeq.jpg', '2022-04-01', 4.9),
-('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773619/ferxoo100_yr75um.mp3', 'Ferxxo 100', '00:00:37', 'https://example.com/share/ferxxo_100', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770020/ferxxo100_jkdul3.jpg', '2022-07-01', 4.6),
-('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773709/goteo_ckg403.mp3', 'Goteo', '00:02:08', 'https://example.com/share/goteo', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770020/goteo_ztww4q.jpg', '2019-08-06', 4.5),
-('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773590/wartermelon_s0o1ri.mp3', 'Watermelon Sugar', '00:00:23', 'https://example.com/share/watermelon_sugar', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/watermelonsugar_rhrf8w.jpg', '2019-11-16', 4.8),
-('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773596/partyenelbarrio_seejoa.mp3', 'Party en el Barrio', '00:00:36', 'https://example.com/share/party_en_el_barrio', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/partyenelbarrio_ecfqxj.jpg', '2022-09-14', 4.7),
-('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773729/lolabunny_vs5kdf.mp3', 'Lola Bunny', '00:02:16', 'https://example.com/share/lola_bunny', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/lolabunny_o38u22.jpg', '2019-07-31', 4.6),
-('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773651/discoteka_blcs7c.mp3', 'Discoteka', '00:01:49', 'https://example.com/share/discoteka', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/diskoteca_gvaos3.jpg', '2022-09-01', 4.8),
-('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773580/eltonto_qoguwp.mp3', 'El Tonto', '00:00:44', 'https://example.com/share/el_tonto', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/eltonto_toogt3.jpg', '2023-04-14', 4.9);
+INSERT INTO Contenido_multimedia (link_cm, titulo, duracion, link_compartir, link_imagen, fecha_pub) VALUES
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740771781/minaelhammani_i6b7wb.mp3', 'Mina el Hammani', '00:00:39', 'https://example.com/shareminaelhammani/', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770021/mina_f6v0jk.jpg', '2019-11-13'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773911/velda_ta5ap7.mp3', 'VeLDÁ', '00:00:33', 'https://example.com/share/velda', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768017/DTMF_pq1pgl.jpg', '2025-01-05'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773924/sinrazon_bo3sm5.mp3', 'Sin Razón', '00:00:47', 'https://example.com/share/sinrazon', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770020/sinrazon_nkv3f2.jpg', '2022-10-10'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740774205/rockstar_ducbqv.m4a', 'Rockstar', '00:01:00', 'https://example.com/share/rockstar', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770020/rockstar_gihqjy.jpg', '2019-11-22'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773965/dommage_bc0vjy.mp3', 'Domino', '00:02:52', 'https://example.com/share/domino', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770020/domino_ychtga.jpg', '2021-05-14'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740775397/pedololalolita_borutl.mp3', 'Episodio 1: Bienvenidos', '00:01:16', 'https://example.com/share/ep1', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770862/ep1_v4nuiq.jpg', '2024-01-15'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740775464/perrosanchez_hk5amg.mp3', 'Episodio 2: Redes Sociales y Salud Mental', '00:01:17', 'https://example.com/share/ep2', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770863/perrosanchez_f0lg5e.jpg', '2024-02-20'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740775464/jordiwild01_ywnwkb.mp3', 'Entrevista sobre Salud Mental', '00:01:11', 'https://example.com/share/ep1jordi', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770862/wild180_a1cf4i.jpg', '2024-02-22'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740775457/jordiwild02_yzle4j.mp3', 'Éxito Personal a Través de la Disciplina', '00:01:00', 'https://example.com/share/ep2jordi', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740771000/wild121_piej6g.jpg', '2024-02-23'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773796/whereshegoes_awabsi.mp3', 'WHERE SHE GOES', '00:00:27', 'https://example.com/share/where_she_goes', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770020/whereshegoes_urmtrz.jpg', '2023-05-18'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773919/lareina_sp8vrs.mp3', 'La Reina', '00:02:07', 'https://example.com/share/lareina', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770020/lareina_n5ccrx.jpg', '2024-06-15'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773972/titimepregunto_kizeex.mp3', 'Tití Me Preguntó', '00:03:19', 'https://example.com/share/titi_me_pregunto', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768014/uvst_l2fas0.jpg', '2022-05-06'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773864/yovistoasi_lsg9ou.mp3', 'Yo Visto Así', '00:02:38', 'https://example.com/share/yo_visto_asi', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768014/eutdm_as8cp5.jpg', '2020-11-27'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740775220/dtmf_l5yszg.mp3', 'DeBÍ TiRAR MáS FOToS', '00:00:19', 'https://example.com/share/debitiar', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768017/DTMF_pq1pgl.jpg', '2025-01-05'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773857/pesadillas_rggf1z.mp3', 'Pesadillas', '00:02:22', 'https://example.com/share/pesadillas', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/pesadillas_lg3qnb.jpg', '2024-09-13'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773741/normal_niurzh.mp3', 'Normal', '00:01:54', 'https://example.com/share/normal', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/norma_rhzn6l.jpg', '2022-09-14'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773646/malbec_zpzjnv.mp3', 'Malbec', '00:00:38', 'https://example.com/share/malbec', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768013/defdm_hceqs8.jpg', '2021-04-22'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773737/asitwas_p4fffn.mp3', 'As It Was', '00:02:08', 'https://example.com/share/as_it_was', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768013/harryysuvarita_nrkjeq.jpg', '2022-04-01'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773619/ferxoo100_yr75um.mp3', 'Ferxxo 100', '00:00:37', 'https://example.com/share/ferxxo_100', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770020/ferxxo100_jkdul3.jpg', '2022-07-01'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773709/goteo_ckg403.mp3', 'Goteo', '00:02:08', 'https://example.com/share/goteo', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770020/goteo_ztww4q.jpg', '2019-08-06'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773590/wartermelon_s0o1ri.mp3', 'Watermelon Sugar', '00:00:23', 'https://example.com/share/watermelon_sugar', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/watermelonsugar_rhrf8w.jpg', '2019-11-16'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773596/partyenelbarrio_seejoa.mp3', 'Party en el Barrio', '00:00:36', 'https://example.com/share/party_en_el_barrio', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/partyenelbarrio_ecfqxj.jpg', '2022-09-14'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773729/lolabunny_vs5kdf.mp3', 'Lola Bunny', '00:02:16', 'https://example.com/share/lola_bunny', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/lolabunny_o38u22.jpg', '2019-07-31'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773651/discoteka_blcs7c.mp3', 'Discoteka', '00:01:49', 'https://example.com/share/discoteka', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/diskoteca_gvaos3.jpg', '2022-09-01'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773580/eltonto_qoguwp.mp3', 'El Tonto', '00:00:44', 'https://example.com/share/el_tonto', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/eltonto_toogt3.jpg', '2023-04-14');
+
+INSERT INTO Valoraciones (nombre_usuario, id_cm, valoracion) VALUES
+('jorge', 1, 4),
+('jorge', 2, 5);
 
 INSERT INTO Cancion (id_cancion, n_repros, letra) VALUES
 (1, 1500000, 'Esta es la letra de "Mina el Hammani", un tema cargado de energía que resalta la espiritualidad en la música urbana.'),
@@ -506,30 +521,59 @@ INSERT INTO Carpeta (nombre) VALUES
 ('Idiomas'),
 ('Géneros'),
 ('Artistas'),
-('Canciones'),
-('Episodios');
+('Podcasters'),
+('Aleatorio Canciones'),
+('Aleatorio Episodios');
 
 INSERT INTO Carpetas_del_usuario (nombre_usuario, id_carpeta) VALUES
 ('spongefy', 1),
 ('spongefy', 2),
 ('spongefy', 3),
 ('spongefy', 4),
-('spongefy', 5);
+('spongefy', 5),
+('spongefy', 6);
 
 INSERT INTO Lista_reproduccion (nombre, es_publica, color, link_compartir) VALUES
-('Español', TRUE, 'Azul', 'https://example.com/share/español'),
-('Francés', TRUE, 'Rojo', 'https://example.com/share/frances'),
-('Inglés', TRUE, 'Verde', 'https://example.com/share/ingles'),
-('Rap', TRUE, 'Amarillo', 'https://example.com/share/rap'),
-('Reguetón', TRUE, 'Morado', 'https://example.com/share/regueton'),
-('Trap', TRUE, 'Naranja', 'https://example.com/share/trap'),
-('Pop', TRUE, 'Azul', 'https://example.com/share/pop'),
-('This is Bad Bunny', TRUE, 'Negro', 'https://example.com/share/thisisbadbunny'),
-('This is Feid', TRUE, 'Negro', 'https://example.com/share/thisisfeid'),
-('This is Duki', TRUE, 'Negro', 'https://example.com/share/thisisduki'),
-('This is Lola Índigo', TRUE, 'Negro', 'https://example.com/share/thisislolaindigo'),
-('This is Quevedo', TRUE, 'Negro', 'https://example.com/share/thisisquevedo'),
-('This is Cruz Cafuné', TRUE, 'Negro', 'https://example.com/share/thisiscruzcafune');
+-- idiomas
+('TOP ESPAÑOL', TRUE, '#0000FF', 'https://example.com/share/español'),
+('TOP FRANCÉS', TRUE, '#FF0000', 'https://example.com/share/frances'),
+('TOP INGLÉS', TRUE, '#008000', 'https://example.com/share/ingles'),
+-- generos
+('RAP', TRUE, '#FFFF00', 'https://example.com/share/rap'),
+('REGUETÓN', TRUE, '#800080', 'https://example.com/share/regueton'),
+('TRAP', TRUE, '#FFA500', 'https://example.com/share/trap'),
+('POP', TRUE, '#0000FF', 'https://example.com/share/pop'),
+-- artistas
+('This is Bad Bunny', TRUE, '#000000', 'https://example.com/share/thisisbadbunny'),
+('This is Feid', TRUE, '#000000', 'https://example.com/share/thisisfeid'),
+('This is Duki', TRUE, '#000000', 'https://example.com/share/thisisduki'),
+('This is Lola Índigo', TRUE, '#000000', 'https://example.com/share/thisislolaindigo'),
+('This is Quevedo', TRUE, '#000000', 'https://example.com/share/thisisquevedo'),
+('This is Cruz Cafuné', TRUE, '#000000', 'https://example.com/share/thisiscruzcafune'),
+-- podcasters
+('This is Carlos Peguer', TRUE, '#000000', 'https://example.com/share/thisiscarlospeguer'),
+('This is Mariang Maturana', TRUE, '#000000', 'https://example.com/share/thisismariangmaturana'),
+('This is Jordi Wild', TRUE, '#000000', 'https://example.com/share/thisisjordiwild'),
+-- aleatorio canciones
+('VERANO', TRUE, '#FFA500', 'https://example.com/share/verano'),
+('FIESTA', TRUE, '#FF0000', 'https://example.com/share/fiesta'),
+('RELAX', TRUE, '#008000', 'https://example.com/share/relax'),
+('ENTRENAMIENTO', TRUE, '#FFFF00', 'https://example.com/share/entrenamiento'),
+('TRABAJO', TRUE, '#0000FF', 'https://example.com/share/trabajo'),
+('ESTUDIO', TRUE, '#800080', 'https://example.com/share/estudio'),
+('SAN VALENTÍN', TRUE, '#FFA500', 'https://example.com/share/sanvalentin'),
+('NAVIDAD', TRUE, '#FF0000', 'https://example.com/share/navidad'),
+-- aleatorio episodios
+('ASMR', TRUE, '#008000', 'https://example.com/share/asmr'),
+('MEDITACIÓN', TRUE, '#FFFF00', 'https://example.com/share/meditacion'),
+('COCINA', TRUE, '#0000FF', 'https://example.com/share/cocina'),
+('INFANTIL', TRUE, '#800080', 'https://example.com/share/infantil'),
+('MOTIVACIÓN', TRUE, '#FFA500', 'https://example.com/share/motivacion'),
+('HISTORIA', TRUE, '#008000', 'https://example.com/share/historia'),
+('CIENCIA', TRUE, '#FFFF00', 'https://example.com/share/ciencia'),
+('CULTURA', TRUE, '#800080', 'https://example.com/share/cultura'),
+('COMEDIA', TRUE, '#FFA500', 'https://example.com/share/comedia'),
+('ENTREVISTAS', TRUE, '#008000', 'https://example.com/share/entrevistas');
 
 INSERT INTO Playlist (id_playlist) VALUES
 (1), (2), (3), (4), (5), (6), (7), (8), (9), (10), (11), (12), (13);
@@ -548,4 +592,26 @@ INSERT INTO Listas_de_carpeta (id_carpeta, id_lista) VALUES
 (3, 10),
 (3, 11),
 (3, 12),
-(3, 13);
+(3, 13),
+(4, 14),
+(4, 15),
+(4, 16),
+(5, 17),
+(5, 18),
+(5, 19),
+(5, 20),
+(5, 21),
+(5, 22),
+(5, 23),
+(5, 24),
+(6, 25),
+(6, 26),
+(6, 27),
+(6, 28),
+(6, 29),
+(6, 30),
+(6, 31),
+(6, 32),
+(6, 33),
+(6, 34);
+
