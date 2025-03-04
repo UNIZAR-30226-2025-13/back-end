@@ -223,9 +223,9 @@ CREATE TABLE Sigue_a_usuario (
 );
 
 CREATE TABLE Token (
-    nombre_usuario  VARCHAR(255),
+    nombre_usuario  VARCHAR(255) PRIMARY KEY,
     token           TEXT,
-    PRIMARY KEY (nombre_usuario , token),
+    fecha_exp       DATE,
     FOREIGN KEY (nombre_usuario) REFERENCES Usuario(nombre_usuario) ON DELETE CASCADE
 );
 
