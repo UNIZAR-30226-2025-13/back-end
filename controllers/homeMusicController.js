@@ -113,14 +113,34 @@ const getHomeMusic = async (req, res) => {
             listas_aleatorio_info = listas_aleatorio_info_result.rows;
         }
 
-        
+        const artista_result = await client.execute("SELECT nombre_artista, link_imagen FROM Artista ORDER BY RANDOM() LIMIT 1");
+        const artista = artista_result.rows[0];
+        // obtener las 5 canciones y álbumes más recientes del artista random
+        const canciones_albumes_result = await client.execute(
+          ` SELECT c.id_cancion, cm.titulo, cm.link_imagen
+            FROM Cancion c
+            JOIN Contenido_multimedia cm ON c.id_cancion = cm.id_cm
+            WHERE nombre_artista = ?
+            UNION ALL
+            SELECT id_album, nombre_album, link_imagen
+            FROM Album
+            WHERE nombre_artista = ? AND es_disco = TRUE
+            ORDER BY fecha_lanzamiento DESC
+            LIMIT 5`, 
+            [artista.nombre_artista, artista.nombre_artista]
+        );
 
         res.status(200).json({ 
             podcasts: podcasts_info.rows,
             listas_genero_info: listas_genero_info,
             listas_idioma_info: listas_idioma_info,
             listas_artistas_info: listas_artistas_final,
-            listas_aleatorio_info: listas_aleatorio_info
+            listas_aleatorio_info: listas_aleatorio_info,
+            artista: {
+                nombre_artista: artista.nombre_artista,
+                link_imagen: artista.link_imagen,
+                canciones_albumes: canciones_albumes_result.rows
+            }
         });
 
     } catch (error) {
