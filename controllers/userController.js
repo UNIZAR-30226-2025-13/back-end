@@ -79,18 +79,26 @@ const getLists = async (req, res) => {
             'SELECT c.id_carpeta, c.nombre FROM Carpeta c JOIN Carpetas_del_Usuario cu ON c.id_carpeta = cu.id_carpeta WHERE nombre_usuario = ?;',
             [nombre_usuario]
         );
-        const artisitas_favoritos = await client.execute(
-            'SELECT a.nombre_artista FROM Sigue_a_creador sc JOIN Artista a ON sc.nombre_creador = a.nombre_artista WHERE sc.nombre_usuario = ?;',
+        const artistas_favoritos = await client.execute(
+            `SELECT a.nombre_artista, c.link_imagen 
+             FROM Sigue_a_creador sc 
+             JOIN Artista a ON sc.nombre_creador = a.nombre_artista
+             JOIN Creador c ON a.nombre_artista = c.nombre_creador
+             WHERE sc.nombre_usuario = ?;`,
             [nombre_usuario]
         );
         const podcasts_favoritos = await client.execute(
-            'SELECT p.nombre_podcaster FROM Sigue_a_creador sc JOIN Podcaster p ON sc.nombre_creador = p.nombre_podcaster WHERE sc.nombre_usuario = ?;',
+            `SELECT p.nombre_podcaster, c.link_imagen 
+             FROM Sigue_a_creador sc 
+             JOIN Podcaster p ON sc.nombre_creador = p.nombre_podcaster
+             JOIN Creador c ON p.nombre_podcaster = c.nombre_creador
+             WHERE sc.nombre_usuario = ?;`,
             [nombre_usuario]
-        );
+        );        
         res.status(200).json({
             listas: listas.rows.length ? listas.rows : "No hay listas",
             carpetas: carpetas.rows.length ? carpetas.rows : "No hay carpetas",
-            artistas_favoritos: artisitas_favoritos.rows.length ? artisitas_favoritos.rows : "No hay artistas favoritos",
+            artistas_favoritos: artistas_favoritos.rows.length ? artistas_favoritos.rows : "No hay artistas favoritos",
             podcasts_favoritos: podcasts_favoritos.rows.length ? podcasts_favoritos.rows : "No hay podcasts favoritos"
         });
 
@@ -119,4 +127,5 @@ const createList = async (req, res) => {
         res.status(500).json({ message: "Hubo un error al crear la lista" });
     }
 };
+
 module.exports = { getProfile, changePassword, getLists, createList };
