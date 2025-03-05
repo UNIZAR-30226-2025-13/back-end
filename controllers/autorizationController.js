@@ -1,7 +1,20 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const crypto = require('crypto')
+const crypto = require('crypto');
 const client = require('../db');
+const nodemailer = require('nodemailer'); // Funcionalidad del correo electrónico
+require('dotenv').config(); // para acceder a las variables de entorno
+
+
+
+// Configurar transporte de correo GMAIL
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+      user: process.env.MAIL_ADDRESS, 
+      pass: process.env.MAIL_PASSWORD 
+  }
+});
 
 // registrar usuario
 const register = async (req, res) => {
@@ -119,16 +132,12 @@ const register = async (req, res) => {
         const { nombre_usuario } = result.rows[0];
 
         // Generar token aleatorio
-        const token = crypto.randomBytes(32).toString("hex");
+        const token = crypto.randomBytes(6).toString("hex");
         
         // Establecer tiempo de expiración (ej. 1 hora desde la generación)
         const fechaExp = new Date();
         fechaExp.setHours(fechaExp.getHours() + 2);
         const fechaExpISO = fechaExp.toISOString();
-
-        console.log("fecha de exp: " + fechaExpISO);
-        console.log("fecha de exp: " + fechaExpISO);
-
 
         // Guardar token en la base de datos
         // Insertar en la base de datos o actualizar si ya existe
@@ -137,10 +146,45 @@ const register = async (req, res) => {
           [nombre_usuario, token, fechaExpISO, token, fechaExpISO]
         );
 
+        // Configurar el mensaje a enviar
+        const mailConf = {
+          from: process.env.MAIL_ADDRESS,
+          to: correo,
+          subject: "Solicitud de cambio de contraseña Spongefy",
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9;">
+              <h2 style="color:rgb(0, 0, 0); text-align: center;">Spongefy - Restablecimiento de contraseña</h2>
+              
+              <p style="font-size: 16px; color: #333;">Hola <strong>${nombre_usuario}</strong>,</p>
+              <p style="font-size: 16px; color: #333;">
+                Recibimos una solicitud para restablecer tu contraseña. Usa el siguiente código para completar el proceso:
+              </p>
+
+              <div style="text-align: center; padding: 15px; background-color: #fff3cd; border-radius: 8px; font-size: 18px; font-weight: bold; color: #856404; margin: 20px 0;">
+                ${token}
+              </div>
+
+              <p style="font-size: 14px; color: #777;">⚠️ Este código expira en <strong>1 hora</strong>.</p>
+              
+              <p style="font-size: 14px; color: #777;">
+                Si no solicitaste este cambio, ignora este mensaje y tu contraseña permanecerá segura.
+              </p>
+
+              <hr style="border: 0; height: 1px; background-color: #ddd; margin: 20px 0;">
+              
+              <p style="text-align: center; font-size: 12px; color: #aaa;">
+                &copy; 2025 Spongefy. Todos los derechos reservados.
+              </p>
+            </div>
+            `
+        }
+
+        // Enviar correo electrónico con el token
+        await transporter.sendMail(mailConf);
+
         // Enviar el token como respuesta
         res.status(200).json({ 
             message: "Solicitud de cambio de contraseña exitosa",
-            token: token 
         });
 
     } catch (error) {
