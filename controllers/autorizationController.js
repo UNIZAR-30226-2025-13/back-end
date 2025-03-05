@@ -42,6 +42,32 @@ const register = async (req, res) => {
   
       // insertar usuario
       await client.execute("INSERT INTO Usuario (nombre_usuario, contrasena, correo, link_compartir, es_admin) VALUES (?, ?, ?, ?, ?)", [nombre_usuario, hashContrasena, correo , "", false]);
+      
+      // verificar si las listas ya existen
+      const listaFavoritas = await client.execute("SELECT id_lista FROM Lista_reproduccion WHERE nombre = ?", ["Tus canciones favoritas"]);
+      let id_lista_favoritas;
+      if (listaFavoritas.rows.length > 0) {
+          id_lista_favoritas = listaFavoritas.rows[0].id_lista;
+      } else {
+          await client.execute("INSERT INTO Lista_reproduccion (nombre, es_publica, color, link_compartir) VALUES (?, ?, ?, ?)", 
+              ["Tus canciones favoritas", false, "#A200F4", null]);
+          id_lista_favoritas = (await client.execute("SELECT last_insert_rowid() AS id")).rows[0].id;
+      }
+
+      const listaEpisodios = await client.execute("SELECT id_lista FROM Lista_reproduccion WHERE nombre = ?", ["Tus episodios favoritos"]);
+      let id_lista_episodios;
+      if (listaEpisodios.rows.length > 0) {
+          id_lista_episodios = listaEpisodios.rows[0].id_lista;
+      } else {
+          await client.execute("INSERT INTO Lista_reproduccion (nombre, es_publica, color, link_compartir) VALUES (?, ?, ?, ?)", 
+              ["Tus episodios favoritos", false, "#341146", null]);
+          id_lista_episodios = (await client.execute("SELECT last_insert_rowid() AS id")).rows[0].id;
+      }
+
+      // insertar en Listas_del_usuario solo si no existe
+      await client.execute(`INSERT OR IGNORE INTO Listas_del_usuario (nombre_usuario, id_lista) VALUES (?, ?), (?, ?)`, 
+        [nombre_usuario, id_lista_favoritas, nombre_usuario, id_lista_episodios]);
+
       // mensaje de correcto registro
       res.status(201).json({ message: "Usuario registrado correctamente" });
     

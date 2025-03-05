@@ -67,9 +67,17 @@ const getArtist = async (req, res) => {
 
         // obtener número de seguidores del artista
         const seguidores_result = await client.execute("SELECT COUNT(*) AS seguidores FROM Sigue_a_creador WHERE nombre_creador = ?", [nombre_artista]);
-
         const num_seguidores = seguidores_result.rows[0].seguidores;
 
+        // obtener la lista de reproducción de "This is" del artista
+        const lista_artista_result = await client.execute("SELECT id_lista, nombre FROM Lista_reproduccion WHERE nombre = CONCAT('This is ', ?)", [nombre_artista]);
+
+        // devolver la lista "This is", si existe
+        let lista_this_is = null;
+        if (lista_artista_result.rows.length > 0) {
+            lista_this_is = lista_artista_result.rows[0];
+        }
+        
         res.status(200).json({ // devolver todo el perfil del artista
             nombre_artista: result_artista.rows[0].nombre_artista,
             biografia: biografia,
@@ -77,7 +85,8 @@ const getArtist = async (req, res) => {
             link_imagen: link_imagen,
             albumes: albumes_info,
             canciones: canciones_info,
-            seguidores: num_seguidores
+            seguidores: num_seguidores,
+            lista_this_is: lista_this_is
         });
 
     } catch (error) {

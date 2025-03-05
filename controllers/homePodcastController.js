@@ -1,6 +1,17 @@
+/*
+A MOSTRAR:
+- TODO LO DEL HOME NORMAL (menos generos y idiomas)
+- de 1 carpeta de spongefy llamada ALEATORIO EPISODIOS:
+    obtener 6 listas de reproducción aleatorias
+- de un podcast aleatorio:
+        - nombre_podcast
+        - foto_podcast
+        - los 4 episodios más recientes
+*/
+
 const client = require('../db');
 
-const getHome = async (req, res) => {
+const getHomePodcast = async (req, res) => {
     try {
         // sacar id,nombre,foto de 10 podcasts
         const podcasts_info = await client.execute("SELECT id_podcast, nombre, link_imagen FROM Podcast LIMIT 10");
@@ -42,7 +53,6 @@ const getHome = async (req, res) => {
             const listas_idioma_info_result = await client.execute(query_idioma, list_listas_idioma);
             listas_idioma_info = listas_idioma_info_result.rows;
         }
-
         // sacar 10 listas de reproduccion de artistas (This is ?artist)
         const carpeta_artistas_result = await client.execute("SELECT c.id_carpeta FROM Carpeta c, Carpetas_del_usuario u WHERE nombre = 'Artistas' AND c.id_carpeta = u.id_carpeta AND u.nombre_usuario = 'spongefy'");
         let list_listas_artistas = [];
@@ -92,11 +102,12 @@ const getHome = async (req, res) => {
             listas_idioma_info: listas_idioma_info,
             listas_artistas_info: listas_artistas_final
         });
+        
 
     } catch (error) {
-        console.error("Error al obtener home", error);
-        res.status(500).json({ message: "Hubo un error al obtener home" });
+        console.error("Error al obtener home de los podcasts", error);
+        res.status(500).json({ message: "Hubo un error al obtener home de los podcasts" });
     }
 };
 
-module.exports = { getHome };
+module.exports = { getHomePodcast };
