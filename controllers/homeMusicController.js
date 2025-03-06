@@ -113,25 +113,27 @@ const getHomeMusic = async (req, res) => {
             listas_aleatorio_info = listas_aleatorio_info_result.rows;
         }
 
-        const artista_result = await client.execute("SELECT nombre_artista, link_imagen FROM Artista ORDER BY RANDOM() LIMIT 1");
+        const artista_result = await client.execute("SELECT nombre_artista FROM Artista ORDER BY RANDOM() LIMIT 1");
         const artista = artista_result.rows[0];
         // obtener las 5 canciones y álbumes más recientes del artista random
         const canciones_albumes_result = await client.execute(
-          ` SELECT c.id_cancion, cm.titulo, cm.link_imagen
+          ` SELECT DISTINCT c.id_cancion as id, cm.titulo, cm.link_imagen, cm.fecha_pub, 'cancion' AS tipo
             FROM Cancion c
             JOIN Contenido_multimedia cm ON c.id_cancion = cm.id_cm
-            WHERE nombre_artista = ?
+            JOIN Artista_principal ap ON ap.id_cancion = c.id_cancion
+            LEFT JOIN Featuring f ON f.id_cancion = c.id_cancion
+            WHERE ap.nombre_artista = ? OR f.nombre_artista = ?
             UNION ALL
-            SELECT id_album, nombre_album, link_imagen
-            FROM Album
+            SELECT DISTINCT a.id_album as id, a.nombre_album, a.link_imagen, a.fecha_pub, 'album' AS tipo
+            FROM Album a
+            JOIN Artista_posee_albumes apa ON apa.id_album = a.id_album
             WHERE nombre_artista = ? AND es_disco = TRUE
-            ORDER BY fecha_lanzamiento DESC
+            ORDER BY fecha_pub DESC
             LIMIT 5`, 
-            [artista.nombre_artista, artista.nombre_artista]
+            [artista.nombre_artista, artista.nombre_artista, artista.nombre_artista]
         );
 
         res.status(200).json({ 
-            podcasts: podcasts_info.rows,
             listas_genero_info: listas_genero_info,
             listas_idioma_info: listas_idioma_info,
             listas_artistas_info: listas_artistas_final,
