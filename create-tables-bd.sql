@@ -223,9 +223,9 @@ CREATE TABLE Sigue_a_usuario (
 );
 
 CREATE TABLE Token (
-    nombre_usuario  VARCHAR(255),
+    nombre_usuario  VARCHAR(255) PRIMARY KEY,
     token           TEXT,
-    PRIMARY KEY (nombre_usuario , token),
+    fecha_exp       DATE,
     FOREIGN KEY (nombre_usuario) REFERENCES Usuario(nombre_usuario) ON DELETE CASCADE
 );
 
@@ -574,6 +574,10 @@ INSERT INTO Lista_reproduccion (nombre, es_publica, color, link_compartir) VALUE
 ('CULTURA', TRUE, '#800080', 'https://example.com/share/cultura'),
 ('COMEDIA', TRUE, '#FFA500', 'https://example.com/share/comedia'),
 ('ENTREVISTAS', TRUE, '#008000', 'https://example.com/share/entrevistas');
+
+INSERT INTO Playlist (id_playlist) VALUES
+(1), (2), (3), (4), (5), (6), (7), (8), (9), (10), (11), (12), (13);
+
 
 INSERT INTO Listas_de_carpeta (id_carpeta, id_lista) VALUES
 (1, 1),

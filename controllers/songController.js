@@ -34,17 +34,18 @@ const playSong = async (req, res) => {
         const artistas_feat = artists_result.rows[0]?.artistas_feat ? artists_result.rows[0].artistas_feat.split(",").join(", ") : "";
 
         res.status(200).json({
+            id_cancion: id_cancion,
             link_cm: cm_result.rows[0].link_cm,
             titulo: cm_result.rows[0].titulo,
             duracion: cm_result.rows[0].duracion,
-            link_imagen: cm_result.rows[0].link_img,
+            link_imagen: cm_result.rows[0].link_imagen,
             autor: nombre_artista, 
             artistas_featuring: artistas_feat // String con los featuring separados por coma
         });
     
     } catch (error) {
-        console.error("Error al obtener perfil:", error);
-        res.status(500).json({ message: "Hubo un error al obtener el perfil" });
+        console.error("Error al obtener la canción:", error);
+        res.status(500).json({ message: "Hubo un al obtener la canción" });
     }
 };
 

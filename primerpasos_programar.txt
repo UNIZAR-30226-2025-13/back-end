@@ -176,7 +176,7 @@ http://localhost:8080/create-list
 }
 
 
-PRUEBA playSong (POST)
+PRUEBA playSong (GET)
 - direccion web:
 http://localhost:8080/play-song?id_cancion=2
 -formato prueba:
@@ -186,6 +186,21 @@ nada
     "link_cm": "https://res.cloudinary.com/djsm3jfht/video/upload/v1740773911/velda_ta5ap7.mp3",
     "titulo": "VeLDÁ",
     "duracion": "00:00:33",
+    "link_imagen": "https://res.cloudinary.com/djsm3jfht/image/upload/v1740768017/DTMF_pq1pgl.jpg",
     "autor": "Bad Bunny",
     "artistas_featuring": "Dei V, Omar Courtz"
+}
+
+PRUEBA add-song-playlist (POST)
+- direccion web:
+http://localhost:8080/add-song-playlist
+-formato prueba:
+{
+    "id_cancion": "2",
+    "id_playlist": "2"
+}
+
+-respuesta obtenida:
+{
+    "message": "Canción añadida correctamente"
 }
