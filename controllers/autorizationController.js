@@ -118,9 +118,14 @@ const register = async (req, res) => {
   // Solicitar cambio de contraseña
   const changePasswordRequest = async (req, res) => {
     try {
-        const { correo } = req.query;
+      console.log("Query params recibidos:", req.query); // Verifica si llega el parámetro
+      const { correo } = req.query;
 
-        console.log(correo);
+      if (!correo) {
+          return res.status(400).json({ message: "Falta el parámetro 'correo'" });
+      }
+
+      console.log("Correo recibido:", correo);
 
         // Verificar si el correo existe
         const result = await client.execute("SELECT nombre_usuario FROM Usuario WHERE correo = ?", [correo]);

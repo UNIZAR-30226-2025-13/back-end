@@ -69,7 +69,7 @@ const changePassword = async (req, res) => {
 
 const getLists = async (req, res) => {
     try{
-        const { nombre_usuario } = req.body; // obtener nombre_usuario
+        const { nombre_usuario } = req.query; // obtener nombre_usuario
          // Obtener listas y carpetas del usuario
         const listas = await client.execute(
             'SELECT lr.id_lista, lr.nombre FROM Lista_reproduccion lr JOIN Listas_del_usuario lu ON lr.id_lista = lu.id_lista WHERE lu.nombre_usuario = ?;',
@@ -108,6 +108,45 @@ const getLists = async (req, res) => {
     }
 }
 
+const getPlaylists = async (req, res) => {
+    try {
+        const { nombre_usuario } = req.query; // obtener nombre_usuario
+
+        // Obtener listas y carpetas del usuario
+        const listasResult = await client.execute(
+            'SELECT lr.id_lista, lr.nombre FROM Lista_reproduccion lr JOIN Listas_del_usuario lu ON lr.id_lista = lu.id_lista WHERE lu.nombre_usuario = ?;',
+            [nombre_usuario]
+        );
+        const listas = listasResult.rows || []; // Acceder a 'rows'
+
+        const listas_en_carpetasResult = await client.execute(
+            'SELECT lr.id_lista, lr.nombre FROM Lista_reproduccion lr JOIN Listas_de_carpeta lc ON lr.id_lista = lc.id_lista WHERE EXISTS (SELECT 1 FROM Carpetas_del_Usuario cu WHERE cu.id_carpeta = lc.id_carpeta AND cu.nombre_usuario = ?);',
+            [nombre_usuario]
+        );
+        const listas_en_carpetas = listas_en_carpetasResult.rows || []; // Acceder a 'rows'
+
+        // Unir listas y listas_en_carpetas
+        const todas_las_listas = [...listas, ...listas_en_carpetas];
+
+        // Filtrar las listas específicas que no quieres incluir
+        const listas_filtradas = todas_las_listas.filter(lista => 
+            lista.nombre !== 'Tus canciones favoritas' && lista.nombre !== 'Tus episodios favoritos'
+        );
+
+        // Eliminar duplicados si es necesario, por ejemplo, si las listas tienen el mismo id_lista
+        const listas_unicas = [
+            ...new Map(listas_filtradas.map(item => [item.id_lista, item])).values()
+        ];
+
+        // Devolver el resultado combinado
+        res.status(200).json(listas_unicas);
+
+    } catch (error) {
+        console.error("Error al obtener listas:", error);
+        res.status(500).json({ message: "Hubo un error al obtener las listas" });
+    }
+};
+
 const createList = async (req, res) => {
     try {
         const { nombre_lista, nombre_usuario } = req.body;
@@ -133,22 +172,32 @@ const createList = async (req, res) => {
 const addSongToPlaylist = async (req, res) => {
     try {
         const { id_cancion, id_playlist } = req.body;
+        
         if (!id_cancion || !id_playlist) {
             return res.status(400).json({ message: "Hay que rellenar todos los campos" });
         }
-        const result_playlist = await client.execute("SELECT * FROM Playlist WHERE id_playlist = ?", [id_playlist]);
+        const result_playlist = await client.execute("SELECT * FROM Lista_reproduccion WHERE id_lista = ?", [id_playlist]);
         if (result_playlist.rows.length === 0) {
             return res.status(400).json({ message: "La playlist no existe" });
         }
+
         const result_song = await client.execute("SELECT * FROM Cancion WHERE id_cancion = ?", [id_cancion]);
         console.log(result_song)
         if (result_song.rows.length === 0) {
             return res.status(400).json({ message: "La cancion no existe" });
         }
+
         const song_in_playlist = await client.execute("SELECT * FROM Canciones_en_playlist WHERE id_cancion = ? AND id_playlist = ?", [id_cancion, id_playlist]);
         console.log(song_in_playlist.rows.length)
         if (song_in_playlist.rows.length === 1) {
             return res.status(400).json({ message: "La canción ya pertenece a la playlist" });
+        }
+
+        const result_playlist_check = await client.execute("SELECT * FROM Playlist WHERE id_playlist = ?", [id_playlist]);
+        if (result_playlist_check.rows.length === 0) {
+            // Si no existe, la añadimos a la tabla `Playlist`
+            await client.execute("INSERT INTO Playlist (id_playlist) VALUES (?)", [id_playlist]);
+            console.log("Playlist añadida a la tabla Playlist");
         }
 
         await client.execute("INSERT INTO Canciones_en_playlist (id_playlist, id_cancion) VALUES (?, ?)", [id_playlist, id_cancion]);
@@ -159,4 +208,4 @@ const addSongToPlaylist = async (req, res) => {
     }
 }
 
-module.exports = { getProfile, changePassword, getLists, createList, addSongToPlaylist };
+module.exports = { getProfile, changePassword, getLists, createList, addSongToPlaylist, getPlaylists };
