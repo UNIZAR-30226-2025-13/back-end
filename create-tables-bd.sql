@@ -479,10 +479,10 @@ INSERT INTO Tiene_podcast (nombre_podcaster, id_podcast) VALUES
 ('Jordi Wild', 2);
 
 INSERT INTO Episodio (id_ep, id_podcast, descripcion) VALUES
-(8, 1, 'En este episodio, hablamos de la última película de terror y analizamos las tendencias actuales de la moda.'),
-(9, 1, 'Un episodio dedicado a nuestras vivencias en el mundo de las redes sociales y cómo afectan la salud mental.'),
-(10, 2, 'Entrevista con un experto en psicología sobre la importancia de la salud mental en el mundo moderno.'),
-(11, 2, 'En este episodio, discutimos cómo lograr el éxito personal a través de la disciplina y el trabajo constante.');
+(6, 1, 'En este episodio, hablamos de la última película de terror y analizamos las tendencias actuales de la moda.'),
+(7, 1, 'Un episodio dedicado a nuestras vivencias en el mundo de las redes sociales y cómo afectan la salud mental.'),
+(8, 2, 'Entrevista con un experto en psicología sobre la importancia de la salud mental en el mundo moderno.'),
+(9, 2, 'En este episodio, discutimos cómo lograr el éxito personal a través de la disciplina y el trabajo constante.');
 
 INSERT INTO Idiomas_multimedia (id_cm, idioma) VALUES
 (1, 'Español'),   -- "Mina el Hammani" de Cruz Cafuné
@@ -576,8 +576,11 @@ INSERT INTO Lista_reproduccion (nombre, es_publica, color, link_compartir) VALUE
 ('ENTREVISTAS', TRUE, '#008000', 'https://example.com/share/entrevistas');
 
 INSERT INTO Playlist (id_playlist) VALUES
-(1), (2), (3), (4), (5), (6), (7), (8), (9), (10), (11), (12), (13);
+(1), (2), (3), (4), (5), (6), (7), (8), (9), (10), (11), (12), (13),
+(17), (18), (19), (20), (21), (22), (23), (24);
 
+INSERT INTO Lista_Episodios (id_lista_ep) VALUES
+(14), (15), (16), (25), (26), (27), (28), (29), (30), (31), (32), (33), (34);
 
 INSERT INTO Listas_de_carpeta (id_carpeta, id_lista) VALUES
 (1, 1),

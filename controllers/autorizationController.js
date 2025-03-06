@@ -43,17 +43,13 @@ const register = async (req, res) => {
       // insertar usuario
       await client.execute("INSERT INTO Usuario (nombre_usuario, contrasena, correo, link_compartir, es_admin) VALUES (?, ?, ?, ?, ?)", [nombre_usuario, hashContrasena, correo , "", false]);
 
-      // crear lista de canciones favoritas
-      await client.execute("INSERT INTO Lista_reproduccion (nombre, es_publica, color, link_compartir) VALUES (?, ?, ?, ?)", ['Tus canciones favoritas', false, '#A200F4', null]);
-      // se guarda el id de la lista de canciones favoritas
-      const canciones_fav_result = await client.execute("SELECT id_lista FROM Lista_reproduccion WHERE nombre = ? ORDER BY id_lista DESC LIMIT 1", ['Tus canciones favoritas']);
-      const id_canciones_favoritas = canciones_fav_result.rows[0].id_lista;
+      // crear lista de canciones favoritas y guardar su id
+      const id_lista_canciones_fav_result = await client.execute("INSERT INTO Lista_reproduccion (nombre, es_publica, color, link_compartir) VALUES (?, ?, ?, ?) RETURNING id_lista", ['Tus canciones favoritas', false, '#A200F4', null]);
+      const id_canciones_favoritas = id_lista_canciones_fav_result.rows[0].id_lista;
       
-      // crear lista de episodios favoritos
-      await client.execute("INSERT INTO Lista_reproduccion (nombre, es_publica, color, link_compartir) VALUES (?, ?, ?, ?)", ['Tus episodios favoritos', false, '#341146', null]);
-      // se guarda el id de la lista de episodios favoritos
-      const episodios_fav_result = await client.execute("SELECT id_lista FROM Lista_reproduccion WHERE nombre = ? ORDER BY id_lista DESC LIMIT 1", ['Tus episodios favoritos']);
-      const id_episodios_favoritos = episodios_fav_result.rows[0].id_lista;
+      // crear lista de episodios favoritos y guardar su id
+      const id_lista_episodios_fav_result = await client.execute("INSERT INTO Lista_reproduccion (nombre, es_publica, color, link_compartir) VALUES (?, ?, ?, ?) RETURNING id_lista", ['Tus episodios favoritos', false, '#341146', null]);
+      const id_episodios_favoritos = id_lista_episodios_fav_result.rows[0].id_lista;
       
       // asignarlas al usuario
       await client.execute("INSERT INTO Listas_del_usuario (nombre_usuario, id_lista) VALUES (?, ?), (?, ?)",
