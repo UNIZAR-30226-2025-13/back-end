@@ -296,8 +296,11 @@ INSERT INTO Creador (nombre_creador, biografia, link_compartir, link_imagen) VAL
 ('Emilia', 'Emilia Mernes, conocida artísticamente como Emilia, es una cantante argentina destacada en la música urbana y pop.', 'https://example.com/share/emilia', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740766758/emilia-img_kx5rfj.jpg'),
 ('Don Patricio', 'Patricio Martín Díaz, conocido como Don Patricio, es un rapero español que ha alcanzado éxito con su estilo fresco y letras pegajosas.', 'https://example.com/share/donpatricio', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740766758/don-patricio-img_om3dyt.jpg'),
 ('Quevedo', 'Pedro Luis Domínguez Quevedo, conocido artísticamente como Quevedo, es un cantante español que ha ganado reconocimiento en la escena urbana.', 'https://example.com/share/quevedo', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740766758/quevedo_j6dz7r.jpg'),
-('Dei V', 'Dei V es un artista emergente en la escena musical urbana, conocido por su estilo distintivo y letras profundas.', 'https://example.com/share/deiv', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740766758/dei-v-img_ayzv9v.jpg'),
-('Omar Courtz', 'Omar Courtz es un cantante y compositor español que ha destacado en la música urbana y reguetón.', 'https://example.com/share/omarcourtz', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740766758/omar-coutz-img_ayzv9v.jpg');
+('Dei V', 'Dei V es un artista emergente en la escena musical urbana, conocido por su estilo distintivo y letras profundas.', 'https://example.com/share/deiv', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741465266/deiv_t2damc.jpg'),
+('Omar Courtz', 'Omar Courtz es un cantante y compositor español que ha destacado en la música urbana y reguetón.', 'https://example.com/share/omarcourtz', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741465266/omarcourtz_ehtb7t.jpg'),
+('Efecto Pasillo', 'Efecto Pasillo es una banda española conocida por su estilo único que fusiona pop, rock y música latina. Han ganado popularidad por sus éxitos pegajosos y su energía en el escenario.', 'https://example.com/share/efectopasillo', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741465266/efecto-pasillo_hv3snl.jpg'),
+('Rels B', 'Rels B es un cantante y compositor español, conocido por su estilo de rap melódico y líricas introspectivas. Ha logrado gran éxito en la escena musical urbana.', 'https://example.com/share/relsb', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741465266/relsb_ktgdjl.jpg'),
+('C. Tangana', 'C. Tangana es un cantante y compositor español que ha conquistado la escena musical con su fusión de géneros como el rap, reguetón, flamenco y música popular española. Es conocido por sus letras provocadoras y su estilo único.', 'https://example.com/share/ctangana', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741465266/ctangana_ad4kd6.jpg');
 
 INSERT INTO Artista (nombre_artista) VALUES
 ('Cruz Cafuné'),
@@ -314,7 +317,10 @@ INSERT INTO Artista (nombre_artista) VALUES
 ('Don Patricio'),
 ('Quevedo'),
 ('Dei V'),
-('Omar Courtz');
+('Omar Courtz'),
+('Efecto Pasillo'),
+('Rels B'),
+('C. Tangana');
 
 INSERT INTO Album (nombre_album, link_imagen, link_compartir, es_disco, fecha_pub) VALUES
 ('Me Muevo Con Dios', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768018/mmcd_itztvm.jpg', 'https://example.com/share/memuevocondios', TRUE, '2023-05-25'),
@@ -326,7 +332,9 @@ INSERT INTO Album (nombre_album, link_imagen, link_compartir, es_disco, fecha_pu
 ('El Último Tour Del Mundo', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768014/eutdm_as8cp5.jpg', 'https://example.com/share/elultimotourdelmundo', TRUE, '2020-11-27'),
 ('Feliz cumpleaños, Ferxxo, te pirateamos el álbum', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768014/felizcumpleferxxo_ep1nn3.jpg', 'https://example.com/share/feliz_cumpleanos_ferxxo', TRUE, '2022-09-14'),
 ('Desde el fin del mundo', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768013/defdm_hceqs8.jpg', 'https://example.com/share/desde_el_fin_del_mundo', TRUE, '2021-04-22'),
-('Harry''s House', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768013/harryysuvarita_nrkjeq.jpg', 'https://example.com/share/harrys_house', TRUE, '2022-05-20');
+('Harry''s House', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768013/harryysuvarita_nrkjeq.jpg', 'https://example.com/share/harrys_house', TRUE, '2022-05-20'),
+('El Madrileño', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741466752/elmadrile%C3%B1o_ked1dn.jpg', 'https://example.com/share/harrys_house', TRUE, '2021-02-26'),
+('Happy Birthday Flakko', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741471200/happybirthdayflakko_hjl8xm.jpg', '', TRUE, '2019-10-17');
 
 INSERT INTO Artista_posee_albumes (nombre_artista, id_album) VALUES
 ('Cruz Cafuné', 1),
@@ -338,7 +346,9 @@ INSERT INTO Artista_posee_albumes (nombre_artista, id_album) VALUES
 ('Bad Bunny', 7),
 ('Feid', 8),
 ('Duki', 9),
-('Harry Styles', 10);
+('Harry Styles', 10),
+('C. Tangana', 11),
+('Rels B', 12);
 
 INSERT INTO Podcaster (nombre_podcaster) VALUES
 ('Carlos Peguer'),
@@ -370,7 +380,19 @@ INSERT INTO Contenido_multimedia (link_cm, titulo, duracion, link_compartir, lin
 ('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773596/partyenelbarrio_seejoa.mp3', 'Party en el Barrio', '00:00:36', 'https://example.com/share/party_en_el_barrio', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/partyenelbarrio_ecfqxj.jpg', '2022-09-14'),
 ('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773729/lolabunny_vs5kdf.mp3', 'Lola Bunny', '00:02:16', 'https://example.com/share/lola_bunny', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/lolabunny_o38u22.jpg', '2019-07-31'),
 ('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773651/discoteka_blcs7c.mp3', 'Discoteka', '00:01:49', 'https://example.com/share/discoteka', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/diskoteca_gvaos3.jpg', '2022-09-01'),
-('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773580/eltonto_qoguwp.mp3', 'El Tonto', '00:00:44', 'https://example.com/share/el_tonto', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/eltonto_toogt3.jpg', '2023-04-14');
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773580/eltonto_qoguwp.mp3', 'El Tonto', '00:00:44', 'https://example.com/share/el_tonto', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/eltonto_toogt3.jpg', '2023-04-14'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741466208/demasiadasmujeres_kupbpc.mp3', 'Demasiadas Mujeres', '00:01:57', 'https://example.com/share/demasiadasmujeres', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741466752/elmadrile%C3%B1o_ked1dn.jpg', '2021-02-26'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741466208/medejastedequerer_ic9evk.mp3', 'Tu Me Dejaste De Querer', '00:01:46', 'https://example.com/share/tumedejastedequerer', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741466752/elmadrile%C3%B1o_ked1dn.jpg', '2021-02-26'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741466207/nuncaestoy_ns8gi3.mp3', 'Nunca Estoy', '00:00:32', 'https://example.com/share/nuncaestoy', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741466752/elmadrile%C3%B1o_ked1dn.jpg', '2021-02-26'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741466207/ingobernable_ssdpqo.m4a', 'Ingobernable', '00:01:00', 'https://example.com/share/ingobernable', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741466752/elmadrile%C3%B1o_ked1dn.jpg', '2021-02-26'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741466206/lostontos_xrgjiw.mp3', 'Los Tontos', '00:00:35', 'https://example.com/share/lostontos', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741466752/elmadrile%C3%B1o_ked1dn.jpg', '2021-02-26'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741471491/ami_faifw3.mp3', 'A Mí', '00:002:53', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741471403/ami_mjxzve.jpg','2017-02-17'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741471490/eldon_rnyis0.mp3', 'Tienes el Don', '00:00:27', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741471404/eldon_pl7ivx.jpg','2019-02-21'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741471490/shortyquetevayabien_oyuzvj.mp3', 'SHORTY QUE TE VAYA BN <3', '00:00:22', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741471404/shortyquetevayabien_cgsu4v.jpg','2021-09-29'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741471490/sinmirarlasse%C3%B1ales_rngg86.mp3', 'SIN MIRAR LAS SEÑALES', '00:00:24', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741471200/happybirthdayflakko_hjl8xm.jpg','2019-10-17'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741471489/comotevaquerida_j1yeoj.m4a', '¿CÓMO TE VA, QUERIDA?', '00:01:00', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741471200/happybirthdayflakko_hjl8xm.jpg','2019-10-17'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741471489/OTROCHEKE_xfo0hd.mp3', 'OTRO CHEKE', '00:00:39', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741471200/happybirthdayflakko_hjl8xm.jpg','2019-10-17');
+-- ('', '', '00:00:00', 'link_compartir', '','2017-00-00'),
 
 INSERT INTO Valoraciones (nombre_usuario, id_cm, valoracion) VALUES
 ('jorge', 1, 4),
@@ -397,7 +419,18 @@ INSERT INTO Cancion (id_cancion, n_repros, letra) VALUES
 (22, 150000000, 'Letra de "Party en el Barrio" de Paulo Londra y Duki.'),
 (23, 120000000, 'Letra de "Lola Bunny" de Lola Índigo y Don Patricio.'),
 (24, 180000000, 'Letra de "Discoteka" de Lola Índigo y María Becerra.'),
-(25, 200000000, 'Letra de "El Tonto" de Lola Índigo y Quevedo.');
+(25, 200000000, 'Letra de "El Tonto" de Lola Índigo y Quevedo.'),
+(26, 100000000, 'Letra de "Demasiadas Mujeres": \n"Y sigo soñando con esas, demasiadas mujeres\nNo puedo dejar de pensar en ellas, demasiadas mujeres\nSonreímos con risas que envenenan\nY ya no hay vuelta atrás, demasiado tarde para frenar\n..." [Continuar letra de la canción aquí]'),
+(27, 150000000, 'Letra de "Tu Me Dejaste De Querer": \n"Tu me dejaste de querer\nTu me dejaste de querer\nY yo te sigo amando\nAunque ya no te vea\nTu me dejaste de querer..." [Continuar letra de la canción aquí]'),
+(28, 120000000, 'Letra de "Nunca Estoy": \n"Siempre voy a estar cuando me necesites\nPero nunca estoy, nunca estoy, nunca estoy\nEn este lugar, nunca estoy\nLa cabeza me grita lo que no escuchas..." [Continuar letra de la canción aquí]'),
+(29, 200000000, 'Letra de "Ingobernable": \n"Soy ingobernable, ya no puedo parar\nVoy a hacer lo que quiero, a mi manera\nNada me para, nada me detiene\nIngobernable, soy mi propio camino..." [Continuar letra de la canción aquí]'),
+(30, 180000000, 'Letra de "Los Tontos": \n"Y ahora somos los tontos, siempre somos los tontos\nNos volvemos a caer, y nos volvemos a levantar\nNo aprendo de mis errores, soy uno más\nPero siempre vuelvo a lo mismo..." [Continuar letra de la canción aquí]'),
+(31, 800000000, 'Letra de "A Mí":...'),
+(32, 800000000, 'Letra de "Tienes el don":...'),
+(33, 172000000, 'Letra de "SHORTY QUE TE VAYA BN <3":...'),
+(34, 200000000, 'Letra de "SIN MIRAR LAS SEÑALES":...'),
+(35, 80000000, 'Letra de "¿CÓMO TE VA, QUERIDA?":...'),
+(36, 60000000, 'Letra de "OTRO CHEKE":...');
 
 INSERT INTO Generos (id_cancion, genero) VALUES
 (1, 'Rap'),
@@ -420,7 +453,22 @@ INSERT INTO Generos (id_cancion, genero) VALUES
 (22, 'Trap'),
 (23, 'Reguetón'),
 (24, 'Reguetón'),
-(25, 'Reguetón');
+(25, 'Reguetón'),
+(26, 'Flamenco'),
+(26, 'Reguetón'),
+(27, 'Flamenco'),
+(27, 'Reguetón'),
+(28, 'Flamenco'),
+(28, 'Reguetón'),
+(29, 'Flamenco'),
+(30, 'Flamenco'),
+(31, 'Reguetón'),
+(32, 'Rap'),
+(33, 'Reguetón'),
+(34, 'Reguetón'),
+(35, 'Trap'),
+(36, 'Trap');
+
 
 INSERT INTO Numero_cancion_en_album (id_album, id_cancion, numero_cancion) VALUES
 (4, 10, 5),  -- "WHERE SHE GOES" en "Nadie Sabe Lo Que Va A Pasar Mañana"
@@ -428,7 +476,15 @@ INSERT INTO Numero_cancion_en_album (id_album, id_cancion, numero_cancion) VALUE
 (7, 13, 1), -- "Yo Visto Así" en "El Último Tour Del Mundo"
 (8, 16, 4),  -- "Normal" en "Feliz cumpleaños, Ferxxo, te pirateamos el álbum"
 (9, 17, 10), -- "Malbec" en "Desde el fin del mundo"
-(10, 18, 4);  -- "As It Was" en "Harry's House"
+(10, 18, 4),  -- "As It Was" en "Harry's House"
+(11, 26, 1),
+(11, 27, 2),
+(11, 28, 4),
+(11, 29, 6),
+(11, 30, 13),
+(12, 34, 4),
+(12, 35, 5),
+(12, 36, 7);
 
 INSERT INTO Artista_principal (nombre_artista, id_cancion) VALUES
 ('Cruz Cafuné', 1),
@@ -451,7 +507,19 @@ INSERT INTO Artista_principal (nombre_artista, id_cancion) VALUES
 ('Paulo Londra', 22),
 ('Lola Índigo', 23),
 ('Lola Índigo', 24),
-('Lola Índigo', 25);
+('Lola Índigo', 25),
+('C. Tangana', 30),
+('C. Tangana', 26),
+('C. Tangana', 27),
+('C. Tangana', 28),
+('C. Tangana', 29),
+('Rels B', 31),
+('Rels B', 32),
+('Rels B', 33),
+('Rels B', 34),
+('Rels B', 35),
+('Rels B', 36);
+
 
 INSERT INTO Featuring (nombre_artista, id_cancion) VALUES
 ('Dei V', 2),
@@ -459,7 +527,9 @@ INSERT INTO Featuring (nombre_artista, id_cancion) VALUES
 ('Duki', 22),
 ('Don Patricio', 23),
 ('María Becerra', 24),
-('Quevedo', 25);
+('Quevedo', 25),
+('Duki',36),
+('Don Patricio', 35);
 
 INSERT INTO Podcast (id_podcast, nombre, link_imagen, link_compartir, descripcion) VALUES
 (1, 'La Pija y la Quinqui', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768719/lapijaylaquinqui_vrgwui.jpg', 'https://example.com/share/lapijaylaquinqui', 'Un podcast donde se exploran temas de actualidad y cultura con humor irreverente.'),
@@ -509,7 +579,19 @@ INSERT INTO Idiomas_multimedia (id_cm, idioma) VALUES
 (22, 'Español'),  -- "Party en el Barrio" de Paulo Londra y Duki.
 (23, 'Español'),  -- "Lola Bunny" de Lola Índigo y Don Patricio.
 (24, 'Español'),  -- "Discoteka" de Lola Índigo y María Becerra.
-(25, 'Español');  -- "El Tonto" de Lola Índigo y Quevedo.
+(25, 'Español'),  -- "El Tonto" de Lola Índigo y Quevedo.
+(26, 'Español'),
+(27, 'Español'),
+(28, 'Español'),
+(29, 'Español'),
+(30, 'Español'),
+(31, 'Español'),
+(32, 'Español'),
+(33, 'Español'),
+(34, 'Español'),
+(35, 'Español'),
+(36, 'Español');
+
 
 INSERT INTO Sigue_a_creador (nombre_usuario, nombre_creador) VALUES
 ('jorge', 'Cruz Cafuné'),

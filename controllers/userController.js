@@ -108,19 +108,81 @@ const getLists = async (req, res) => {
     }
 }
 
+<<<<<<< Updated upstream
+=======
+const getPlaylists = async (req, res) => {
+    try {
+        const { nombre_usuario } = req.query; // obtener nombre_usuario
+
+        // Obtener listas y carpetas del usuario
+        const listasResult = await client.execute(
+            'SELECT lr.id_lista, lr.nombre FROM Lista_reproduccion lr JOIN Listas_del_usuario lu ON lr.id_lista = lu.id_lista WHERE lu.nombre_usuario = ?;',
+            [nombre_usuario]
+        );
+        const listas = listasResult.rows || []; // Acceder a 'rows'
+
+        const listas_en_carpetasResult = await client.execute(
+            'SELECT lr.id_lista, lr.nombre FROM Lista_reproduccion lr JOIN Listas_de_carpeta lc ON lr.id_lista = lc.id_lista WHERE EXISTS (SELECT 1 FROM Carpetas_del_Usuario cu WHERE cu.id_carpeta = lc.id_carpeta AND cu.nombre_usuario = ?);',
+            [nombre_usuario]
+        );
+        const listas_en_carpetas = listas_en_carpetasResult.rows || []; // Acceder a 'rows'
+
+        // Unir listas y listas_en_carpetas
+        const todas_las_listas = [...listas, ...listas_en_carpetas];
+
+        // Filtrar las listas específicas que no quieres incluir
+        const listas_filtradas = todas_las_listas.filter(lista => 
+            lista.nombre !== 'Tus canciones favoritas' && lista.nombre !== 'Tus episodios favoritos'
+        );
+
+        // Eliminar duplicados si es necesario, por ejemplo, si las listas tienen el mismo id_lista
+        const listas_unicas = [
+            ...new Map(listas_filtradas.map(item => [item.id_lista, item])).values()
+        ];
+
+        // Devolver el resultado combinado
+        res.status(200).json(listas_unicas);
+
+    } catch (error) {
+        console.error("Error al obtener listas:", error);
+        res.status(500).json({ message: "Hubo un error al obtener las listas" });
+    }
+};
+
+// Dado un nombre, un usuario, un color y un tipo de lista("episodios o canciones") crea una lista asocidado a ese usuario
+>>>>>>> Stashed changes
 const createList = async (req, res) => {
     try {
-        const { nombre_lista, nombre_usuario } = req.body;
-        if (!nombre_lista || !nombre_usuario) {
+        const { nombre_lista, nombre_usuario, color, tipo } = req.body;
+        if (!nombre_lista || !nombre_usuario || !color) {
             return res.status(400).json({ message: "Hay que rellenar todos los campos" });
         }
-        const result = await client.execute("SELECT * FROM Usuario WHERE nombre_usuario = ?", [nombre_usuario]);
-        if (result.rows.length === 0) {
+        
+        // Comprobamos que exista el usuario
+        const result_usuario = await client.execute("SELECT * FROM Usuario WHERE nombre_usuario = ?", [nombre_usuario]);
+        if (result_usuario.rows.length === 0) {
             return res.status(400).json({ message: "El usuario no existe" });
         }
-        await client.execute("INSERT INTO Lista_reproduccion (nombre) VALUES (?)", [nombre_lista]);
-        const id_lista = (await client.execute("SELECT id_lista FROM Lista_reproduccion WHERE nombre = ?", [nombre_lista])).rows[0].id_lista;
+
+        // Realizamos el insert
+        const result = await client.execute(
+            "INSERT INTO Lista_reproduccion (nombre, color) VALUES (?, ?) RETURNING id_lista",
+            [nombre_lista, color]
+        );
+
+        // Obtenemos el id de la lista
+        const id_lista = result.rows[0].id_lista;
+        
+        // Asociamos la lista al usuario
         await client.execute("INSERT INTO Listas_del_usuario (id_lista, nombre_usuario) VALUES (?, ?)", [id_lista, nombre_usuario]);
+        
+        // Según el tipo catalogamos la lista
+        if (tipo == "canciones") {
+            await client.execute("INSERT INTO Playlist (id_playlist) VALUES (?)", [id_lista]);
+        } else if (tipo == "episodios") {
+            await client.execute("INSERT INTO Lista_Episodios (id_lista_ep) VALUES (?)", [id_lista]);
+        }
+
         res.status(200).json({ message: "Lista creada correctamente" });
     } catch (error) {
         console.error("Error al crear lista:", error);
@@ -129,6 +191,7 @@ const createList = async (req, res) => {
 };
 
 
+<<<<<<< Updated upstream
 // Dadas un id_cancion y un id_playlist añade la canción a la playlist si y solo si existen ambas y la canción no pertene previamente a la playlist
 const addSongToPlaylist = async (req, res) => {
     try {
@@ -160,3 +223,7 @@ const addSongToPlaylist = async (req, res) => {
 }
 
 module.exports = { getProfile, changePassword, getLists, createList, addSongToPlaylist };
+=======
+
+module.exports = { getProfile, changePassword, getLists, createList, getPlaylists };
+>>>>>>> Stashed changes

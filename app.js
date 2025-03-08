@@ -21,7 +21,12 @@ const usuario = require("./routes/user");
 const artista = require("./routes/artist");
 const home = require("./routes/home");
 const canciones = require("./routes/song");
+<<<<<<< Updated upstream
 
+=======
+const album = require("./routes/album");
+const playlists = require("./routes/playlists");
+>>>>>>> Stashed changes
 
 // hace que las rutas empiecen por esa palabra
 // ej: si pones app.use("/usuario", usuario); la ruta para login es http://localhost:8080/usuario/login
@@ -30,6 +35,11 @@ app.use(usuario);
 app.use(artista);
 app.use(home);
 app.use(canciones);
+<<<<<<< Updated upstream
+=======
+app.use(album);
+app.use(playlists);
+>>>>>>> Stashed changes
 
 // prueba inicial
 app.get("/", (req, res) => {
