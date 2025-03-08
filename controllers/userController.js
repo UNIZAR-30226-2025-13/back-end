@@ -69,7 +69,7 @@ const changePassword = async (req, res) => {
 
 const getLists = async (req, res) => {
     try{
-        const { nombre_usuario } = req.body; // obtener nombre_usuario
+        const { nombre_usuario } = req.query; // obtener nombre_usuario
          // Obtener listas y carpetas del usuario
         const listas = await client.execute(
             'SELECT lr.id_lista, lr.nombre FROM Lista_reproduccion lr JOIN Listas_del_usuario lu ON lr.id_lista = lu.id_lista WHERE lu.nombre_usuario = ?;',
@@ -108,8 +108,7 @@ const getLists = async (req, res) => {
     }
 }
 
-<<<<<<< Updated upstream
-=======
+
 const getPlaylists = async (req, res) => {
     try {
         const { nombre_usuario } = req.query; // obtener nombre_usuario
@@ -150,7 +149,6 @@ const getPlaylists = async (req, res) => {
 };
 
 // Dado un nombre, un usuario, un color y un tipo de lista("episodios o canciones") crea una lista asocidado a ese usuario
->>>>>>> Stashed changes
 const createList = async (req, res) => {
     try {
         const { nombre_lista, nombre_usuario, color, tipo } = req.body;
@@ -190,40 +188,5 @@ const createList = async (req, res) => {
     }
 };
 
-
-<<<<<<< Updated upstream
-// Dadas un id_cancion y un id_playlist añade la canción a la playlist si y solo si existen ambas y la canción no pertene previamente a la playlist
-const addSongToPlaylist = async (req, res) => {
-    try {
-        const { id_cancion, id_playlist } = req.body;
-        if (!id_cancion || !id_playlist) {
-            return res.status(400).json({ message: "Hay que rellenar todos los campos" });
-        }
-        const result_playlist = await client.execute("SELECT * FROM Playlist WHERE id_playlist = ?", [id_playlist]);
-        if (result_playlist.rows.length === 0) {
-            return res.status(400).json({ message: "La playlist no existe" });
-        }
-        const result_song = await client.execute("SELECT * FROM Cancion WHERE id_cancion = ?", [id_cancion]);
-        console.log(result_song)
-        if (result_song.rows.length === 0) {
-            return res.status(400).json({ message: "La cancion no existe" });
-        }
-        const song_in_playlist = await client.execute("SELECT * FROM Canciones_en_playlist WHERE id_cancion = ? AND id_playlist = ?", [id_cancion, id_playlist]);
-        console.log(song_in_playlist.rows.length)
-        if (song_in_playlist.rows.length === 1) {
-            return res.status(400).json({ message: "La canción ya pertenece a la playlist" });
-        }
-
-        await client.execute("INSERT INTO Canciones_en_playlist (id_playlist, id_cancion) VALUES (?, ?)", [id_playlist, id_cancion]);
-        res.status(200).json({ message: "Canción añadida correctamente" });
-    } catch (error) {
-        console.error("Error al añadir canción a la lista:", error);
-        res.status(500).json({ message: "Hubo un error al añadir una canción a una lista" });
-    }
-}
-
-module.exports = { getProfile, changePassword, getLists, createList, addSongToPlaylist };
-=======
-
 module.exports = { getProfile, changePassword, getLists, createList, getPlaylists };
->>>>>>> Stashed changes
+

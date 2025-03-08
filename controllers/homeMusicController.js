@@ -1,14 +1,3 @@
-/*
-A MOSTRAR:
-- TODO LO DEL HOME NORMAL (menos los podcasts)
-- de 1 carpeta de spongefy llamada ALEATORIO CANCIONES:
-    obtener 6 listas de reproducción aleatorias
-- de un artista aleatorio:
-        - su foto
-        - su nombre
-        - las 5 cosas más recientes (ya sean canciones o albumes)
-*/
-
 const client = require('../db');
 
 const getHomeMusic = async (req, res) => {
@@ -54,15 +43,13 @@ const getHomeMusic = async (req, res) => {
         // sacar 10 listas de reproduccion de artistas (This is ?artist)
         const carpeta_artistas_result = await client.execute("SELECT c.id_carpeta FROM Carpeta c, Carpetas_del_usuario u WHERE nombre = 'Artistas' AND c.id_carpeta = u.id_carpeta AND u.nombre_usuario = 'spongefy'");
         let list_listas_artistas = [];
-        const listas_artistas_result = await client.execute("SELECT id_lista FROM Listas_de_carpeta WHERE id_carpeta = ? LIMIT 10", [carpeta_artistas_result.rows[0].id_carpeta]);
-        if (listas_artistas_result.rows.length > 0) {
-            list_listas_artistas = listas_artistas_result.rows.map((row) => row.id_lista);
-        }
-
         let listas_artistas_info = [];
         let datos_artistas = [];
         let listas_artistas_final = [];
+        const listas_artistas_result = await client.execute("SELECT id_lista FROM Listas_de_carpeta WHERE id_carpeta = ? LIMIT 10", [carpeta_artistas_result.rows[0].id_carpeta]);
         if (listas_artistas_result.rows.length > 0) {
+            list_listas_artistas = listas_artistas_result.rows.map((row) => row.id_lista);
+            
             // sacar la información de las listas de reproduccion de artistas
             const dynamic_artistas = list_listas_artistas.map(() => "?").join(",");
             const query_artistas = ` SELECT id_lista, nombre 
@@ -113,14 +100,40 @@ const getHomeMusic = async (req, res) => {
             listas_aleatorio_info = listas_aleatorio_info_result.rows;
         }
 
-        
+        // obtener un artista random
+        const artista_result = await client.execute(`SELECT a.nombre_artista, c.link_imagen 
+                                                    FROM Artista a 
+                                                    JOIN Creador c ON a.nombre_artista = c.nombre_creador 
+                                                    ORDER BY RANDOM() LIMIT 1`);
+        const artista = artista_result.rows[0];
+        // obtener las 5 canciones y álbumes más recientes del artista random
+        const canciones_albumes_result = await client.execute(
+          ` SELECT DISTINCT c.id_cancion as id, cm.titulo, cm.link_imagen, cm.fecha_pub, 'cancion' AS tipo
+            FROM Cancion c
+            JOIN Contenido_multimedia cm ON c.id_cancion = cm.id_cm
+            JOIN Artista_principal ap ON ap.id_cancion = c.id_cancion
+            LEFT JOIN Featuring f ON f.id_cancion = c.id_cancion
+            WHERE ap.nombre_artista = ? OR f.nombre_artista = ?
+            UNION ALL
+            SELECT DISTINCT a.id_album as id, a.nombre_album, a.link_imagen, a.fecha_pub, 'album' AS tipo
+            FROM Album a
+            JOIN Artista_posee_albumes apa ON apa.id_album = a.id_album
+            WHERE nombre_artista = ? AND es_disco = TRUE
+            ORDER BY fecha_pub DESC
+            LIMIT 5`, 
+            [artista.nombre_artista, artista.nombre_artista, artista.nombre_artista]
+        );
 
         res.status(200).json({ 
-            podcasts: podcasts_info.rows,
             listas_genero_info: listas_genero_info,
             listas_idioma_info: listas_idioma_info,
             listas_artistas_info: listas_artistas_final,
-            listas_aleatorio_info: listas_aleatorio_info
+            listas_aleatorio_info: listas_aleatorio_info,
+            artista: {
+                nombre_artista: artista.nombre_artista,
+                link_imagen: artista.link_imagen,
+                canciones_albumes: canciones_albumes_result.rows
+            }
         });
 
     } catch (error) {

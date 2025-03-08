@@ -34,6 +34,7 @@ const playSong = async (req, res) => {
         const artistas_feat = artists_result.rows[0]?.artistas_feat ? artists_result.rows[0].artistas_feat.split(",").join(", ") : "";
 
         res.status(200).json({
+            id_cancion: id_cancion,
             link_cm: cm_result.rows[0].link_cm,
             titulo: cm_result.rows[0].titulo,
             duracion: cm_result.rows[0].duracion,

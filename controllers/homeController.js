@@ -46,15 +46,13 @@ const getHome = async (req, res) => {
         // sacar 10 listas de reproduccion de artistas (This is ?artist)
         const carpeta_artistas_result = await client.execute("SELECT c.id_carpeta FROM Carpeta c, Carpetas_del_usuario u WHERE nombre = 'Artistas' AND c.id_carpeta = u.id_carpeta AND u.nombre_usuario = 'spongefy'");
         let list_listas_artistas = [];
-        const listas_artistas_result = await client.execute("SELECT id_lista FROM Listas_de_carpeta WHERE id_carpeta = ? LIMIT 10", [carpeta_artistas_result.rows[0].id_carpeta]);
-        if (listas_artistas_result.rows.length > 0) {
-            list_listas_artistas = listas_artistas_result.rows.map((row) => row.id_lista);
-        }
-
         let listas_artistas_info = [];
         let datos_artistas = [];
         let listas_artistas_final = [];
+        const listas_artistas_result = await client.execute("SELECT id_lista FROM Listas_de_carpeta WHERE id_carpeta = ? LIMIT 10", [carpeta_artistas_result.rows[0].id_carpeta]);
         if (listas_artistas_result.rows.length > 0) {
+            list_listas_artistas = listas_artistas_result.rows.map((row) => row.id_lista);
+            
             // sacar la información de las listas de reproduccion de artistas
             const dynamic_artistas = list_listas_artistas.map(() => "?").join(",");
             const query_artistas = ` SELECT id_lista, nombre 

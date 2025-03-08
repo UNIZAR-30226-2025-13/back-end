@@ -42,31 +42,18 @@ const register = async (req, res) => {
   
       // insertar usuario
       await client.execute("INSERT INTO Usuario (nombre_usuario, contrasena, correo, link_compartir, es_admin) VALUES (?, ?, ?, ?, ?)", [nombre_usuario, hashContrasena, correo , "", false]);
+
+      // crear lista de canciones favoritas y guardar su id
+      const id_lista_canciones_fav_result = await client.execute("INSERT INTO Lista_reproduccion (nombre, es_publica, color, link_compartir) VALUES (?, ?, ?, ?) RETURNING id_lista", ['Tus canciones favoritas', false, '#A200F4', null]);
+      const id_canciones_favoritas = id_lista_canciones_fav_result.rows[0].id_lista;
       
-      // verificar si las listas ya existen
-      const listaFavoritas = await client.execute("SELECT id_lista FROM Lista_reproduccion WHERE nombre = ?", ["Tus canciones favoritas"]);
-      let id_lista_favoritas;
-      if (listaFavoritas.rows.length > 0) {
-          id_lista_favoritas = listaFavoritas.rows[0].id_lista;
-      } else {
-          await client.execute("INSERT INTO Lista_reproduccion (nombre, es_publica, color, link_compartir) VALUES (?, ?, ?, ?)", 
-              ["Tus canciones favoritas", false, "#A200F4", null]);
-          id_lista_favoritas = (await client.execute("SELECT last_insert_rowid() AS id")).rows[0].id;
-      }
-
-      const listaEpisodios = await client.execute("SELECT id_lista FROM Lista_reproduccion WHERE nombre = ?", ["Tus episodios favoritos"]);
-      let id_lista_episodios;
-      if (listaEpisodios.rows.length > 0) {
-          id_lista_episodios = listaEpisodios.rows[0].id_lista;
-      } else {
-          await client.execute("INSERT INTO Lista_reproduccion (nombre, es_publica, color, link_compartir) VALUES (?, ?, ?, ?)", 
-              ["Tus episodios favoritos", false, "#341146", null]);
-          id_lista_episodios = (await client.execute("SELECT last_insert_rowid() AS id")).rows[0].id;
-      }
-
-      // insertar en Listas_del_usuario solo si no existe
-      await client.execute(`INSERT OR IGNORE INTO Listas_del_usuario (nombre_usuario, id_lista) VALUES (?, ?), (?, ?)`, 
-        [nombre_usuario, id_lista_favoritas, nombre_usuario, id_lista_episodios]);
+      // crear lista de episodios favoritos y guardar su id
+      const id_lista_episodios_fav_result = await client.execute("INSERT INTO Lista_reproduccion (nombre, es_publica, color, link_compartir) VALUES (?, ?, ?, ?) RETURNING id_lista", ['Tus episodios favoritos', false, '#341146', null]);
+      const id_episodios_favoritos = id_lista_episodios_fav_result.rows[0].id_lista;
+      
+      // asignarlas al usuario
+      await client.execute("INSERT INTO Listas_del_usuario (nombre_usuario, id_lista) VALUES (?, ?), (?, ?)",
+        [nombre_usuario, id_canciones_favoritas, nombre_usuario, id_episodios_favoritos]);
 
       // mensaje de correcto registro
       res.status(201).json({ message: "Usuario registrado correctamente" });
@@ -118,9 +105,14 @@ const register = async (req, res) => {
   // Solicitar cambio de contraseña
   const changePasswordRequest = async (req, res) => {
     try {
-        const { correo } = req.query;
+      console.log("Query params recibidos:", req.query); // Verifica si llega el parámetro
+      const { correo } = req.query;
 
-        console.log(correo);
+      if (!correo) {
+          return res.status(400).json({ message: "Falta el parámetro 'correo'" });
+      }
+
+      console.log("Correo recibido:", correo);
 
         // Verificar si el correo existe
         const result = await client.execute("SELECT nombre_usuario FROM Usuario WHERE correo = ?", [correo]);
@@ -193,5 +185,6 @@ const register = async (req, res) => {
     }
 };
 
-module.exports = { register, login, changePasswordRequest };
+  module.exports = { register, login, changePasswordRequest };
+
   
