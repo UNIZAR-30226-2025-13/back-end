@@ -1,14 +1,3 @@
-/*
-A MOSTRAR:
-- TODO LO DEL HOME NORMAL (menos generos y idiomas)
-- de 1 carpeta de spongefy llamada ALEATORIO EPISODIOS:
-    obtener 6 listas de reproducción aleatorias
-- de un podcast aleatorio:
-        - nombre_podcast
-        - foto_podcast
-        - los 4 episodios más recientes
-*/
-
 const client = require('../db');
 
 const getHomePodcast = async (req, res) => {

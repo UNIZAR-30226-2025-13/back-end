@@ -1,14 +1,3 @@
-/*
-A MOSTRAR:
-- TODO LO DEL HOME NORMAL (menos los podcasts)
-- de 1 carpeta de spongefy llamada ALEATORIO CANCIONES:
-    obtener 6 listas de reproducción aleatorias
-- de un artista aleatorio:
-        - su foto
-        - su nombre
-        - las 5 cosas más recientes (ya sean canciones o albumes)
-*/
-
 const client = require('../db');
 
 const getHomeMusic = async (req, res) => {
