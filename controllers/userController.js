@@ -108,6 +108,7 @@ const getLists = async (req, res) => {
     }
 }
 
+
 const getPlaylists = async (req, res) => {
     try {
         const { nombre_usuario } = req.query; // obtener nombre_usuario
@@ -147,19 +148,39 @@ const getPlaylists = async (req, res) => {
     }
 };
 
+// Dado un nombre, un usuario, un color y un tipo de lista("episodios o canciones") crea una lista asocidado a ese usuario
 const createList = async (req, res) => {
     try {
-        const { nombre_lista, nombre_usuario } = req.body;
-        if (!nombre_lista || !nombre_usuario) {
+        const { nombre_lista, nombre_usuario, color, tipo } = req.body;
+        if (!nombre_lista || !nombre_usuario || !color) {
             return res.status(400).json({ message: "Hay que rellenar todos los campos" });
         }
-        const result = await client.execute("SELECT * FROM Usuario WHERE nombre_usuario = ?", [nombre_usuario]);
-        if (result.rows.length === 0) {
+        
+        // Comprobamos que exista el usuario
+        const result_usuario = await client.execute("SELECT * FROM Usuario WHERE nombre_usuario = ?", [nombre_usuario]);
+        if (result_usuario.rows.length === 0) {
             return res.status(400).json({ message: "El usuario no existe" });
         }
-        await client.execute("INSERT INTO Lista_reproduccion (nombre) VALUES (?)", [nombre_lista]);
-        const id_lista = (await client.execute("SELECT id_lista FROM Lista_reproduccion WHERE nombre = ?", [nombre_lista])).rows[0].id_lista;
+
+        // Realizamos el insert
+        const result = await client.execute(
+            "INSERT INTO Lista_reproduccion (nombre, color) VALUES (?, ?) RETURNING id_lista",
+            [nombre_lista, color]
+        );
+
+        // Obtenemos el id de la lista
+        const id_lista = result.rows[0].id_lista;
+        
+        // Asociamos la lista al usuario
         await client.execute("INSERT INTO Listas_del_usuario (id_lista, nombre_usuario) VALUES (?, ?)", [id_lista, nombre_usuario]);
+        
+        // Según el tipo catalogamos la lista
+        if (tipo == "canciones") {
+            await client.execute("INSERT INTO Playlist (id_playlist) VALUES (?)", [id_lista]);
+        } else if (tipo == "episodios") {
+            await client.execute("INSERT INTO Lista_Episodios (id_lista_ep) VALUES (?)", [id_lista]);
+        }
+
         res.status(200).json({ message: "Lista creada correctamente" });
     } catch (error) {
         console.error("Error al crear lista:", error);
@@ -167,45 +188,5 @@ const createList = async (req, res) => {
     }
 };
 
+module.exports = { getProfile, changePassword, getLists, createList, getPlaylists };
 
-// Dadas un id_cancion y un id_playlist añade la canción a la playlist si y solo si existen ambas y la canción no pertene previamente a la playlist
-const addSongToPlaylist = async (req, res) => {
-    try {
-        const { id_cancion, id_playlist } = req.body;
-        
-        if (!id_cancion || !id_playlist) {
-            return res.status(400).json({ message: "Hay que rellenar todos los campos" });
-        }
-        const result_playlist = await client.execute("SELECT * FROM Lista_reproduccion WHERE id_lista = ?", [id_playlist]);
-        if (result_playlist.rows.length === 0) {
-            return res.status(400).json({ message: "La playlist no existe" });
-        }
-
-        const result_song = await client.execute("SELECT * FROM Cancion WHERE id_cancion = ?", [id_cancion]);
-        console.log(result_song)
-        if (result_song.rows.length === 0) {
-            return res.status(400).json({ message: "La cancion no existe" });
-        }
-
-        const song_in_playlist = await client.execute("SELECT * FROM Canciones_en_playlist WHERE id_cancion = ? AND id_playlist = ?", [id_cancion, id_playlist]);
-        console.log(song_in_playlist.rows.length)
-        if (song_in_playlist.rows.length === 1) {
-            return res.status(400).json({ message: "La canción ya pertenece a la playlist" });
-        }
-
-        const result_playlist_check = await client.execute("SELECT * FROM Playlist WHERE id_playlist = ?", [id_playlist]);
-        if (result_playlist_check.rows.length === 0) {
-            // Si no existe, la añadimos a la tabla `Playlist`
-            await client.execute("INSERT INTO Playlist (id_playlist) VALUES (?)", [id_playlist]);
-            console.log("Playlist añadida a la tabla Playlist");
-        }
-
-        await client.execute("INSERT INTO Canciones_en_playlist (id_playlist, id_cancion) VALUES (?, ?)", [id_playlist, id_cancion]);
-        res.status(200).json({ message: "Canción añadida correctamente" });
-    } catch (error) {
-        console.error("Error al añadir canción a la lista:", error);
-        res.status(500).json({ message: "Hubo un error al añadir una canción a una lista" });
-    }
-}
-
-module.exports = { getProfile, changePassword, getLists, createList, addSongToPlaylist, getPlaylists };
