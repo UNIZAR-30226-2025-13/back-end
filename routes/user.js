@@ -12,7 +12,6 @@ const { verifyToken } = require('../middleware/autorizationMiddleware');
  *   description: Endpoints relacionados con los usuarios
  */
 
-
 /**
  * @swagger
  * /perfil:
