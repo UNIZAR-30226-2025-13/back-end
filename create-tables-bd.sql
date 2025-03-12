@@ -278,6 +278,7 @@ CREATE TABLE Listas_de_carpeta (
 );
 
 -- CREAR LOS USUARIOS spongefy y jorge DESDE LA APLICACIÓN (así las contraseñas se guardan cifradas)
+-- HACER PRIMERO TODOS LOS INSERTS QUE NO INVOLUCREN A LOS USUARIOS, Y DESPUÉS CREAR A LOS USUARIOS
 
 INSERT INTO Creador (nombre_creador, biografia, link_compartir, link_imagen) VALUES
 ('Carlos Peguer', 'Carlos Peguer es co-presentador del pódcast español "La Pija y la Quinqui", que ha ganado popularidad entre la generación Z y los millennials.', 'https://example.com/share/carlospeguer', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740765428/carlos-peguer-img_ftskv0.jpg'),
@@ -469,7 +470,6 @@ INSERT INTO Generos (id_cancion, genero) VALUES
 (35, 'Trap'),
 (36, 'Trap');
 
-
 INSERT INTO Numero_cancion_en_album (id_album, id_cancion, numero_cancion) VALUES
 (4, 10, 5),  -- "WHERE SHE GOES" en "Nadie Sabe Lo Que Va A Pasar Mañana"
 (6, 12, 7), -- "Tití Me Preguntó" en "Un Verano Sin Ti"
@@ -519,7 +519,6 @@ INSERT INTO Artista_principal (nombre_artista, id_cancion) VALUES
 ('Rels B', 34),
 ('Rels B', 35),
 ('Rels B', 36);
-
 
 INSERT INTO Featuring (nombre_artista, id_cancion) VALUES
 ('Dei V', 2),
@@ -592,7 +591,6 @@ INSERT INTO Idiomas_multimedia (id_cm, idioma) VALUES
 (35, 'Español'),
 (36, 'Español');
 
-
 INSERT INTO Sigue_a_creador (nombre_usuario, nombre_creador) VALUES
 ('jorge', 'Cruz Cafuné'),
 ('jorge', 'Bad Bunny');
@@ -626,12 +624,24 @@ INSERT INTO Lista_reproduccion (nombre, es_publica, color, link_compartir) VALUE
 ('TRAP', TRUE, '#FFA500', 'https://example.com/share/trap'),
 ('POP', TRUE, '#0000FF', 'https://example.com/share/pop'),
 -- artistas
+('This is Cruz Cafuné', TRUE, '#000000', 'https://example.com/share/thisicruzcafune'),
 ('This is Bad Bunny', TRUE, '#000000', 'https://example.com/share/thisisbadbunny'),
+('This is Lola Índigo', TRUE, '#000000', 'https://example.com/share/thisislolaindigo'),
+('This is Sosad.97', TRUE, '#000000', 'https://example.com/share/thisissosad.97'),
 ('This is Feid', TRUE, '#000000', 'https://example.com/share/thisisfeid'),
 ('This is Duki', TRUE, '#000000', 'https://example.com/share/thisisduki'),
-('This is Lola Índigo', TRUE, '#000000', 'https://example.com/share/thisislolaindigo'),
+('This is Harry Styles', TRUE, '#000000', 'https://example.com/share/thisisharrystyles'),
+('This is Bigflo & Oli', TRUE, '#000000', 'https://example.com/share/thisisbigflooli'),
+('This is Paulo Londra', TRUE, '#000000', 'https://example.com/share/thisispaulolondra'),
+('This is María Becerra', TRUE, '#000000', 'https://example.com/share/thisismariabecerra'),
+('This is Emilia', TRUE, '#000000', 'https://example.com/share/thisisemilia'),
+('This is Don Patricio', TRUE, '#000000', 'https://example.com/share/thisisdonpatricio'),
 ('This is Quevedo', TRUE, '#000000', 'https://example.com/share/thisisquevedo'),
-('This is Cruz Cafuné', TRUE, '#000000', 'https://example.com/share/thisiscruzcafune'),
+('This is Dei V', TRUE, '#000000', 'https://example.com/share/thisisdeiv'),
+('This is Omar Courtz', TRUE, '#000000', 'https://example.com/share/thisisomarcourtz'),
+('This is Efecto Pasillo', TRUE, '#000000', 'https://example.com/share/thisisefectopasillo'),
+('This is Rels B', TRUE, '#000000', 'https://example.com/share/thisisrelsb'),
+('This is C. Tangana', TRUE, '#000000', 'https://example.com/share/thisisc.tangana'),
 -- podcasters
 ('This is Carlos Peguer', TRUE, '#000000', 'https://example.com/share/thisiscarlospeguer'),
 ('This is Mariang Maturana', TRUE, '#000000', 'https://example.com/share/thisismariangmaturana'),
@@ -663,40 +673,100 @@ INSERT INTO Playlist (id_playlist) VALUES
 
 INSERT INTO Lista_Episodios (id_lista_ep) VALUES
 (14), (15), (16), (25), (26), (27), (28), (29), (30), (31), (32), (33), (34);
+(1), (2), (3), (4), (5), (6), (7), (8), (9), (10), (11), (12), (13), (14), (15), (16), (17), (18), (19), (20), (21), (22), (23), (24), (25),
+(29), (30), (31), (32), (33), (34), (35), (36);
+
+INSERT INTO Playlist_Cancion (id_playlist, id_cancion) VALUES
+-- TOP ESPAÑOL
+(1,2),(1,4),(1,11),(1,12),(1,13),(1,14),(1,15),(1,16),(1,17),(1,19),(1,20),(1,22),
+-- TOP FRANCÉS
+(2,5),
+-- TOP INGLÉS
+(3,18),(3,21),
+-- RAP
+(4,1),(4,5),(4,32),
+-- REGUETÓN
+(5,2),(5,10),(5,11),(5,12),(5,13),(5,14),(5,15),(5,16),(5,19),(5,23),(5,24),(5,25),(5,31),(5,33),(5,34),
+-- TRAP
+(6,3),(6,4),(6,17),(6,20),(6,22),(6,35),(6,36),
+-- POP
+(7,18),(7,21),
+-- This is Cruz Cafuné
+(8,1),
+-- This is Bad Bunny
+(9,2),(9,10),(9,12),(9,13),(9,14),
+-- This is Lola Índigo
+(10,11),(10,15),(10,23),(10,24),(10,25),
+-- This is Sosad.97
+(11,3),
+-- This is Feid
+(12,16),(12,19),
+-- This is Duki
+(13,4),(13,17),(13,20),(13,22),
+-- This is Harry Styles
+(14,18),(14,21),
+-- This is Bigflo & Oli
+(15,5),
+-- This is Paulo Londra
+(16,22),
+-- This is María Becerra
+(17,24),
+-- This is Emilia
+
+-- This is Don Patricio
+(19,23),
+-- This is Quevedo
+(20,25),
+-- This is Dei V
+(21,2),
+-- This is Omar Courtz
+(22,2),
+-- This is Efecto Pasillo
+
+-- This is Rels B
+(24,31),(24,32),(24,33),(24,34),(24,35),(24,36),
+-- This is C. Tangana
+(25,26),(25,27),(25,28),(25,29),(25,30),
+-- VERANO
+(29,10),(29,12),(29,20),(29,21),(29,25),
+-- FIESTA
+(30,4),(30,12),(30,20),(30,21),(30,22),(30,23),(30,24),
+-- RELAX
+(31,18),(31,19),(31,31), (31,35),
+-- ENTRENAMIENTO
+(32,3),(32,4),(32,13),(32,16),(32,17),(32,20),(32,22),(32,24),
+-- TRABAJO
+(33,1),(33,5),(33,18),(33,21),(33,31),
+-- ESTUDIO
+(33,15),(34,26),(34,27),(34,28),(34,29),(34,30),(33,34),
+-- SAN VALENTÍN
+(35,23),(35,24),(35,25),(35,35),
+-- NAVIDAD
+(36,18);
+
+INSERT INTO Lista_Episodios (id_lista_ep) VALUES
+(26), (27), (28), (37), (38), (39), (40), 
+(41), (42), (43), (44), (45), (46);
+
+INSERT INTO Episodios_de_lista (id_lista_ep, id_ep, id_podcast) VALUES
+(26,6,1),(26,7,1),(26,8,2),(26,9,2),
+(27,6,1),(27,7,1),(27,8,2),(27,9,2),
+(28,6,1),(28,7,1),(28,8,2),(28,9,2),
+(37,6,1),(37,7,1),(37,8,2),(37,9,2),
+(38,6,1),(38,7,1),(38,8,2),(38,9,2),
+(39,6,1),(39,7,1),(39,8,2),(39,9,2),
+(40,6,1),(40,7,1),(40,8,2),(40,9,2),
+(41,6,1),(41,7,1),(41,8,2),(41,9,2),
+(42,6,1),(42,7,1),(42,8,2),(42,9,2),
+(43,6,1),(43,7,1),(43,8,2),(43,9,2),
+(44,6,1),(44,7,1),(44,8,2),(44,9,2),
+(45,6,1),(45,7,1),(45,8,2),(45,9,2),
+(46,6,1),(46,7,1),(46,8,2),(46,9,2);
 
 INSERT INTO Listas_de_carpeta (id_carpeta, id_lista) VALUES
-(1, 1),
-(1, 2),
-(1, 3),
-(2, 4),
-(2, 5),
-(2, 6),
-(2, 7),
-(3, 8),
-(3, 9),
-(3, 10),
-(3, 11),
-(3, 12),
-(3, 13),
-(4, 14),
-(4, 15),
-(4, 16),
-(5, 17),
-(5, 18),
-(5, 19),
-(5, 20),
-(5, 21),
-(5, 22),
-(5, 23),
-(5, 24),
-(6, 25),
-(6, 26),
-(6, 27),
-(6, 28),
-(6, 29),
-(6, 30),
-(6, 31),
-(6, 32),
-(6, 33),
-(6, 34);
-
+(1,1),(1,2),(1,3),
+(2,4),(2,5),(2,6),(2,7),
+(3,8),(3,9),(3,10),(3,11),(3,12),(3,13),(3,14),(3,15),(3,16),(3,17),(3,18),(3,19),(3,20),(3,21),(3,22),(3,23),(3,24),(3,25),
+(4,26),(4,27),(4,28),
+(5,29),(5,30),(5,31),(5,32),(5,33),(5,34),(5,35),(5,36),
+(6,37),(6,38),(6,39),(6,40),(6,41),(6,42),(6,43),(6,44),(6,45),(6,46);
