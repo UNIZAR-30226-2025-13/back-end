@@ -392,7 +392,14 @@ INSERT INTO Contenido_multimedia (link_cm, titulo, duracion, link_compartir, lin
 ('https://res.cloudinary.com/djsm3jfht/video/upload/v1741471490/shortyquetevayabien_oyuzvj.mp3', 'SHORTY QUE TE VAYA BN <3', '00:00:22', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741471404/shortyquetevayabien_cgsu4v.jpg','2021-09-29'),
 ('https://res.cloudinary.com/djsm3jfht/video/upload/v1741471490/sinmirarlasse%C3%B1ales_rngg86.mp3', 'SIN MIRAR LAS SEÑALES', '00:00:24', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741471200/happybirthdayflakko_hjl8xm.jpg','2019-10-17'),
 ('https://res.cloudinary.com/djsm3jfht/video/upload/v1741471489/comotevaquerida_j1yeoj.m4a', '¿CÓMO TE VA, QUERIDA?', '00:01:00', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741471200/happybirthdayflakko_hjl8xm.jpg','2019-10-17'),
-('https://res.cloudinary.com/djsm3jfht/video/upload/v1741471489/OTROCHEKE_xfo0hd.mp3', 'OTRO CHEKE', '00:00:39', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741471200/happybirthdayflakko_hjl8xm.jpg','2019-10-17');
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741471489/OTROCHEKE_xfo0hd.mp3', 'OTRO CHEKE', '00:00:39', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741471200/happybirthdayflakko_hjl8xm.jpg','2019-10-17'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741794971/panymantequilla_oi6lxi.mp3', 'Pan y mantequilla', '00:01:17', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741796350/noimportaquellueva_kmzxul.jpg','2013-12-20'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741794971/cuandomesientobien_xz2fun.mp3', 'Cuando me siento bien', '00:03:04', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741796350/cuandomesientobien_cdsfun.jpg','2015-12-20'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741794971/noimportaquellueva_ih9sui.mp3', 'No importa que llueva', '00:02:14', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741796350/noimportaquellueva_kmzxul.jpg','2013-12-20'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741794970/comosinoimportara_r1yr7y.m4a', 'como si no importara', '00:01:00', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741796349/comosinoimportara_kacsxj.jpg','2021-07-13'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741794970/noseve_qtruq0.mp3', 'No_Se_Ve.mp3', '00:01:01', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741796349/mp3-emilia_aqwbdb.jpg','2023-11-03'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741794969/exclusive_mik789.m4a', 'Exclusive.mp3', '00:01:00', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741796349/mp3-emilia_aqwbdb.jpg','2023-11-03'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741794968/estorecienempieza_i4si96.mp3', 'Esto Recién Empieza', '00:00:13', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741796349/estorecienempieza_hq1ymr.jpg','2022-02-14');
 -- ('', '', '00:00:00', 'link_compartir', '','2017-00-00'),
 
 INSERT INTO Valoraciones (nombre_usuario, id_cm, valoracion) VALUES
@@ -431,10 +438,18 @@ INSERT INTO Cancion (id_cancion, n_repros, letra) VALUES
 (33, 172000000, 'Letra de "SHORTY QUE TE VAYA BN <3":...'),
 (34, 200000000, 'Letra de "SIN MIRAR LAS SEÑALES":...'),
 (35, 80000000, 'Letra de "¿CÓMO TE VA, QUERIDA?":...'),
-(36, 60000000, 'Letra de "OTRO CHEKE":...');
+(36, 60000000, 'Letra de "OTRO CHEKE":...'),
+(37, 80000000, 'Letra de "Pan y mantequilla...'),
+(38, 35000000, 'Letra de "Cuando me siento bien..."'),
+(39, 40000000, 'Letra de "No importa que llueva..."'),
+(40, 300000000, 'Letra de "como si no importara..."'),
+(41, 350000000, 'Letra de "No se ve..."'),
+(42, 60000000, 'Letra de "Exclusive..."'),
+(43, 120000000, 'Letra de "Esto recien empieza..."');
 
 INSERT INTO Generos (id_cancion, genero) VALUES
 (1, 'Rap'),
+(1, 'Trap'),
 (2, 'Reguetón'),
 (3, 'Trap'),
 (4, 'Trap'),
@@ -468,7 +483,16 @@ INSERT INTO Generos (id_cancion, genero) VALUES
 (33, 'Reguetón'),
 (34, 'Reguetón'),
 (35, 'Trap'),
-(36, 'Trap');
+(36, 'Trap'),
+(37, 'Pop'),
+(38, 'Pop'),
+(39, 'Pop'),
+(40, 'Reguetón'),
+(41, 'Reguetón'),
+(41, 'Funk Carioca'),
+(42, 'Reguetón'),
+(42, 'Pop'),
+(43, 'Reguetón');
 
 INSERT INTO Numero_cancion_en_album (id_album, id_cancion, numero_cancion) VALUES
 (4, 10, 5),  -- "WHERE SHE GOES" en "Nadie Sabe Lo Que Va A Pasar Mañana"
@@ -518,7 +542,14 @@ INSERT INTO Artista_principal (nombre_artista, id_cancion) VALUES
 ('Rels B', 33),
 ('Rels B', 34),
 ('Rels B', 35),
-('Rels B', 36);
+('Rels B', 36),
+('Efecto Pasillo', 37),
+('Efecto Pasillo', 38),
+('Efecto Pasillo', 39),
+('Emilia', 40),
+('Emilia', 41),
+('Emilia', 42),
+('Duki', 43);
 
 INSERT INTO Featuring (nombre_artista, id_cancion) VALUES
 ('Dei V', 2),
@@ -528,7 +559,9 @@ INSERT INTO Featuring (nombre_artista, id_cancion) VALUES
 ('María Becerra', 24),
 ('Quevedo', 25),
 ('Duki',36),
-('Don Patricio', 35);
+('Don Patricio', 35),
+('Duki', 40),
+('Emilia', 43);
 
 INSERT INTO Podcast (id_podcast, nombre, link_imagen, link_compartir, descripcion) VALUES
 (1, 'La Pija y la Quinqui', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740768719/lapijaylaquinqui_vrgwui.jpg', 'https://example.com/share/lapijaylaquinqui', 'Un podcast donde se exploran temas de actualidad y cultura con humor irreverente.'),
@@ -589,7 +622,17 @@ INSERT INTO Idiomas_multimedia (id_cm, idioma) VALUES
 (33, 'Español'),
 (34, 'Español'),
 (35, 'Español'),
-(36, 'Español');
+(36, 'Español'),
+(37, 'Español'),
+(38, 'Español'),
+(39, 'Español'),
+(40, 'Español'),
+(41, 'Español'),
+(41, 'Portugués'),
+(42, 'Español'),
+(42, 'Inglés'),
+(43, 'Español');
+
 
 INSERT INTO Sigue_a_creador (nombre_usuario, nombre_creador) VALUES
 ('jorge', 'Cruz Cafuné'),
@@ -676,7 +719,7 @@ INSERT INTO Lista_Episodios (id_lista_ep) VALUES
 (1), (2), (3), (4), (5), (6), (7), (8), (9), (10), (11), (12), (13), (14), (15), (16), (17), (18), (19), (20), (21), (22), (23), (24), (25),
 (29), (30), (31), (32), (33), (34), (35), (36);
 
-INSERT INTO Playlist_Cancion (id_playlist, id_cancion) VALUES
+INSERT INTO Canciones_en_playlist (id_playlist, id_cancion) VALUES
 -- TOP ESPAÑOL
 (1,2),(1,4),(1,11),(1,12),(1,13),(1,14),(1,15),(1,16),(1,17),(1,19),(1,20),(1,22),
 -- TOP FRANCÉS
@@ -712,7 +755,7 @@ INSERT INTO Playlist_Cancion (id_playlist, id_cancion) VALUES
 -- This is María Becerra
 (17,24),
 -- This is Emilia
-
+(18, 40), (18, 41), (18, 42), (18, 23),
 -- This is Don Patricio
 (19,23),
 -- This is Quevedo
@@ -722,7 +765,7 @@ INSERT INTO Playlist_Cancion (id_playlist, id_cancion) VALUES
 -- This is Omar Courtz
 (22,2),
 -- This is Efecto Pasillo
-
+(23, 37), (23, 38), (23, 39),
 -- This is Rels B
 (24,31),(24,32),(24,33),(24,34),(24,35),(24,36),
 -- This is C. Tangana
