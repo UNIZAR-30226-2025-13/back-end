@@ -20,7 +20,7 @@ const autorizacion = require("./routes/autorization");
 const usuario = require("./routes/user");
 const artista = require("./routes/artist");
 const home = require("./routes/home");
-const canciones = require("./routes/song");
+const player = require("./routes/player");
 const album = require("./routes/album");
 const playlists = require("./routes/playlists");
 
@@ -31,7 +31,7 @@ app.use(autorizacion);
 app.use(usuario);
 app.use(artista);
 app.use(home);
-app.use(canciones);
+app.use(player);
 app.use(album);
 app.use(playlists);
 

@@ -1,0 +1,178 @@
+const express = require('express');
+const router = express.Router();
+const { playSong, saveLastThingPlaying, recoverLastThingPlaying } = require('../controllers/playerController');
+
+/**
+ * @swagger
+ * tags:
+ *   name: Player
+ *   description: Endpoints relacionados con el reproductor de contenido multimedia
+ */
+/**
+ * @swagger
+ * /play-song:
+ *   get:
+ *     summary: Reproducir una canción
+ *     description: Obtiene la información de una canción para su reproducción sin mostrar detalles de la misma.
+ *     tags:
+ *       - Player
+ *     parameters:
+ *       - in: query
+ *         name: id_cancion
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: ID de la canción a reproducir
+ *     responses:
+ *       200:
+ *         description: Canción encontrada y lista para reproducción
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id_cancion:
+ *                   type: string
+ *                   description: ID de la canción
+ *                 link_cm:
+ *                   type: string
+ *                   description: Enlace al contenido multimedia de la canción
+ *                 titulo:
+ *                   type: string
+ *                   description: Título de la canción
+ *                 duracion:
+ *                   type: string
+ *                   description: Duración de la canción
+ *                 link_imagen:
+ *                   type: string
+ *                   description: Enlace a la imagen de la canción
+ *                 autor:
+ *                   type: string
+ *                   description: Nombre del artista principal
+ *                 artistas_featuring:
+ *                   type: string
+ *                   description: Lista de artistas en featuring separados por coma
+ *       400:
+ *         description: Error si la canción no existe o si el contenido es un episodio de podcast
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   examples:
+ *                     no_existe:
+ *                       value: "No existe la canción"
+ *                     es_podcast:
+ *                       value: "El contenido solicitado es un episodio de podcast, no una canción"
+ *       500:
+ *         description: Error del servidor al obtener la canción
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Hubo un error al obtener la canción"
+ */
+router.get('/play-song', playSong);
+
+/**
+ * @swagger
+ * /save-last-playing:
+ *   post:
+ *     summary: Guarda el último contenido multimedia reproducido por un usuario.
+ *     description: Guarda el último contenido multimedia que un usuario estaba reproduciendo junto con el tiempo de reproducción actual.
+ *     tags: [Player]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - nombre_usuario
+ *               - id_cm
+ *               - tiempo
+ *             properties:
+ *               nombre_usuario:
+ *                 type: string
+ *                 description: Nombre de usuario del cual se va a guardar la última canción reproducida.
+ *               id_cm:
+ *                 type: string
+ *                 description: ID del contenido multimedia que estaba reproduciendo el usuario.
+ *               tiempo:
+ *                 type: integer
+ *                 description: Tiempo en segundos en el que se dejó la reproducción del contenido multimedia.
+ *     responses:
+ *       200:
+ *         description: El último contenido multimedia reproducido ha sido guardado correctamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 msg:
+ *                   type: string
+ *                   example: El último contenido multimedia reproducido ha sido guardado correctamente.
+ *       400:
+ *         description: Error en la solicitud debido a datos inválidos.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: El contenido dado no existe | El tiempo dado excede el del contenido | El usuario dado no existe.
+ *       500:
+ *         description: Error interno del servidor al intentar guardar la información.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Hubo un error al guardar el último contenido sonando.
+ */
+router.post('/save-last-playing', saveLastThingPlaying);
+
+/**
+ * @swagger
+ * /recover-last-playing:
+ *   get:
+ *     summary: Obtiene el ID del último contenido multimedia que estaba reproduciéndose.
+ *     description: Recupera el último contenido reproducido y el tiempo en el que se pausó para un usuario específico.
+ *     tags: [Player]
+ *     parameters:
+ *       - in: query
+ *         name: nombre_usuario
+ *         required: true
+ *         description: Nombre de usuario del cual se quiere recuperar la última reproducción.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Última reproducción encontrada correctamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id_cm:
+ *                   type: integer
+ *                   description: ID del contenido multimedia.
+ *                 tiempo:
+ *                   type: integer
+ *                   description: Tiempo en segundos donde se pausó la reproducción.
+ *       400:
+ *         description: El usuario no existe.
+ *       500:
+ *         description: Error interno al recuperar la última reproducción.
+ */
+router.get('/recover-last-playing', recoverLastThingPlaying);
+
+module.exports = router;
