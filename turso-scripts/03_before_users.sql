@@ -1,284 +1,3 @@
-DROP TABLE IF EXISTS Listas_de_carpeta;
-DROP TABLE IF EXISTS Carpetas_del_usuario;
-DROP TABLE IF EXISTS Carpeta;
-DROP TABLE IF EXISTS Listas_del_usuario;
-DROP TABLE IF EXISTS Usuario_reproduce;
-DROP TABLE IF EXISTS Mensaje;
-DROP TABLE IF EXISTS Token;
-DROP TABLE IF EXISTS Sigue_a_usuario;
-DROP TABLE IF EXISTS Sigue_a_creador;
-DROP TABLE IF EXISTS Usuario;
-DROP TABLE IF EXISTS Canciones_en_playlist;
-DROP TABLE IF EXISTS Playlist;
-DROP TABLE IF EXISTS Episodios_de_lista;
-DROP TABLE IF EXISTS Lista_Episodios;
-DROP TABLE IF EXISTS Lista_reproduccion;
-DROP TABLE IF EXISTS Tiene_podcast;
-DROP TABLE IF EXISTS Podcaster;
-DROP TABLE IF EXISTS Tematica_podcast;
-DROP TABLE IF EXISTS Podcast;
-DROP TABLE IF EXISTS Episodio;
-DROP TABLE IF EXISTS Featuring;
-DROP TABLE IF EXISTS Artista_principal;
-DROP TABLE IF EXISTS Generos;
-DROP TABLE IF EXISTS Cancion;
-DROP TABLE IF EXISTS Idiomas_multimedia;
-DROP TABLE IF EXISTS Numero_cancion_en_album;
-DROP TABLE IF EXISTS Artista_posee_albumes;
-DROP TABLE IF EXISTS Album;
-DROP TABLE IF EXISTS Valoraciones;
-DROP TABLE IF EXISTS Contenido_multimedia;
-DROP TABLE IF EXISTS Artista;
-DROP TABLE IF EXISTS Creador;
-
-
-CREATE TABLE Creador (
-    nombre_creador      VARCHAR(255) PRIMARY KEY,
-    biografia           TEXT,
-    link_compartir      VARCHAR(500) NOT NULL,
-    link_imagen         VARCHAR(500) NOT NULL
-);
-
-CREATE TABLE Artista (
-    nombre_artista  VARCHAR(255) PRIMARY KEY,
-    FOREIGN KEY (nombre_artista) REFERENCES Creador(nombre_creador) ON DELETE CASCADE
-);
-
-CREATE TABLE Album (
-    id_album        INTEGER PRIMARY KEY AUTOINCREMENT,
-    nombre_album    VARCHAR(255) NOT NULL,
-    link_imagen     VARCHAR(500),
-    link_compartir  VARCHAR(500),
-    es_disco        BOOLEAN NOT NULL DEFAULT FALSE,
-    fecha_pub       DATE NOT NULL
-);
-
-CREATE TABLE Artista_posee_albumes (
-    nombre_artista  VARCHAR(255),
-    id_album        INTEGER,
-    PRIMARY KEY (nombre_artista, id_album),
-    FOREIGN KEY (nombre_artista) REFERENCES Artista(nombre_artista) ON DELETE CASCADE,
-    FOREIGN KEY (id_album) REFERENCES Album(id_album) ON DELETE CASCADE
-);
-
-CREATE TABLE Numero_cancion_en_album (
-    id_album        INT,
-    id_cancion      INT,
-    numero_cancion  INT,
-    PRIMARY KEY (id_album, id_cancion),
-    FOREIGN KEY (id_album) REFERENCES Album(id_album) ON DELETE CASCADE,
-    FOREIGN KEY (id_cancion) REFERENCES Cancion(id_cancion) ON DELETE CASCADE
-);
-
-CREATE TABLE Contenido_multimedia (
-    id_cm           INTEGER PRIMARY KEY AUTOINCREMENT,
-    link_cm         VARCHAR(255) NOT NULL,
-    titulo          VARCHAR(255) NOT NULL,
-    duracion        TIME NOT NULL,
-    link_compartir  VARCHAR(255),
-    link_imagen     VARCHAR(255),
-    fecha_pub       DATE NOT NULL
-);
-
-CREATE TABLE Valoraciones (
-    nombre_usuario  VARCHAR(255),
-    id_cm           INTEGER,
-    valoracion      FLOAT CHECK (valoracion BETWEEN 1 AND 5),
-    PRIMARY KEY (nombre_usuario, id_cm),
-    FOREIGN KEY (nombre_usuario) REFERENCES Usuario(nombre_usuario) ON DELETE CASCADE,
-    FOREIGN KEY (id_cm) REFERENCES Contenido_multimedia(id_cm) ON DELETE CASCADE
-);
-
-CREATE TABLE Idiomas_multimedia (
-    id_cm   INTEGER,
-    idioma  VARCHAR(100),
-    PRIMARY KEY (id_cm, idioma),
-    FOREIGN KEY (id_cm) REFERENCES Contenido_multimedia(id_cm) ON DELETE CASCADE
-);
-
-CREATE TABLE Cancion (
-    id_cancion  INT PRIMARY KEY, 
-    n_repros    INT DEFAULT 0, 
-    letra       TEXT, 
-    FOREIGN KEY (id_cancion) REFERENCES Contenido_multimedia(id_cm) ON DELETE CASCADE
-);
-
-CREATE TABLE Generos (
-    id_cancion   INT,
-    genero       VARCHAR(100),
-    PRIMARY KEY (id_cancion, genero),
-    FOREIGN KEY (id_cancion) REFERENCES Cancion(id_cancion) ON DELETE CASCADE
-);
-
-CREATE TABLE Artista_principal (
-    nombre_artista  VARCHAR(255),
-    id_cancion      INT,
-    PRIMARY KEY (nombre_artista, id_cancion),
-    FOREIGN KEY (nombre_artista) REFERENCES Artista(nombre_artista) ON DELETE CASCADE,
-    FOREIGN KEY (id_cancion) REFERENCES Cancion(id_cancion) ON DELETE CASCADE
-);
-
-CREATE TABLE Featuring (
-    nombre_artista  VARCHAR(255),
-    id_cancion      INT,
-    PRIMARY KEY (nombre_artista, id_cancion),
-    FOREIGN KEY (nombre_artista) REFERENCES Artista(nombre_artista) ON DELETE CASCADE,
-    FOREIGN KEY (id_cancion) REFERENCES Cancion(id_cancion) ON DELETE CASCADE
-);
-
-CREATE TABLE Episodio (
-    id_ep       INT, 
-    id_podcast  INT, 
-    descripcion TEXT,
-    PRIMARY KEY (id_ep, id_podcast),
-    FOREIGN KEY (id_ep) REFERENCES Contenido_multimedia(id_cm) ON DELETE CASCADE
-    FOREIGN KEY (id_podcast) REFERENCES Podcast(id_podcast) ON DELETE CASCADE
-);
-
-CREATE TABLE Podcast (
-    id_podcast      INT PRIMARY KEY,
-    nombre          VARCHAR(255) NOT NULL,
-    link_imagen     VARCHAR(500),
-    link_compartir  VARCHAR(500),
-    descripcion     TEXT
-);
-
-CREATE TABLE Tematica_podcast (
-    id_podcast  INT,
-    tematica    VARCHAR(255),
-    PRIMARY KEY (id_podcast, tematica),
-    FOREIGN KEY (id_podcast) REFERENCES Podcast(id_podcast) ON DELETE CASCADE
-);
-
-CREATE TABLE Podcaster (
-    nombre_podcaster  VARCHAR(255) PRIMARY KEY,
-    FOREIGN KEY (nombre_podcaster) REFERENCES Creador(nombre_creador) ON DELETE CASCADE
-);
-
-CREATE TABLE Tiene_podcast (
-    nombre_podcaster  VARCHAR(255),
-    id_podcast        INT,
-    PRIMARY KEY (nombre_podcaster, id_podcast),
-    FOREIGN KEY (nombre_podcaster) REFERENCES Podcaster(nombre_podcaster) ON DELETE CASCADE,
-    FOREIGN KEY (id_podcast) REFERENCES Podcast(id_podcast) ON DELETE CASCADE
-);
-
-CREATE TABLE Lista_reproduccion (
-    id_lista        INTEGER PRIMARY KEY AUTOINCREMENT,
-    nombre          VARCHAR(255) NOT NULL,
-    es_publica      BOOLEAN NOT NULL DEFAULT FALSE,
-    color           VARCHAR(255),
-    link_compartir  VARCHAR(500)
-);
-
-CREATE TABLE Lista_Episodios (
-    id_lista_ep    INT PRIMARY KEY,
-    FOREIGN KEY (id_lista_ep) REFERENCES Lista_reproduccion(id_lista) ON DELETE CASCADE
-);
-
-CREATE TABLE Episodios_de_lista (
-    id_lista_ep  INT,
-    id_ep        INT,
-    id_podcast   INT,
-    PRIMARY KEY (id_lista_ep, id_ep, id_podcast),
-    FOREIGN KEY (id_lista_ep) REFERENCES Lista_Episodios(id_lista_ep) ON DELETE CASCADE,
-    FOREIGN KEY (id_ep, id_podcast) REFERENCES Episodio(id_ep, id_podcast) ON DELETE CASCADE
-);
-
-CREATE TABLE Playlist (
-    id_playlist     INT PRIMARY KEY,
-    FOREIGN KEY (id_playlist) REFERENCES Lista_reproduccion(id_lista) ON DELETE CASCADE
-);
-
-CREATE TABLE Canciones_en_playlist (
-    id_playlist  INT,
-    id_cancion   INT,
-    PRIMARY KEY (id_playlist, id_cancion),
-    FOREIGN KEY (id_playlist) REFERENCES Playlist(id_playlist) ON DELETE CASCADE,
-    FOREIGN KEY (id_cancion) REFERENCES Cancion(id_cancion) ON DELETE CASCADE
-);
-
-CREATE TABLE Usuario (
-    nombre_usuario  VARCHAR(255) PRIMARY KEY,
-    contrasena      VARCHAR(255) NOT NULL,
-    correo          VARCHAR(255) NOT NULL,
-    link_compartir  VARCHAR(255),
-    es_admin        BOOLEAN NOT NULL DEFAULT FALSE
-);
-
-CREATE TABLE Sigue_a_creador (
-    nombre_usuario  VARCHAR(255),
-    nombre_creador  VARCHAR(255),
-    PRIMARY KEY (nombre_usuario, nombre_creador),
-    FOREIGN KEY (nombre_usuario) REFERENCES Usuario(nombre_usuario) ON DELETE CASCADE,
-    FOREIGN KEY (nombre_creador) REFERENCES Creador(nombre_creador) ON DELETE CASCADE
-);
-
-CREATE TABLE Sigue_a_usuario (
-    nombre_usuario1  VARCHAR(255),
-    nombre_usuario2  VARCHAR(255),
-    PRIMARY KEY (nombre_usuario1, nombre_usuario2),
-    FOREIGN KEY (nombre_usuario1) REFERENCES Usuario(nombre_usuario) ON DELETE CASCADE,
-    FOREIGN KEY (nombre_usuario2) REFERENCES Usuario(nombre_usuario) ON DELETE CASCADE
-);
-
-CREATE TABLE Token (
-    nombre_usuario  VARCHAR(255) PRIMARY KEY,
-    token           TEXT,
-    fecha_exp       DATE,
-    FOREIGN KEY (nombre_usuario) REFERENCES Usuario(nombre_usuario) ON DELETE CASCADE
-);
-
-CREATE TABLE Mensaje (
-    id_mensaje            INTEGER PRIMARY KEY AUTOINCREMENT,
-    nombre_usuario_envia  VARCHAR(255),
-    nombre_usuario_recibe VARCHAR(255),
-    contenido             TEXT,
-    fecha                 DATETIME,
-    FOREIGN KEY (nombre_usuario_envia) REFERENCES Usuario(nombre_usuario) ON DELETE CASCADE,
-    FOREIGN KEY (nombre_usuario_recibe) REFERENCES Usuario(nombre_usuario) ON DELETE CASCADE
-);
-
-CREATE TABLE Usuario_reproduce (
-    nombre_usuario  VARCHAR(255),
-    id_cm           INTEGER,
-    tiempo          TIME,
-    PRIMARY KEY (nombre_usuario, id_cm),
-    FOREIGN KEY (nombre_usuario) REFERENCES Usuario(nombre_usuario) ON DELETE CASCADE,
-    FOREIGN KEY (id_cm) REFERENCES Contenido_multimedia(id_cm) ON DELETE CASCADE
-);
-
-CREATE TABLE Listas_del_usuario (
-    nombre_usuario  VARCHAR(255),
-    id_lista        INT,
-    PRIMARY KEY (nombre_usuario, id_lista),
-    FOREIGN KEY (nombre_usuario) REFERENCES Usuario(nombre_usuario) ON DELETE CASCADE,
-    FOREIGN KEY (id_lista) REFERENCES Lista_reproduccion(id_lista) ON DELETE CASCADE
-);
-
-CREATE TABLE Carpeta (
-    id_carpeta      INTEGER PRIMARY KEY AUTOINCREMENT,
-    nombre          VARCHAR(255)
-);
-
-CREATE TABLE Carpetas_del_usuario (
-    nombre_usuario  VARCHAR(255),
-    id_carpeta      INTEGER,
-    PRIMARY KEY (nombre_usuario, id_carpeta),
-    FOREIGN KEY (nombre_usuario) REFERENCES Usuario(nombre_usuario) ON DELETE CASCADE,
-    FOREIGN KEY (id_carpeta) REFERENCES Carpeta(id_carpeta) ON DELETE CASCADE
-);
-
-CREATE TABLE Listas_de_carpeta (
-    id_carpeta  INT,
-    id_lista    INT,
-    PRIMARY KEY (id_carpeta, id_lista),
-    FOREIGN KEY (id_carpeta) REFERENCES Carpeta(id_carpeta) ON DELETE CASCADE,
-    FOREIGN KEY (id_lista) REFERENCES Lista_reproduccion(id_lista) ON DELETE CASCADE
-);
-
--- CREAR LOS USUARIOS spongefy y jorge DESDE LA APLICACIÓN (así las contraseñas se guardan cifradas)
--- HACER PRIMERO TODOS LOS INSERTS QUE NO INVOLUCREN A LOS USUARIOS, Y DESPUÉS CREAR A LOS USUARIOS
 
 INSERT INTO Creador (nombre_creador, biografia, link_compartir, link_imagen) VALUES
 ('Carlos Peguer', 'Carlos Peguer es co-presentador del pódcast español "La Pija y la Quinqui", que ha ganado popularidad entre la generación Z y los millennials.', 'https://example.com/share/carlospeguer', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740765428/carlos-peguer-img_ftskv0.jpg'),
@@ -401,10 +120,6 @@ INSERT INTO Contenido_multimedia (link_cm, titulo, duracion, link_compartir, lin
 ('https://res.cloudinary.com/djsm3jfht/video/upload/v1741794969/exclusive_mik789.m4a', 'Exclusive.mp3', '00:01:00', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741796349/mp3-emilia_aqwbdb.jpg','2023-11-03'),
 ('https://res.cloudinary.com/djsm3jfht/video/upload/v1741794968/estorecienempieza_i4si96.mp3', 'Esto Recién Empieza', '00:00:13', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741796349/estorecienempieza_hq1ymr.jpg','2022-02-14');
 -- ('', '', '00:00:00', 'link_compartir', '','2017-00-00'),
-
-INSERT INTO Valoraciones (nombre_usuario, id_cm, valoracion) VALUES
-('jorge', 1, 4),
-('jorge', 2, 5);
 
 INSERT INTO Cancion (id_cancion, n_repros, letra) VALUES
 (1, 1500000, 'Esta es la letra de "Mina el Hammani", un tema cargado de energía que resalta la espiritualidad en la música urbana.'),
@@ -633,13 +348,6 @@ INSERT INTO Idiomas_multimedia (id_cm, idioma) VALUES
 (42, 'Inglés'),
 (43, 'Español');
 
-
-INSERT INTO Sigue_a_creador (nombre_usuario, nombre_creador) VALUES
-('jorge', 'Cruz Cafuné'),
-('jorge', 'Bad Bunny');
-
-UPDATE Usuario SET es_admin = TRUE WHERE nombre_usuario = 'spongefy';
-
 INSERT INTO Carpeta (nombre) VALUES
 ('Idiomas'),
 ('Géneros'),
@@ -648,13 +356,6 @@ INSERT INTO Carpeta (nombre) VALUES
 ('Aleatorio Canciones'),
 ('Aleatorio Episodios');
 
-INSERT INTO Carpetas_del_usuario (nombre_usuario, id_carpeta) VALUES
-('spongefy', 1),
-('spongefy', 2),
-('spongefy', 3),
-('spongefy', 4),
-('spongefy', 5),
-('spongefy', 6);
 
 INSERT INTO Lista_reproduccion (nombre, es_publica, color, link_compartir) VALUES
 -- idiomas
@@ -710,106 +411,104 @@ INSERT INTO Lista_reproduccion (nombre, es_publica, color, link_compartir) VALUE
 ('COMEDIA', TRUE, '#FFA500', 'https://example.com/share/comedia'),
 ('ENTREVISTAS', TRUE, '#008000', 'https://example.com/share/entrevistas');
 
+
 INSERT INTO Playlist (id_playlist) VALUES
-(1), (2), (3), (4), (5), (6), (7), (8), (9), (10), (11), (12), (13),
-(17), (18), (19), (20), (21), (22), (23), (24);
+(1), (2), (3), (4), (5), (6), (7), (8), (9), (10), (11), (12), (13), (14), (15), (16),
+(17), (18), (19), (20), (21), (22), (23), (24), (25), 
+(29), (30), (31), (32), (33), (34), (35), (36);
 
 INSERT INTO Lista_Episodios (id_lista_ep) VALUES
-(14), (15), (16), (25), (26), (27), (28), (29), (30), (31), (32), (33), (34);
-(1), (2), (3), (4), (5), (6), (7), (8), (9), (10), (11), (12), (13), (14), (15), (16), (17), (18), (19), (20), (21), (22), (23), (24), (25),
-(29), (30), (31), (32), (33), (34), (35), (36);
+(26), (27), (28), 
+(37), (38), (39), (40), (41), (42), (43), (44), (45), (46);
 
 INSERT INTO Canciones_en_playlist (id_playlist, id_cancion) VALUES
 -- TOP ESPAÑOL
-(1,2),(1,4),(1,11),(1,12),(1,13),(1,14),(1,15),(1,16),(1,17),(1,19),(1,20),(1,22),
+(1, 2), (1, 4), (1, 11), (1, 12), (1, 13), (1, 14), (1, 15), (1, 16), (1, 17), (1, 19), (1,20), (1, 22),
 -- TOP FRANCÉS
-(2,5),
+(2, 5),
 -- TOP INGLÉS
-(3,18),(3,21),
+(3, 18),(3,21),
 -- RAP
-(4,1),(4,5),(4,32),
+(4, 1),(4,5),(4,32),
 -- REGUETÓN
-(5,2),(5,10),(5,11),(5,12),(5,13),(5,14),(5,15),(5,16),(5,19),(5,23),(5,24),(5,25),(5,31),(5,33),(5,34),
+(5, 2),(5,10),(5,11),(5,12),(5,13),(5,14),(5,15),(5,16),(5,19),(5,23),(5,24),(5,25),(5,31),(5,33),(5,34),
 -- TRAP
-(6,3),(6,4),(6,17),(6,20),(6,22),(6,35),(6,36),
+(6, 3),(6,4),(6,17),(6,20),(6,22),(6,35),(6,36),
 -- POP
-(7,18),(7,21),
+(7, 18),(7,21),
 -- This is Cruz Cafuné
-(8,1),
+(8, 1),
 -- This is Bad Bunny
-(9,2),(9,10),(9,12),(9,13),(9,14),
+(9, 2),(9,10),(9,12),(9,13),(9,14),
 -- This is Lola Índigo
-(10,11),(10,15),(10,23),(10,24),(10,25),
+(10, 11),(10,15),(10,23),(10,24),(10,25),
 -- This is Sosad.97
-(11,3),
+(11, 3),
 -- This is Feid
-(12,16),(12,19),
+(12, 16),(12,19),
 -- This is Duki
-(13,4),(13,17),(13,20),(13,22),
+(13, 4),(13,17),(13,20),(13,22),
 -- This is Harry Styles
-(14,18),(14,21),
+(14, 18),(14,21),
 -- This is Bigflo & Oli
-(15,5),
+(15, 5),
 -- This is Paulo Londra
-(16,22),
+(16, 22),
 -- This is María Becerra
-(17,24),
+(17, 24),
 -- This is Emilia
 (18, 40), (18, 41), (18, 42), (18, 23),
 -- This is Don Patricio
-(19,23),
+(19, 23),
 -- This is Quevedo
-(20,25),
+(20, 25),
 -- This is Dei V
-(21,2),
+(21, 2),
 -- This is Omar Courtz
-(22,2),
+(22, 2),
 -- This is Efecto Pasillo
 (23, 37), (23, 38), (23, 39),
 -- This is Rels B
-(24,31),(24,32),(24,33),(24,34),(24,35),(24,36),
+(24, 31),(24,32),(24,33),(24,34),(24,35),(24,36),
 -- This is C. Tangana
-(25,26),(25,27),(25,28),(25,29),(25,30),
+(25, 26),(25,27),(25,28),(25,29),(25,30),
 -- VERANO
-(29,10),(29,12),(29,20),(29,21),(29,25),
+(29, 10),(29,12),(29,20),(29,21),(29,25),
 -- FIESTA
-(30,4),(30,12),(30,20),(30,21),(30,22),(30,23),(30,24),
+(30, 4),(30,12),(30,20),(30,21),(30,22),(30,23),(30,24),
 -- RELAX
-(31,18),(31,19),(31,31), (31,35),
+(31, 18),(31,19),(31,31), (31,35),
 -- ENTRENAMIENTO
-(32,3),(32,4),(32,13),(32,16),(32,17),(32,20),(32,22),(32,24),
+(32, 3),(32,4),(32,13),(32,16),(32,17),(32,20),(32,22),(32,24),
 -- TRABAJO
-(33,1),(33,5),(33,18),(33,21),(33,31),
+(33, 1),(33,5),(33,18),(33,21),(33,31),
 -- ESTUDIO
-(33,15),(34,26),(34,27),(34,28),(34,29),(34,30),(33,34),
+(33, 15),(34,26),(34,27),(34,28),(34,29),(34,30),(33,34),
 -- SAN VALENTÍN
-(35,23),(35,24),(35,25),(35,35),
+(35, 23),(35,24),(35,25),(35,35),
 -- NAVIDAD
-(36,18);
+(36, 18);
 
-INSERT INTO Lista_Episodios (id_lista_ep) VALUES
-(26), (27), (28), (37), (38), (39), (40), 
-(41), (42), (43), (44), (45), (46);
 
 INSERT INTO Episodios_de_lista (id_lista_ep, id_ep, id_podcast) VALUES
-(26,6,1),(26,7,1),(26,8,2),(26,9,2),
-(27,6,1),(27,7,1),(27,8,2),(27,9,2),
-(28,6,1),(28,7,1),(28,8,2),(28,9,2),
-(37,6,1),(37,7,1),(37,8,2),(37,9,2),
-(38,6,1),(38,7,1),(38,8,2),(38,9,2),
-(39,6,1),(39,7,1),(39,8,2),(39,9,2),
-(40,6,1),(40,7,1),(40,8,2),(40,9,2),
-(41,6,1),(41,7,1),(41,8,2),(41,9,2),
-(42,6,1),(42,7,1),(42,8,2),(42,9,2),
-(43,6,1),(43,7,1),(43,8,2),(43,9,2),
-(44,6,1),(44,7,1),(44,8,2),(44,9,2),
-(45,6,1),(45,7,1),(45,8,2),(45,9,2),
-(46,6,1),(46,7,1),(46,8,2),(46,9,2);
+(26, 6, 1), (26, 7, 1),
+(27, 6, 1), (27, 7, 1),
+(28, 8, 2), (28, 9, 2),
+(37, 6, 1), (37, 7, 1), (37, 8, 2), (37, 9, 2),
+(38, 6, 1), (38, 7, 1), (38, 8, 2), (38, 9, 2),
+(39, 6, 1), (39, 7, 1), (39, 8, 2), (39, 9, 2),
+(40, 6, 1), (40, 7, 1), (40, 8, 2), (40, 9, 2),
+(41, 6, 1), (41, 7, 1), (41, 8, 2), (41, 9, 2),
+(42, 6, 1), (42, 7, 1), (42, 8, 2), (42, 9, 2),
+(43, 6, 1), (43, 7, 1), (43, 8, 2), (43, 9, 2),
+(44, 6, 1), (44, 7, 1), (44, 8, 2), (44, 9, 2),
+(45, 6, 1), (45, 7, 1), (45, 8, 2), (45, 9, 2),
+(46, 6, 1), (46, 7, 1), (46, 8, 2), (46, 9, 2);
 
 INSERT INTO Listas_de_carpeta (id_carpeta, id_lista) VALUES
-(1,1),(1,2),(1,3),
-(2,4),(2,5),(2,6),(2,7),
-(3,8),(3,9),(3,10),(3,11),(3,12),(3,13),(3,14),(3,15),(3,16),(3,17),(3,18),(3,19),(3,20),(3,21),(3,22),(3,23),(3,24),(3,25),
-(4,26),(4,27),(4,28),
-(5,29),(5,30),(5,31),(5,32),(5,33),(5,34),(5,35),(5,36),
-(6,37),(6,38),(6,39),(6,40),(6,41),(6,42),(6,43),(6,44),(6,45),(6,46);
+(1, 1), (1, 2), (1, 3),
+(2, 4), (2, 5), (2, 6), (2, 7),
+(3, 8), (3, 9), (3, 10), (3, 11),(3, 12),(3, 13),(3, 14),(3, 15),(3, 16),(3, 17),(3, 18),(3, 19),(3, 20),(3, 21),(3, 22),(3, 23),(3, 24),(3, 25),
+(4, 26), (4, 27), (4, 28),
+(5, 29), (5, 30), (5, 31), (5, 32), (5, 33), (5, 34), (5, 35), (5, 36),
+(6, 37), (6, 38), (6, 39), (6, 40), (6, 41), (6, 42), (6, 43), (6, 44),(6, 45), (6, 46);
