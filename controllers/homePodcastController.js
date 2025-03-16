@@ -70,7 +70,7 @@ const getHomePodcast = async (req, res) => {
         const podcast_random = podcast_random_result.rows[0];
         // obtener los 4 episodios más recientes del podcast random
         const episodios_random_result = await client.execute(
-                `SELECT e.id_ep, cm.titulo, cm.link_imagen, cm.fecha_pub
+                `SELECT e.id_ep, cm.titulo, cm.link_imagen, cm.fecha_pub, e.descripcion
                 FROM Episodio e
                 JOIN Contenido_multimedia cm ON e.id_ep = cm.id_cm
                 WHERE id_podcast = ? 
