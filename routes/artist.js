@@ -45,7 +45,7 @@ const { getArtist } = require('../controllers/artistController');
  *                     type: object
  *                     properties:
  *                       id_album:
- *                         type: string
+ *                         type: integer
  *                         description: Identificador del álbum
  *                       nombre_album:
  *                         type: string
@@ -59,7 +59,7 @@ const { getArtist } = require('../controllers/artistController');
  *                     type: object
  *                     properties:
  *                       id_cancion:
- *                         type: string
+ *                         type: integer
  *                         description: Identificador de la canción
  *                       titulo:
  *                         type: string
@@ -72,11 +72,14 @@ const { getArtist } = require('../controllers/artistController');
  *                         description: URL de la imagen de la canción
  *                       duracion:
  *                         type: string
- *                         description: Duración de la canción
+ *                         format: time
+ *                         description: Duración de la canción en formato HH:MM:SS
+ *                         example: "00:03:45"  
  *                       fecha_pub:
  *                         type: string
  *                         format: date
- *                         description: Fecha de publicación de la canción
+ *                         description: Fecha de publicación de la canción YYYY-MM-DD
+ *                         example: "2021-09-30" 
  *                       nombre_artista:
  *                         type: string
  *                         description: Nombre del artista principal
@@ -91,7 +94,7 @@ const { getArtist } = require('../controllers/artistController');
  *                   nullable: true
  *                   properties:
  *                     id_lista:
- *                       type: string
+ *                       type: integer
  *                       description: Identificador de la lista de reproducción
  *                     nombre:
  *                       type: string

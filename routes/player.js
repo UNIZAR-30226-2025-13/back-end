@@ -20,7 +20,7 @@ const { playSong, saveLastThingPlaying, recoverLastThingPlaying } = require('../
  *       - in: query
  *         name: id_cancion
  *         schema:
- *           type: string
+ *           type: integer
  *         required: true
  *         description: ID de la canción a reproducir
  *     responses:
@@ -32,7 +32,7 @@ const { playSong, saveLastThingPlaying, recoverLastThingPlaying } = require('../
  *               type: object
  *               properties:
  *                 id_cancion:
- *                   type: string
+ *                   type: integer
  *                   description: ID de la canción
  *                 link_cm:
  *                   type: string
@@ -42,7 +42,9 @@ const { playSong, saveLastThingPlaying, recoverLastThingPlaying } = require('../
  *                   description: Título de la canción
  *                 duracion:
  *                   type: string
- *                   description: Duración de la canción
+ *                   format: time
+ *                   description: Duración de la canción en formato HH:MM:SS
+ *                   example: "00:03:45"  
  *                 link_imagen:
  *                   type: string
  *                   description: Enlace a la imagen de la canción
@@ -101,7 +103,7 @@ router.get('/play-song', playSong);
  *                 type: string
  *                 description: Nombre de usuario del cual se va a guardar la última canción reproducida.
  *               id_cm:
- *                 type: string
+ *                 type: integer
  *                 description: ID del contenido multimedia que estaba reproduciendo el usuario.
  *               tiempo:
  *                 type: integer

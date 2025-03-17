@@ -22,7 +22,7 @@ const { getPlaylistData, addSongToPlaylist } = require('../controllers/playlists
  *           required: true
  *           description: ID de la playlist que se quiere consultar.
  *           schema:
- *             type: string
+ *             type: integer
  *       responses:
  *         200:
  *           description: Datos de la playlist obtenidos exitosamente.
@@ -56,11 +56,14 @@ const { getPlaylistData, addSongToPlaylist } = require('../controllers/playlists
  *                           description: Enlace a la imagen de la canción.
  *                         duracion:
  *                           type: string
- *                           description: Duración de la canción.
+ *                           format: time
+ *                           description: Duración de la canción en formato HH:MM:SS
+ *                           example: "00:03:45"
  *                         fecha_pub:
  *                           type: string
  *                           format: date
- *                           description: Fecha de publicación de la canción.
+ *                           description: Fecha de publicación de la canción YYYY-MM-DD
+ *                           example: "2021-09-30" 
  *                         nombre_artista:
  *                           type: string
  *                           description: Nombre del artista principal de la canción.
@@ -104,10 +107,10 @@ router.get('/get-playlist-data', getPlaylistData);
  *             type: object
  *             properties:
  *               id_cancion:
- *                 type: string
+ *                 type: integer
  *                 description: El ID de la canción a añadir.
  *               id_playlist:
- *                 type: string
+ *                 type: integer
  *                 description: El ID de la playlist donde se añadirá la canción.
  *       responses:
  *         200:
