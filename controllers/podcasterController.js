@@ -42,12 +42,12 @@ const getPodcaster = async (req, res) => {
             
             // se obtiene la información necesaria de cada podcast
             const query_podcasts = `SELECT id_podcast, nombre, link_imagen FROM Podcast WHERE id_podcast IN (${dynamic_podcasts})`;
-            const query_episodios = `SELECT p.link_imagen, c.id_cm AS id_episodio, c.titulo AS titulo_episodio
+            const query_episodios = `SELECT p.nombre, p.link_imagen, c.id_cm AS id_episodio, c.titulo AS titulo_episodio
                                     FROM Episodio e
                                     JOIN Podcast p ON p.id_podcast = e.id_podcast
                                     JOIN Contenido_multimedia c ON c.id_cm = e.id_ep
                                     WHERE p.id_podcast IN (${dynamic_podcasts})`;
-            const query_ep_mas_reciente = `SELECT p.link_imagen, c.id_cm AS id_episodio, c.titulo AS titulo_episodio, e.descripcion
+            const query_ep_mas_reciente = `SELECT p.id_podcast, p.nombre, p.link_imagen, c.id_cm AS id_episodio, c.titulo AS titulo_episodio, e.descripcion
                                     FROM Episodio e
                                     JOIN Podcast p ON p.id_podcast = e.id_podcast
                                     JOIN Contenido_multimedia c ON c.id_cm = e.id_ep

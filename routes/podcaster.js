@@ -71,6 +71,9 @@ const { getPodcaster } = require('../controllers/podcasterController');
  *                   items:
  *                     type: object
  *                     properties:
+ *                       nombre:
+ *                         type: string
+ *                         description: Nombre del podcast asociado al episodio
  *                       link_imagen:
  *                         type: string
  *                         description: URL de la imagen del podcast asociado
@@ -85,6 +88,12 @@ const { getPodcaster } = require('../controllers/podcasterController');
  *                   items:
  *                     type: object
  *                     properties:
+ *                       id_podcast:
+ *                         type: integer
+ *                         description: Identificador del podcast asociado al episodio
+ *                       nombre:
+ *                         type: string
+ *                         description: Nombre del podcast asociado al episodio más reciente
  *                       link_imagen:
  *                         type: string
  *                         description: URL de la imagen del podcast asociado

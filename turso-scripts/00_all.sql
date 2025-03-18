@@ -379,7 +379,7 @@ INSERT INTO Contenido_multimedia (link_cm, titulo, duracion, link_compartir, lin
 ('https://res.cloudinary.com/djsm3jfht/video/upload/v1741466207/nuncaestoy_ns8gi3.mp3', 'Nunca Estoy', '00:00:32', 'https://example.com/share/nuncaestoy', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741466752/elmadrile%C3%B1o_ked1dn.jpg', '2021-02-26'),
 ('https://res.cloudinary.com/djsm3jfht/video/upload/v1741466207/ingobernable_ssdpqo.m4a', 'Ingobernable', '00:01:00', 'https://example.com/share/ingobernable', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741466752/elmadrile%C3%B1o_ked1dn.jpg', '2021-02-26'),
 ('https://res.cloudinary.com/djsm3jfht/video/upload/v1741466206/lostontos_xrgjiw.mp3', 'Los Tontos', '00:00:35', 'https://example.com/share/lostontos', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741466752/elmadrile%C3%B1o_ked1dn.jpg', '2021-02-26'),
-('https://res.cloudinary.com/djsm3jfht/video/upload/v1741471491/ami_faifw3.mp3', 'A Mí', '00:002:53', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741471403/ami_mjxzve.jpg','2017-02-17'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741471491/ami_faifw3.mp3', 'A Mí', '00:02:53', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741471403/ami_mjxzve.jpg','2017-02-17'),
 ('https://res.cloudinary.com/djsm3jfht/video/upload/v1741471490/eldon_rnyis0.mp3', 'Tienes el Don', '00:00:27', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741471404/eldon_pl7ivx.jpg','2019-02-21'),
 ('https://res.cloudinary.com/djsm3jfht/video/upload/v1741471490/shortyquetevayabien_oyuzvj.mp3', 'SHORTY QUE TE VAYA BN <3', '00:00:22', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741471404/shortyquetevayabien_cgsu4v.jpg','2021-09-29'),
 ('https://res.cloudinary.com/djsm3jfht/video/upload/v1741471490/sinmirarlasse%C3%B1ales_rngg86.mp3', 'SIN MIRAR LAS SEÑALES', '00:00:24', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741471200/happybirthdayflakko_hjl8xm.jpg','2019-10-17'),
@@ -393,10 +393,6 @@ INSERT INTO Contenido_multimedia (link_cm, titulo, duracion, link_compartir, lin
 ('https://res.cloudinary.com/djsm3jfht/video/upload/v1741794969/exclusive_mik789.m4a', 'Exclusive.mp3', '00:01:00', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741796349/mp3-emilia_aqwbdb.jpg','2023-11-03'),
 ('https://res.cloudinary.com/djsm3jfht/video/upload/v1741794968/estorecienempieza_i4si96.mp3', 'Esto Recién Empieza', '00:00:13', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741796349/estorecienempieza_hq1ymr.jpg','2022-02-14');
 -- ('', '', '00:00:00', 'link_compartir', '','2017-00-00'),
-
-INSERT INTO Valoraciones (nombre_usuario, id_cm, valoracion) VALUES
-('jorge', 1, 4),
-('jorge', 2, 5);
 
 INSERT INTO Cancion (id_cancion, n_repros, letra) VALUES
 (1, 1500000, 'Esta es la letra de "Mina el Hammani", un tema cargado de energía que resalta la espiritualidad en la música urbana.'),
@@ -475,16 +471,7 @@ INSERT INTO Generos (id_cancion, genero) VALUES
 (33, 'Reguetón'),
 (34, 'Reguetón'),
 (35, 'Trap'),
-(36, 'Trap'),
-(37, 'Pop'),
-(38, 'Pop'),
-(39, 'Pop'),
-(40, 'Reguetón'),
-(41, 'Reguetón'),
-(41, 'Funk Carioca'),
-(42, 'Reguetón'),
-(42, 'Pop'),
-(43, 'Reguetón');
+(36, 'Trap');
 
 INSERT INTO Numero_cancion_en_album (id_album, id_cancion, numero_cancion) VALUES
 (4, 10, 5),  -- "WHERE SHE GOES" en "Nadie Sabe Lo Que Va A Pasar Mañana"
@@ -534,14 +521,7 @@ INSERT INTO Artista_principal (nombre_artista, id_cancion) VALUES
 ('Rels B', 33),
 ('Rels B', 34),
 ('Rels B', 35),
-('Rels B', 36),
-('Efecto Pasillo', 37),
-('Efecto Pasillo', 38),
-('Efecto Pasillo', 39),
-('Emilia', 40),
-('Emilia', 41),
-('Emilia', 42),
-('Duki', 43);
+('Rels B', 36);
 
 INSERT INTO Featuring (nombre_artista, id_cancion) VALUES
 ('Dei V', 2),
@@ -614,16 +594,7 @@ INSERT INTO Idiomas_multimedia (id_cm, idioma) VALUES
 (33, 'Español'),
 (34, 'Español'),
 (35, 'Español'),
-(36, 'Español'),
-(37, 'Español'),
-(38, 'Español'),
-(39, 'Español'),
-(40, 'Español'),
-(41, 'Español'),
-(41, 'Portugués'),
-(42, 'Español'),
-(42, 'Inglés'),
-(43, 'Español');
+(36, 'Español');
 
 INSERT INTO Sigue_a_creador (nombre_usuario, nombre_creador) VALUES
 ('jorge', 'Cruz Cafuné'),
@@ -702,8 +673,7 @@ INSERT INTO Lista_reproduccion (nombre, es_publica, color, link_compartir) VALUE
 ('ENTREVISTAS', TRUE, '#008000', 'https://example.com/share/entrevistas');
 
 INSERT INTO Playlist (id_playlist) VALUES
-(1), (2), (3), (4), (5), (6), (7), (8), (9), (10), (11), (12), (13), (14), (15), (16),
-(17), (18), (19), (20), (21), (22), (23), (24), (25), 
+(1), (2), (3), (4), (5), (6), (7), (8), (9), (10), (11), (12), (13), (14), (15), (16), (17), (18), (19), (20), (21), (22), (23), (24), (25),
 (29), (30), (31), (32), (33), (34), (35), (36);
 
 INSERT INTO Lista_Episodios (id_lista_ep) VALUES
@@ -792,125 +762,6 @@ INSERT INTO Episodios_de_lista (id_lista_ep, id_ep, id_podcast) VALUES
 (44,6,1),(44,7,1),(44,8,2),(44,9,2),
 (45,6,1),(45,7,1),(45,8,2),(45,9,2),
 (46,6,1),(46,7,1),(46,8,2),(46,9,2);
-
-INSERT INTO Listas_de_carpeta (id_carpeta, id_lista) VALUES
-(1, 1),
-(1, 2),
-(1, 3),
-(2, 4),
-(2, 5),
-(2, 6),
-(2, 7),
-(3, 8),
-(3, 9),
-(3, 10),
-(3, 11),
-(3, 12),
-(3, 13),
-(4, 14),
-(4, 15),
-(4, 16),
-(5, 17),
-(5, 18),
-(5, 19),
-(5, 20),
-(5, 21),
-(5, 22),
-(5, 23),
-(5, 24),
-(6, 25),
-(6, 26),
-(6, 27),
-(6, 28),
-(6, 29),
-(6, 30),
-(6, 31),
-(6, 32),
-(6, 33),
-(6, 34);
-
-INSERT INTO Canciones_en_playlist (id_playlist, id_cancion) VALUES
--- TOP ESPAÑOL
-(1, 2), (1, 4), (1, 11), (1, 12), (1, 13), (1, 14), (1, 15), (1, 16), (1, 17), (1, 19), (1,20), (1, 22),
--- TOP FRANCÉS
-(2, 5),
--- TOP INGLÉS
-(3, 18),(3,21),
--- RAP
-(4, 1),(4,5),(4,32),
--- REGUETÓN
-(5, 2),(5,10),(5,11),(5,12),(5,13),(5,14),(5,15),(5,16),(5,19),(5,23),(5,24),(5,25),(5,31),(5,33),(5,34),
--- TRAP
-(6, 3),(6,4),(6,17),(6,20),(6,22),(6,35),(6,36),
--- POP
-(7, 18),(7,21),
--- This is Cruz Cafuné
-(8, 1),
--- This is Bad Bunny
-(9, 2),(9,10),(9,12),(9,13),(9,14),
--- This is Lola Índigo
-(10, 11),(10,15),(10,23),(10,24),(10,25),
--- This is Sosad.97
-(11, 3),
--- This is Feid
-(12, 16),(12,19),
--- This is Duki
-(13, 4),(13,17),(13,20),(13,22),
--- This is Harry Styles
-(14, 18),(14,21),
--- This is Bigflo & Oli
-(15, 5),
--- This is Paulo Londra
-(16, 22),
--- This is María Becerra
-(17, 24),
--- This is Emilia
-(18, 40), (18, 41), (18, 42), (18, 23),
--- This is Don Patricio
-(19, 23),
--- This is Quevedo
-(20, 25),
--- This is Dei V
-(21, 2),
--- This is Omar Courtz
-(22, 2),
--- This is Efecto Pasillo
-(23, 37), (23, 38), (23, 39),
--- This is Rels B
-(24, 31),(24,32),(24,33),(24,34),(24,35),(24,36),
--- This is C. Tangana
-(25, 26),(25,27),(25,28),(25,29),(25,30),
--- VERANO
-(29, 10),(29,12),(29,20),(29,21),(29,25),
--- FIESTA
-(30, 4),(30,12),(30,20),(30,21),(30,22),(30,23),(30,24),
--- RELAX
-(31, 18),(31,19),(31,31), (31,35),
--- ENTRENAMIENTO
-(32, 3),(32,4),(32,13),(32,16),(32,17),(32,20),(32,22),(32,24),
--- TRABAJO
-(33, 1),(33,5),(33,18),(33,21),(33,31),
--- ESTUDIO
-(33, 15),(34,26),(34,27),(34,28),(34,29),(34,30),(33,34),
--- SAN VALENTÍN
-(35, 23),(35,24),(35,25),(35,35),
--- NAVIDAD
-(36, 18);
-
-INSERT INTO Episodios_de_lista (id_lista_ep, id_ep, id_podcast) VALUES
-(26, 6, 1), (26, 7, 1),
-(27, 6, 1), (27, 7, 1),
-(28, 8, 2), (28, 9, 2),
-(37, 6, 1), (37, 7, 1), (37, 8, 2), (37, 9, 2),
-(38, 6, 1), (38, 7, 1), (38, 8, 2), (38, 9, 2),
-(39, 6, 1), (39, 7, 1), (39, 8, 2), (39, 9, 2),
-(40, 6, 1), (40, 7, 1), (40, 8, 2), (40, 9, 2),
-(41, 6, 1), (41, 7, 1), (41, 8, 2), (41, 9, 2),
-(42, 6, 1), (42, 7, 1), (42, 8, 2), (42, 9, 2),
-(43, 6, 1), (43, 7, 1), (43, 8, 2), (43, 9, 2),
-(44, 6, 1), (44, 7, 1), (44, 8, 2), (44, 9, 2),
-(45, 6, 1), (45, 7, 1), (45, 8, 2), (45, 9, 2),
-(46, 6, 1), (46, 7, 1), (46, 8, 2), (46, 9, 2);
 
 INSERT INTO Listas_de_carpeta (id_carpeta, id_lista) VALUES
 (1,1),(1,2),(1,3),
