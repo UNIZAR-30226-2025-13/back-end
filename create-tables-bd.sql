@@ -371,11 +371,26 @@ INSERT INTO Contenido_multimedia (link_cm, titulo, duracion, link_compartir, lin
 ('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773596/partyenelbarrio_seejoa.mp3', 'Party en el Barrio', '00:00:36', 'https://example.com/share/party_en_el_barrio', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/partyenelbarrio_ecfqxj.jpg', '2022-09-14'),
 ('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773729/lolabunny_vs5kdf.mp3', 'Lola Bunny', '00:02:16', 'https://example.com/share/lola_bunny', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/lolabunny_o38u22.jpg', '2019-07-31'),
 ('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773651/discoteka_blcs7c.mp3', 'Discoteka', '00:01:49', 'https://example.com/share/discoteka', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/diskoteca_gvaos3.jpg', '2022-09-01'),
-('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773580/eltonto_qoguwp.mp3', 'El Tonto', '00:00:44', 'https://example.com/share/el_tonto', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/eltonto_toogt3.jpg', '2023-04-14');
-
-INSERT INTO Valoraciones (nombre_usuario, id_cm, valoracion) VALUES
-('jorge', 1, 4),
-('jorge', 2, 5);
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1740773580/eltonto_qoguwp.mp3', 'El Tonto', '00:00:44', 'https://example.com/share/el_tonto', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1740770019/eltonto_toogt3.jpg', '2023-04-14'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741466208/demasiadasmujeres_kupbpc.mp3', 'Demasiadas Mujeres', '00:01:57', 'https://example.com/share/demasiadasmujeres', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741466752/elmadrile%C3%B1o_ked1dn.jpg', '2021-02-26'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741466208/medejastedequerer_ic9evk.mp3', 'Tu Me Dejaste De Querer', '00:01:46', 'https://example.com/share/tumedejastedequerer', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741466752/elmadrile%C3%B1o_ked1dn.jpg', '2021-02-26'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741466207/nuncaestoy_ns8gi3.mp3', 'Nunca Estoy', '00:00:32', 'https://example.com/share/nuncaestoy', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741466752/elmadrile%C3%B1o_ked1dn.jpg', '2021-02-26'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741466207/ingobernable_ssdpqo.m4a', 'Ingobernable', '00:01:00', 'https://example.com/share/ingobernable', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741466752/elmadrile%C3%B1o_ked1dn.jpg', '2021-02-26'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741466206/lostontos_xrgjiw.mp3', 'Los Tontos', '00:00:35', 'https://example.com/share/lostontos', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741466752/elmadrile%C3%B1o_ked1dn.jpg', '2021-02-26'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741471491/ami_faifw3.mp3', 'A Mí', '00:02:53', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741471403/ami_mjxzve.jpg','2017-02-17'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741471490/eldon_rnyis0.mp3', 'Tienes el Don', '00:00:27', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741471404/eldon_pl7ivx.jpg','2019-02-21'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741471490/shortyquetevayabien_oyuzvj.mp3', 'SHORTY QUE TE VAYA BN <3', '00:00:22', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741471404/shortyquetevayabien_cgsu4v.jpg','2021-09-29'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741471490/sinmirarlasse%C3%B1ales_rngg86.mp3', 'SIN MIRAR LAS SEÑALES', '00:00:24', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741471200/happybirthdayflakko_hjl8xm.jpg','2019-10-17'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741471489/comotevaquerida_j1yeoj.m4a', '¿CÓMO TE VA, QUERIDA?', '00:01:00', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741471200/happybirthdayflakko_hjl8xm.jpg','2019-10-17'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741471489/OTROCHEKE_xfo0hd.mp3', 'OTRO CHEKE', '00:00:39', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741471200/happybirthdayflakko_hjl8xm.jpg','2019-10-17'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741794971/panymantequilla_oi6lxi.mp3', 'Pan y mantequilla', '00:01:17', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741796350/noimportaquellueva_kmzxul.jpg','2013-12-20'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741794971/cuandomesientobien_xz2fun.mp3', 'Cuando me siento bien', '00:03:04', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741796350/cuandomesientobien_cdsfun.jpg','2015-12-20'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741794971/noimportaquellueva_ih9sui.mp3', 'No importa que llueva', '00:02:14', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741796350/noimportaquellueva_kmzxul.jpg','2013-12-20'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741794970/comosinoimportara_r1yr7y.m4a', 'como si no importara', '00:01:00', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741796349/comosinoimportara_kacsxj.jpg','2021-07-13'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741794970/noseve_qtruq0.mp3', 'No_Se_Ve.mp3', '00:01:01', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741796349/mp3-emilia_aqwbdb.jpg','2023-11-03'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741794969/exclusive_mik789.m4a', 'Exclusive.mp3', '00:01:00', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741796349/mp3-emilia_aqwbdb.jpg','2023-11-03'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1741794968/estorecienempieza_i4si96.mp3', 'Esto Recién Empieza', '00:00:13', 'link_compartir', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1741796349/estorecienempieza_hq1ymr.jpg','2022-02-14');
+-- ('', '', '00:00:00', 'link_compartir', '','2017-00-00'),
 
 INSERT INTO Cancion (id_cancion, n_repros, letra) VALUES
 (1, 1500000, 'Esta es la letra de "Mina el Hammani", un tema cargado de energía que resalta la espiritualidad en la música urbana.'),
@@ -421,9 +436,6 @@ INSERT INTO Generos (id_cancion, genero) VALUES
 (22, 'Trap'),
 (23, 'Reguetón'),
 (24, 'Reguetón'),
-<<<<<<< Updated upstream
-(25, 'Reguetón');
-=======
 (25, 'Reguetón'),
 (26, 'Flamenco'),
 (26, 'Reguetón'),
@@ -439,7 +451,6 @@ INSERT INTO Generos (id_cancion, genero) VALUES
 (34, 'Reguetón'),
 (35, 'Trap'),
 (36, 'Trap');
->>>>>>> Stashed changes
 
 INSERT INTO Numero_cancion_en_album (id_album, id_cancion, numero_cancion) VALUES
 (4, 10, 5),  -- "WHERE SHE GOES" en "Nadie Sabe Lo Que Va A Pasar Mañana"
@@ -470,9 +481,6 @@ INSERT INTO Artista_principal (nombre_artista, id_cancion) VALUES
 ('Paulo Londra', 22),
 ('Lola Índigo', 23),
 ('Lola Índigo', 24),
-<<<<<<< Updated upstream
-('Lola Índigo', 25);
-=======
 ('Lola Índigo', 25),
 ('C. Tangana', 30),
 ('C. Tangana', 26),
@@ -485,7 +493,6 @@ INSERT INTO Artista_principal (nombre_artista, id_cancion) VALUES
 ('Rels B', 34),
 ('Rels B', 35),
 ('Rels B', 36);
->>>>>>> Stashed changes
 
 INSERT INTO Featuring (nombre_artista, id_cancion) VALUES
 ('Dei V', 2),
@@ -543,9 +550,6 @@ INSERT INTO Idiomas_multimedia (id_cm, idioma) VALUES
 (22, 'Español'),  -- "Party en el Barrio" de Paulo Londra y Duki.
 (23, 'Español'),  -- "Lola Bunny" de Lola Índigo y Don Patricio.
 (24, 'Español'),  -- "Discoteka" de Lola Índigo y María Becerra.
-<<<<<<< Updated upstream
-(25, 'Español');  -- "El Tonto" de Lola Índigo y Quevedo.
-=======
 (25, 'Español'),  -- "El Tonto" de Lola Índigo y Quevedo.
 (26, 'Español'),
 (27, 'Español'),
@@ -558,7 +562,6 @@ INSERT INTO Idiomas_multimedia (id_cm, idioma) VALUES
 (34, 'Español'),
 (35, 'Español'),
 (36, 'Español');
->>>>>>> Stashed changes
 
 INSERT INTO Sigue_a_creador (nombre_usuario, nombre_creador) VALUES
 ('jorge', 'Cruz Cafuné'),
@@ -637,10 +640,6 @@ INSERT INTO Lista_reproduccion (nombre, es_publica, color, link_compartir) VALUE
 ('ENTREVISTAS', TRUE, '#008000', 'https://example.com/share/entrevistas');
 
 INSERT INTO Playlist (id_playlist) VALUES
-<<<<<<< Updated upstream
-(1), (2), (3), (4), (5), (6), (7), (8), (9), (10), (11), (12), (13);
-
-=======
 (1), (2), (3), (4), (5), (6), (7), (8), (9), (10), (11), (12), (13), (14), (15), (16), (17), (18), (19), (20), (21), (22), (23), (24), (25),
 (29), (30), (31), (32), (33), (34), (35), (36);
 
@@ -730,7 +729,6 @@ INSERT INTO Episodios_de_lista (id_lista_ep, id_ep, id_podcast) VALUES
 (44,6,1),(44,7,1),(44,8,2),(44,9,2),
 (45,6,1),(45,7,1),(45,8,2),(45,9,2),
 (46,6,1),(46,7,1),(46,8,2),(46,9,2);
->>>>>>> Stashed changes
 
 INSERT INTO Listas_de_carpeta (id_carpeta, id_lista) VALUES
 (1,1),(1,2),(1,3),

@@ -35,6 +35,7 @@ const canciones = require("./routes/song");
 const album = require("./routes/album");
 const playlists = require("./routes/playlists");
 const folder = require("./routes/folder");
+const lists = require("./routes/lists");
 
 
 // hace que las rutas empiecen por esa palabra
@@ -48,6 +49,7 @@ app.use(canciones);
 app.use(album);
 app.use(playlists);
 app.use(folder);
+app.use(lists);
 
 
 // prueba inicial
