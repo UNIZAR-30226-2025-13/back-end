@@ -60,6 +60,7 @@ const home = require("./routes/home");
 const player = require("./routes/player");
 const album = require("./routes/album");
 const playlists = require("./routes/playlists");
+const folder = require("./routes/folder");
 
 
 // hace que las rutas empiecen por esa palabra
@@ -72,6 +73,7 @@ app.use(home);
 app.use(player);
 app.use(album);
 app.use(playlists);
+app.use(folder);
 
 
 // prueba inicial
