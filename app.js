@@ -33,6 +33,9 @@ const podcaster = require("./routes/podcaster");
 const home = require("./routes/home");
 const canciones = require("./routes/song");
 const album = require("./routes/album");
+const playlists = require("./routes/playlists");
+const folder = require("./routes/folder");
+
 
 // hace que las rutas empiecen por esa palabra
 // ej: si pones app.use("/usuario", usuario); la ruta para login es http://localhost:8080/usuario/login
@@ -43,6 +46,9 @@ app.use(podcaster);
 app.use(home);
 app.use(canciones);
 app.use(album);
+app.use(playlists);
+app.use(folder);
+
 
 // prueba inicial
 app.get("/", (req, res) => {
