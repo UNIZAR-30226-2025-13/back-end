@@ -770,3 +770,16 @@ INSERT INTO Listas_de_carpeta (id_carpeta, id_lista) VALUES
 (4,26),(4,27),(4,28),
 (5,29),(5,30),(5,31),(5,32),(5,33),(5,34),(5,35),(5,36),
 (6,37),(6,38),(6,39),(6,40),(6,41),(6,42),(6,43),(6,44),(6,45),(6,46);
+
+INSERT INTO Listas_del_usuario (nombre_usuario, id_lista) VALUES
+('spongefy', 1), ('spongefy', 2), ('spongefy', 3), ('spongefy', 4), ('spongefy', 5), 
+('spongefy', 6), ('spongefy', 7), ('spongefy', 8), ('spongefy', 9), ('spongefy', 10), 
+('spongefy', 11), ('spongefy', 12), ('spongefy', 13), ('spongefy', 14), ('spongefy', 15), 
+('spongefy', 16), ('spongefy', 17), ('spongefy', 18), ('spongefy', 19), ('spongefy', 20), 
+('spongefy', 21), ('spongefy', 22), ('spongefy', 23), ('spongefy', 24), ('spongefy', 25), 
+('spongefy', 26), ('spongefy', 27), ('spongefy', 28), ('spongefy', 29), ('spongefy', 30), 
+('spongefy', 31), ('spongefy', 32), ('spongefy', 33), ('spongefy', 34), ('spongefy', 35), 
+('spongefy', 36), ('spongefy', 37), ('spongefy', 38), ('spongefy', 39), ('spongefy', 40), 
+('spongefy', 41), ('spongefy', 42), ('spongefy', 43), ('spongefy', 44), ('spongefy', 45), 
+('spongefy', 46);
+

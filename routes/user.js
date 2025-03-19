@@ -155,7 +155,7 @@ router.post("/change-password", changePassword);
 
 /**
  * @swagger
- * /get-user-lists:
+ * /get-user-library:
  *   get:
  *     summary: Obtiene las listas, carpetas, artistas y podcasts favoritos del usuario
  *     tags: [Usuarios]
@@ -292,7 +292,6 @@ router.get("/get-user-library",  getLists);
  *                   example: "Hubo un error al obtener las playlists"
  */
 router.get("/get-playlists", getPlaylists);
-
 
 
 /**
