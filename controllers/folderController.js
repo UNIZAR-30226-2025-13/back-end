@@ -55,4 +55,44 @@ const createFolder = async (req, res) => {
     }
 };
 
-module.exports = { getFolder, createFolder };
+const addListToFolder = async (req, res) => {
+    try {
+        const { id_carpeta, id_lista, nombre_usuario } = req.body; // obtener el id de la carpeta y el id de la lista a añadir
+        
+        if (!id_carpeta || !id_lista || !nombre_usuario) { // ningun campo vacio
+            return res.status(400).json({ message: "Hay que rellener todos los campos" });
+        }
+
+        // comprobar si el usuario existe
+        const result = await client.execute("SELECT * FROM Usuario WHERE nombre_usuario = ?", [nombre_usuario]);
+        if (result.rows.length == 0) {
+            return res.status(400).json({ message: "El usuario no existe" });
+        }
+
+        // comprobar si la lista existe y pertenece al usuario
+        const result_list = await client.execute("SELECT * FROM Listas_del_usuario WHERE id_lista = ? AND nombre_usuario = ?", [id_lista, nombre_usuario]);
+        if (result_list.rows.length == 0) {
+            return res.status(400).json({ message: "La lista no existe o no pertenece al usuario" });
+        }
+
+        // comprobar si la carpeta existe y pertenece al usuario
+        const result_folder = await client.execute("SELECT * FROM Carpetas_del_usuario WHERE id_carpeta = ? AND nombre_usuario = ?", [id_carpeta, nombre_usuario]);
+        if (result_folder.rows.length == 0) {
+            return res.status(400).json({ message: "La carpeta no existe o no pertenece al usuario" });
+        }
+
+        // comprobar si la lista ya está en la carpeta
+        const result3 = await client.execute("SELECT * FROM Listas_de_carpeta WHERE id_carpeta = ? AND id_lista = ?", [id_carpeta, id_lista]);
+        if (result3.rows.length > 0) {
+            return res.status(400).json({ message: "La lista ya está en la carpeta" });
+        }
+
+        await client.execute("INSERT INTO Listas_de_carpeta (id_carpeta, id_lista) VALUES (?, ?)", [id_carpeta, id_lista]);
+        res.status(201).json({ message: "Lista añadida correctamente" });
+    } catch (error) {
+        console.error("Error al añadir la lista a la carpeta:", error);
+        res.status(500).json({ message: "Hubo un error al añadir la lista a la carpeta" });
+    }
+}
+
+module.exports = { getFolder, createFolder, addListToFolder };

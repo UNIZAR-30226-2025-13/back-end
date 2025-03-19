@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getFolder } = require('../controllers/folderController');
-const { createFolder } = require('../controllers/folderController');
+const { getFolder, createFolder, addListToFolder } = require('../controllers/folderController');
 
 /**
  * @swagger
@@ -57,7 +56,7 @@ router.get('/get-folder', getFolder);
 
 /**
  * @swagger
- * /register:
+ * /create-folder:
  *   post:
  *     summary: Crea una carpeta
  *     tags: [Folders]
@@ -111,5 +110,66 @@ router.get('/get-folder', getFolder);
  *                   example: "Hubo un error al registrar el usuario"
  */
 router.post('/create-folder', createFolder);
+
+/**
+ * @swagger
+ * /add-list-to-folder:
+ *   post:
+ *     summary: Añade lista a carpeta
+ *     tags: [Folders]
+ *     description: Añade una lista existente a una carpeta existente, perteneciendo ambas a un usuario especificado
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - nombre_usuario
+ *               - id_carpeta
+ *               - id_lista
+ *             properties:
+ *               nombre_usuario:
+ *                 type: string
+ *                 description: Nombre único del usuario.
+ *               id_carpeta:
+ *                 type: integer
+ *                 description: Identificador de la carpeta en la que insertar.
+ *               id_lista:
+ *                 type: integer
+ *                 description: Identificador de la lista que insertar.
+ *     responses:
+ *       201:
+ *         description: Lista añadida a la carpeta correctamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Lista añadida correctamente"
+ *       400:
+ *         description: Error en la solicitud (falta de campos, usuario no en uso, carpeta o lista no pertenecen al usuario).
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "El usuario no existe"
+ *       500:
+ *         description: Error interno del servidor.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Hubo un error al registrar el usuario"
+ */
+router.post('/add-list-to-folder', addListToFolder);
 
 module.exports = router;
