@@ -66,7 +66,7 @@ const { getListData } = require('../controllers/listsController');
  *                           example: "2021-09-30" 
  *                         nombre_creador:
  *                           type: string
- *                           description: Nombre del creador de la canción o nombre/s del creador/es de un episodio.
+ *                           description: Nombre del creador de la canción o '' para el creador de un episodio.
  *                         artistas_feat:
  *                           type: string
  *                           description: Artistas colaboradores (si existen) de la canción. En caso de episodios es "".
