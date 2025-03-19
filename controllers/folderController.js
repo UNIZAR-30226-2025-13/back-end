@@ -31,10 +31,3 @@ const getFolder = async (req, res) => {
 };
 
 module.exports = { getFolder };
-
-
-/*
-    hay que modificar mostrarPlaylists para que sea mostrar lista de reproducción
-    me pasarán un id de la lista de reproducción y yo tendré que devolver las cosas
-    en función de si es una playlist o una lista de episodios
-*/

@@ -11,7 +11,7 @@ const { getListData } = require('../controllers/listsController');
 
 /**
  * @swagger
- *   /getList:
+ *   /get-list-data:
  *     get:
  *       summary: Obtener los datos de una lista de reproducción
  *       description: Esta API obtiene información sobre una lista de reproducción, incluyendo su nombre, color y contenido multimedia asociado.
@@ -96,6 +96,6 @@ const { getListData } = require('../controllers/listsController');
  *                     type: string
  */
 
-router.get('/getList', getListData);
+router.get('/get-list-data', getListData);
 
 module.exports = router;

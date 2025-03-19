@@ -67,6 +67,7 @@ const changePassword = async (req, res) => {
     }
 };
 
+// Obtener las listas del usuario para mostrarlas en su biblioteca
 const getLists = async (req, res) => {
     try{
         const { nombre_usuario } = req.query; // obtener nombre_usuario
