@@ -73,8 +73,9 @@ const getListData = async (req, res) => {
 
             // obtenemos los episodios de una lista
             const episodios_lista = await client.execute(
-                `SELECT e.id_ep AS id_cm, cm.titulo AS titulo, cm.link_imagen, cm.duracion, cm.fecha_pub, 
-                    tp.nombre_podcaster AS nombre_creador, '' AS artistas_feat, p.id_podcast AS id_grupo, p.nombre AS nombre_grupo
+                `SELECT e.id_ep AS id_cm, cm.titulo AS titulo, cm.link_imagen, cm.duracion, cm.fecha_pub,
+                    COALESCE(GROUP_CONCAT(DISTINCT tp.nombre_podcaster), '') AS nombre_creador,
+                    '' AS artistas_feat, p.id_podcast AS id_grupo, p.nombre AS nombre_grupo
                  FROM Episodios_de_lista el
                  JOIN Podcast p ON el.id_podcast = p.id_podcast
                  JOIN Episodio e ON e.id_ep = el.id_ep
