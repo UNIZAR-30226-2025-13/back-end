@@ -239,7 +239,7 @@ router.post("/change-password", changePassword);
  *                   type: string
  *                   example: "Hubo un error al obtener las listas"
  */
-router.get("/get-user-lists",  getLists);
+router.get("/get-user-library",  getLists);
 
 /**
  * @swagger

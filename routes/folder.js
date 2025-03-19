@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getFolder, createFolder, addListToFolder } = require('../controllers/folderController');
+const { getFolder, createFolder, addListToFolder, listUserFolder } = require('../controllers/folderController');
 
 /**
  * @swagger
@@ -171,5 +171,63 @@ router.post('/create-folder', createFolder);
  *                   example: "Hubo un error al registrar el usuario"
  */
 router.post('/add-list-to-folder', addListToFolder);
+
+/**
+  * @swagger 
+  * /list-user-folder:
+  *   get:
+  *     summary: Obtiene las carpetas de un usuario
+  *     tags: [Folders]
+  *     description: Se obtienen todas las carpetas de un usuario
+  *     parameters:
+  *       - in: query
+  *         name: nombre_usuario
+  *         schema:
+  *           type: string
+  *         required: true
+  *         description: Nombre del usuario para obtener sus carpetas.
+  *     responses:
+  *       201:
+  *         description: Lista de carpetas del usuario
+  *         content:
+  *           application/json:
+  *             schema:
+  *               type: object
+  *               properties:
+  *                 carpetas:
+  *                   type: array
+  *                   items:
+  *                     type: object
+  *                     properties:
+  *                       id_carpeta:
+  *                         type: integer
+  *                         description: Identificador de la carpeta
+  *                         example: 1
+  *                       nombre_carpeta:
+  *                         type: string
+  *                         description: Nombre de la carpeta
+  *                         example: "Mi Carpeta"
+  *       400:
+  *         description: Error en la solicitud (usuario no existe o parámetro faltante)
+  *         content:
+  *           application/json:
+  *             schema:
+  *               type: object
+  *               properties:
+  *                 message:
+  *                   type: string
+  *                   example: "El usuario no existe"
+  *       500:
+  *         description: Error interno del servidor
+  *         content:
+  *           application/json:
+  *             schema:
+  *               type: object
+  *               properties:
+  *                 message:
+  *                   type: string
+  *                   example: "Hubo un error al listar las carpetas"
+*/
+router.get('/list-user-folder', listUserFolder);
 
 module.exports = router;

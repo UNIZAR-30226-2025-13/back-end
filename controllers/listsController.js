@@ -13,6 +13,11 @@ const getListData = async (req, res) => {
             return res.status(400).json({ message: "La lista no existe" });
         }
 
+        const nombre_usuario_result = await client.execute(
+            'SELECT nombre_usuario FROM Listas_del_usuario WHERE id_lista = ?', [id_lista]
+        );
+        const nombre_usuario = nombre_usuario_result.rows[0].nombre_usuario;
+
         // Saber si es una playlist o una lista de episodios
         const es_playlist = await client.execute(
             'SELECT * FROM Playlist WHERE id_playlist = ?', [id_lista]
@@ -90,6 +95,7 @@ const getListData = async (req, res) => {
             nombre: nombre,
             color: color,
             es_playlist: es_una_playlist,
+            nombre_usuario: nombre_usuario,
             contenido: contenido_multimedia
         });
 

@@ -93,6 +93,41 @@ const addListToFolder = async (req, res) => {
         console.error("Error al añadir la lista a la carpeta:", error);
         res.status(500).json({ message: "Hubo un error al añadir la lista a la carpeta" });
     }
-}
+};
 
-module.exports = { getFolder, createFolder, addListToFolder };
+const listUserFolder = async (req, res) => {
+    try {
+        const { nombre_usuario } = req.query;
+
+        if (!nombre_usuario) {
+            return res.status(400).json({ message: "Se requiere el nombre de usuario" });
+        }
+
+        // comprobar si el usuario existe
+        const result_usuario = await client.execute("SELECT * FROM Usuario WHERE nombre_usuario = ?", [nombre_usuario]);
+        if (result_usuario.rows.length == 0) {
+            return res.status(400).json({ message: "El usuario no existe" });
+        }
+
+        // obtener carpetas del usuario
+        const result_carpetas = await client.execute(
+            `SELECT c.id_carpeta, c.nombre 
+             FROM Carpetas_del_usuario cu 
+             JOIN Carpeta c ON cu.id_carpeta = c.id_carpeta 
+             WHERE cu.nombre_usuario = ?`,
+            [nombre_usuario]
+        );
+
+        let carpetas = result_carpetas.rows.map(carpeta => ({
+            id_carpeta: carpeta.id_carpeta,
+            nombre_carpeta: carpeta.nombre
+        }));
+
+        res.status(201).json({ carpetas });
+    } catch (error) {
+        console.error("Error al listar las carpetas:", error);
+        res.status(500).json({ message: "Hubo un error al listar las carpetas" });
+    }
+};
+
+module.exports = { getFolder, createFolder, addListToFolder, listUserFolder };
