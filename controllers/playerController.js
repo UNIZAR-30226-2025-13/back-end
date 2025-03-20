@@ -49,7 +49,8 @@ const playSong = async (req, res) => {
     }
 };
 
-// Guarda la última canción que estuviera sonando de un usuario
+
+// Guarda el último contenido multimedia que estuviera escuchando un usuario
 const saveLastThingPlaying = async (req, res) => {
     try {
         const { nombre_usuario, id_cm, tiempo } = req.body;

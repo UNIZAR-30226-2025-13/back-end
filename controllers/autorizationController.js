@@ -5,8 +5,6 @@ const client = require('../db');
 const nodemailer = require('nodemailer'); // Funcionalidad del correo electrónico
 require('dotenv').config(); // para acceder a las variables de entorno
 
-
-
 // Configurar transporte de correo GMAIL
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -54,6 +52,12 @@ const register = async (req, res) => {
       // asignarlas al usuario
       await client.execute("INSERT INTO Listas_del_usuario (nombre_usuario, id_lista) VALUES (?, ?), (?, ?)",
         [nombre_usuario, id_canciones_favoritas, nombre_usuario, id_episodios_favoritos]);
+      
+      // insertar canciones_favoritas como playlist
+      await client.execute("INSERT INTO Playlist (id_playlist) VALUES (?)", [id_canciones_favoritas]);
+
+      // insertar episodios_favoritos como lista de episodios
+      await client.execute("INSERT INTO Lista_Episodios (id_lista_ep) VALUES (?)", [id_episodios_favoritos]);
 
       // mensaje de correcto registro
       res.status(201).json({ message: "Usuario registrado correctamente" });

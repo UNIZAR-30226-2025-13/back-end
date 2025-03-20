@@ -67,16 +67,24 @@ const changePassword = async (req, res) => {
     }
 };
 
+// Obtener las listas del usuario para mostrarlas en su biblioteca
 const getLists = async (req, res) => {
     try{
         const { nombre_usuario } = req.query; // obtener nombre_usuario
          // Obtener listas y carpetas del usuario
         const listas = await client.execute(
-            'SELECT lr.id_lista, lr.nombre FROM Lista_reproduccion lr JOIN Listas_del_usuario lu ON lr.id_lista = lu.id_lista WHERE lu.nombre_usuario = ?;',
+            `SELECT lr.id_lista, lr.nombre 
+             FROM Lista_reproduccion lr 
+             JOIN Listas_del_usuario lu ON lr.id_lista = lu.id_lista
+             WHERE lu.nombre_usuario = ?
+             AND lr.id_lista NOT IN (SELECT lc.id_lista FROM Listas_de_carpeta lc);`,
             [nombre_usuario]
         );
         const carpetas = await client.execute(
-            'SELECT c.id_carpeta, c.nombre FROM Carpeta c JOIN Carpetas_del_Usuario cu ON c.id_carpeta = cu.id_carpeta WHERE nombre_usuario = ?;',
+            `SELECT c.id_carpeta, c.nombre 
+             FROM Carpeta c 
+             JOIN Carpetas_del_Usuario cu ON c.id_carpeta = cu.id_carpeta 
+             WHERE nombre_usuario = ?;`,
             [nombre_usuario]
         );
         const artistas_favoritos = await client.execute(

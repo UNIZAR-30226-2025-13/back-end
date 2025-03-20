@@ -1,14 +1,3 @@
-/*
-MOSTAR:
-toda la info del album -> id, nombre, link_imagen, fecha_pub
-nombre_artista del album
-todas las canciones asociadas a ese album
-    los cantantes de cada cancion (principales y featurings)
-    id cancion
-    nombre cancion
-    num reproducciones
-    duracion
-*/
 const client = require('../db');
 
 const getAlbum = async (req, res) => {

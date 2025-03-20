@@ -55,6 +55,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 const autorizacion = require("./routes/autorization");
 const usuario = require("./routes/user");
 const artista = require("./routes/artist");
+const podcaster = require("./routes/podcaster");
 const home = require("./routes/home");
 const player = require("./routes/player");
 const album = require("./routes/album");
@@ -68,6 +69,7 @@ const buscador = require("./routes/buscador");
 app.use(autorizacion);
 app.use(usuario);
 app.use(artista);
+app.use(podcaster);
 app.use(home);
 app.use(player);
 app.use(album);
@@ -75,6 +77,7 @@ app.use(playlists);
 app.use(folder);
 app.use(lists);
 app.use(buscador);
+
 
 // prueba inicial
 app.get("/", (req, res) => {

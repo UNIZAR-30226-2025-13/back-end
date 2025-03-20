@@ -19,7 +19,7 @@ const { getAlbum } = require('../controllers/albumController');
  *       - in: query
  *         name: id_album
  *         schema:
- *           type: string
+ *           type: integer
  *         required: true
  *         description: Identificador del álbum a consultar
  *     responses:
@@ -34,7 +34,7 @@ const { getAlbum } = require('../controllers/albumController');
  *                   type: object
  *                   properties:
  *                     id:
- *                       type: string
+ *                       type: integer
  *                       description: Identificador del álbum
  *                     nombre:
  *                       type: string
@@ -55,7 +55,7 @@ const { getAlbum } = require('../controllers/albumController');
  *                     type: object
  *                     properties:
  *                       id_cancion:
- *                         type: string
+ *                         type: integer
  *                         description: Identificador de la canción
  *                       titulo:
  *                         type: string
@@ -65,7 +65,9 @@ const { getAlbum } = require('../controllers/albumController');
  *                         description: Número de reproducciones
  *                       duracion:
  *                         type: string
- *                         description: Duración de la canción
+ *                         format: time
+ *                         description: Duración de la canción en formato HH:MM:SS
+ *                         example: "00:03:45"
  *                       fecha_pub:
  *                         type: string
  *                         format: date
