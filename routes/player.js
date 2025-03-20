@@ -41,7 +41,6 @@ const { playSong, saveLastThingPlaying, recoverLastThingPlaying } = require('../
  *                   type: string
  *                   description: Título de la canción
  *                 duracion:
- *                   type: string
  *                   format: time
  *                   description: Duración de la canción en formato HH:MM:SS
  *                   example: "00:03:45"  
