@@ -196,5 +196,67 @@ const createList = async (req, res) => {
     }
 };
 
-module.exports = { getProfile, changePassword, getLists, createList, getPlaylists };
+// Listar únicamente las listas de reproducción de un usuario que sean públicas
+const getPublicLists = async (req, res) => {
+    try {
+        const { nombre_usuario } = req.query; // obtener nombre_usuario
+
+        if (!nombre_usuario) {
+            return res.status(400).json({ message: "Hay que rellenar todos los campos" });
+        }
+        
+        // Comprobamos que exista el usuario
+        const result_usuario = await client.execute("SELECT * FROM Usuario WHERE nombre_usuario = ?", [nombre_usuario]);
+        if (result_usuario.rows.length === 0) {
+            return res.status(400).json({ message: "El usuario no existe" });
+        }
+
+        const result = await client.execute(
+            `SELECT lr.id_lista, lr.nombre, lr.color
+             FROM Lista_reproduccion lr 
+             JOIN Listas_del_usuario lu ON lr.id_lista = lu.id_lista
+             WHERE lu.nombre_usuario = ? AND lr.es_publica = 1;`,
+            [nombre_usuario]
+        );
+
+        res.status(200).json(result.rows); // devolver listas públicas
+
+    } catch (error) {
+        console.error("Error al obtener listas públicas:", error);
+        res.status(500).json({ message: "Hubo un error al obtener las listas públicas" });
+    }
+};
+
+// Cambiar la privacidad (público o privado) de una lista de reproducción
+const changeListPrivacy = async (req, res) => {
+    try {
+        const { id_lista, nombre_usuario } = req.body;
+
+        if (!id_lista || !nombre_usuario) {
+            return res.status(400).json({ message: "Hay que rellenar todos los campos" });
+        }
+
+        // Comprobamos que exista el usuario
+        const result_usuario = await client.execute("SELECT * FROM Usuario WHERE nombre_usuario = ?", [nombre_usuario]);
+        if (result_usuario.rows.length === 0) {
+            return res.status(400).json({ message: "El usuario no existe" });
+        }
+
+        // comprobar si la lista existe y pertenece al usuario
+        const result_list = await client.execute("SELECT * FROM Listas_del_usuario WHERE id_lista = ? AND nombre_usuario = ?", [id_lista, nombre_usuario]);
+        if (result_list.rows.length == 0) {
+            return res.status(400).json({ message: "La lista no existe o no pertenece al usuario" });
+        }
+
+        await client.execute("UPDATE Lista_reproduccion SET es_publica = NOT es_publica WHERE id_lista = ?", [id_lista]);
+
+        res.status(200).json({ message: "Privacidad de la lista actualizada correctamente" });
+
+    } catch (error) {
+        console.error("Error al cambiar privacidad de la lista:", error);
+        res.status(500).json({ message: "Hubo un error al cambiar la privacidad de la lista" });
+    }
+};
+
+module.exports = { getProfile, changePassword, getLists, createList, getPlaylists, getPublicLists, changeListPrivacy };
 

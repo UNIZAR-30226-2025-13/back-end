@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { getProfile, changePassword, getLists, createList, getPlaylists } = require('../controllers/userController');
+const { getProfile, changePassword, getLists, createList, getPlaylists, getPublicLists, changeListPrivacy } = require('../controllers/userController');
 
 const { verifyToken } = require('../middleware/autorizationMiddleware');
 
@@ -353,5 +353,113 @@ router.get("/get-playlists", getPlaylists);
  *                   example: "Hubo un error al crear la lista"
  */
 router.post("/create-list", createList);
+
+/**
+ * @swagger
+ * /get-public-lists:
+ *   get:
+ *     summary: Obtiene las listas públicas del usuario
+ *     tags: [Usuarios]
+ *     parameters:
+ *       - in: query
+ *         name: nombre_usuario
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Nombre de usuario para obtener sus listas públicas
+ *     responses:
+ *       200:
+ *         description: Listas obtenidas correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id_lista:
+ *                     type: integer
+ *                     example: 12
+ *                   nombre:
+ *                     type: string
+ *                     example: "Rock Clásico"
+ *                   color:
+ *                     type: string
+ *                     example: "#FF0000"
+ *       400:
+ *         description: Error en la solicitud (faltan parámetros o usuario no existe)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Hay que rellenar todos los campos"
+ *       500:
+ *         description: Error interno al obtener las playlists
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Hubo un error al obtener las listas públicas"
+ */
+router.get("/get-public-lists", getPublicLists);
+
+/**
+ * @swagger
+ * /change-list-privacy:
+ *   post:
+ *     summary: Actualiza la privacidad de una lista de reproducción para un usuario
+ *     tags: [Usuarios]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_lista:
+ *                 type: integer
+ *                 example: 2
+ *               nombre_usuario:
+ *                 type: string
+ *                 example: "usuario123"
+ *     responses:
+ *       200:
+ *         description: Lista actualizada correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Privacidad de la lista actualizada correctamente"
+ *       400:
+ *         description: Error en la solicitud (faltan parámetros, usuario no existe o lista no existe o no pertenece al usuario)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Hay que rellenar todos los campos"
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Hubo un error al cambiar la privacidad de la lista"
+ */
+router.post("/change-list-privacy", changeListPrivacy);
 
 module.exports = router;
