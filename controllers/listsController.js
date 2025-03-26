@@ -26,13 +26,14 @@ const getListData = async (req, res) => {
         let es_una_playlist = null;
         let contenido_multimedia = [];
 
-        // Obtener datos lista -> nombre, color
+        // Obtener datos lista -> nombre, color, privacidad
         const datos_playlist = await client.execute(
-            'SELECT nombre, color FROM Lista_reproduccion WHERE id_lista = ?',
+            'SELECT nombre, color, es_publica FROM Lista_reproduccion WHERE id_lista = ?',
             [id_lista]
         );
         const color = datos_playlist.rows[0].color;
         const nombre = datos_playlist.rows[0].nombre;
+        const es_publica = datos_playlist.rows[0].es_publica;
 
         if (es_playlist.rows.length > 0) { // es una playlist
             es_una_playlist = true;
@@ -95,6 +96,7 @@ const getListData = async (req, res) => {
             nombre: nombre,
             color: color,
             es_playlist: es_una_playlist,
+            es_publica: es_publica,
             nombre_usuario: nombre_usuario,
             contenido: contenido_multimedia
         });
