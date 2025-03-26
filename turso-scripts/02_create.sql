@@ -236,3 +236,10 @@ CREATE TABLE Listas_de_carpeta (
     FOREIGN KEY (id_carpeta) REFERENCES Carpeta(id_carpeta) ON DELETE CASCADE,
     FOREIGN KEY (id_lista) REFERENCES Lista_reproduccion(id_lista) ON DELETE CASCADE
 );
+
+CREATE TABLE Cola_Reproduccion (
+    id_cola      INTEGER PRIMARY KEY AUTOINCREMENT,
+    propietario  VARCHAR(255) REFERENCES Usuario(nombre_usuario) ON DELETE CASCADE,
+    id_cm        INTEGER REFERENCES Contenido_multimedia(id_cm) ON DELETE CASCADE, 
+    posicion     INTEGER DEFAULT 0
+);

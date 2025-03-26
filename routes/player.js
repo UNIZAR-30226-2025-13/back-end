@@ -1,6 +1,11 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { playSong, saveLastThingPlaying, recoverLastThingPlaying } = require('../controllers/playerController');
+const {
+    playSong,
+    playCM,
+    saveLastThingPlaying,
+    recoverLastThingPlaying,
+} = require("../controllers/playerController");
 
 /**
  * @swagger
@@ -43,7 +48,7 @@ const { playSong, saveLastThingPlaying, recoverLastThingPlaying } = require('../
  *                 duracion:
  *                   format: time
  *                   description: Duración de la canción en formato HH:MM:SS
- *                   example: "00:03:45"  
+ *                   example: "00:03:45"
  *                 link_imagen:
  *                   type: string
  *                   description: Enlace a la imagen de la canción
@@ -78,7 +83,86 @@ const { playSong, saveLastThingPlaying, recoverLastThingPlaying } = require('../
  *                   type: string
  *                   example: "Hubo un error al obtener la canción"
  */
-router.get('/play-song', playSong);
+router.get("/play-song", playSong);
+
+/**
+ * @swagger
+ * /play-cm:
+ *   get:
+ *     summary: Obtener información de una canción o episodio de podcast
+ *     description: Devuelve la información de una canción o episodio de podcast, incluyendo detalles del artista o del podcast correspondiente.
+ *     tags:
+ *       - Player
+ *     parameters:
+ *       - in: query
+ *         name: id_cancion
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID del contenido multimedia a reproducir
+ *     responses:
+ *       200:
+ *         description: Contenido multimedia encontrado y listo para reproducción
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id_cm:
+ *                   type: integer
+ *                   description: ID del contenido multimedia
+ *                 link_cm:
+ *                   type: string
+ *                   description: Enlace al contenido multimedia
+ *                 titulo:
+ *                   type: string
+ *                   description: Título del contenido multimedia
+ *                 duracion:
+ *                   format: time
+ *                   description: Duración del contenido multimedia en formato HH:MM:SS
+ *                   example: "00:03:45"
+ *                 link_imagen:
+ *                   type: string
+ *                   description: Enlace a la imagen del contenido multimedia
+ *                 tipo:
+ *                   type: string
+ *                   description: Indica si el contenido es una "canción" o un "episodio"
+ *                 autor:
+ *                   type: string
+ *                   nullable: true
+ *                   description: Nombre del artista principal (nulo si es un episodio de podcast)
+ *                 artistas_featuring:
+ *                   type: string
+ *                   nullable: true
+ *                   description: Lista de artistas en featuring separados por coma (nulo si es un episodio de podcast)
+ *                 podcast:
+ *                   type: string
+ *                   nullable: true
+ *                   description: Nombre del podcast al que pertenece el episodio (nulo si es una canción)
+ *       400:
+ *         description: Error si el contenido multimedia no existe
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   examples:
+ *                     no_existe:
+ *                       value: "No existe el contenido solicitado"
+ *       500:
+ *         description: Error del servidor al obtener el contenido multimedia
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Hubo un error al obtener el contenido multimedia"
+ */
+router.get("/play-cm", playCM);
 
 /**
  * @swagger
@@ -139,7 +223,7 @@ router.get('/play-song', playSong);
  *                   type: string
  *                   example: Hubo un error al guardar el último contenido sonando.
  */
-router.post('/save-last-playing', saveLastThingPlaying);
+router.post("/save-last-playing", saveLastThingPlaying);
 
 /**
  * @swagger
@@ -174,6 +258,6 @@ router.post('/save-last-playing', saveLastThingPlaying);
  *       500:
  *         description: Error interno al recuperar la última reproducción.
  */
-router.get('/recover-last-playing', recoverLastThingPlaying);
+router.get("/recover-last-playing", recoverLastThingPlaying);
 
 module.exports = router;

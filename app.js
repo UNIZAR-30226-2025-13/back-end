@@ -1,8 +1,15 @@
 const express = require("express");
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+const { Server } = require("socket.io");
+const { createServer } = require("http");
 
 const app = express();
+
+const server = createServer(app);
+const io = new Server(server, {
+    cors: { origin: ["http://localhost:4200", "http://localhost:8081"] },
+});
 
 // como el frontend está en otro puerto
 const cors = require("cors");
@@ -63,6 +70,7 @@ const playlists = require("./routes/playlists");
 const folder = require("./routes/folder");
 const lists = require("./routes/lists");
 const buscador = require("./routes/buscador");
+const queue = require("./routes/queu")(io);
 
 // hace que las rutas empiecen por esa palabra
 // ej: si pones app.use("/usuario", usuario); la ruta para login es http://localhost:8080/usuario/login
@@ -77,7 +85,7 @@ app.use(playlists);
 app.use(folder);
 app.use(lists);
 app.use(buscador);
-
+app.use("/queue", queue);
 
 // prueba inicial
 app.get("/", (req, res) => {
@@ -86,6 +94,14 @@ app.get("/", (req, res) => {
 
 app.listen(3000, () => {
     console.log("Servidor corriendo en http://localhost:3000/api-docs");
+});
+
+io.on("connection", (socket) => {
+    console.log("Usuario conectado: ", socket.id);
+
+    socket.on("disconnect", () => {
+        console.log("Usuario desconectado");
+    });
 });
 
 module.exports = app;

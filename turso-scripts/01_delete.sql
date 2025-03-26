@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS Cola_Reproduccion;
 DROP TABLE IF EXISTS Listas_de_carpeta;
 DROP TABLE IF EXISTS Carpetas_del_usuario;
 DROP TABLE IF EXISTS Carpeta;
