@@ -40,6 +40,9 @@ const { getListData } = require('../controllers/listsController');
  *                   es_playlist:
  *                     type: boolean
  *                     description: Indica si la lista es una playlist (true) o una lista de episodios (false).
+ *                   es_publica:
+ *                     type: boolean
+ *                     description: Indica si la lista es una pública (true) o privada (false).
  *                   nombre_usuario:
  *                     type: string
  *                     description: Nombre del usuario al que pertenece la lista.

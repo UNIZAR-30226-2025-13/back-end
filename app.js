@@ -71,6 +71,7 @@ const folder = require("./routes/folder");
 const lists = require("./routes/lists");
 const buscador = require("./routes/buscador");
 const queue = require("./routes/queu")(io);
+const favoritos = require("./routes/favourites");
 
 // hace que las rutas empiecen por esa palabra
 // ej: si pones app.use("/usuario", usuario); la ruta para login es http://localhost:8080/usuario/login
@@ -86,6 +87,8 @@ app.use(folder);
 app.use(lists);
 app.use(buscador);
 app.use("/queue", queue);
+app.use(favoritos);
+
 
 // prueba inicial
 app.get("/", (req, res) => {
