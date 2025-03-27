@@ -228,5 +228,88 @@ const unfollowCreator = async (req, res) => {
     }
 };
 
+// Ver si un usuario sigue a otro
+const isAFollowerOfUser = async (req, res) => {
+    try {
+        const { nombre_usuario, nombre_usuario_a_seguir } = req.body;
 
-module.exports = { followUser, followCreator, addToFavourites, unfollowUser, unfollowCreator };
+        if (!nombre_usuario_a_seguir || !nombre_usuario) { // ningun campo vacio
+            return res.status(400).json({ message: "Hay que rellener todos los campos" });
+        }
+
+        // comprobar si el usuario que intenta seguir existe
+        const result_user1 = await client.execute("SELECT * FROM Usuario WHERE nombre_usuario = ?", [nombre_usuario]);
+        if (result_user1.rows.length == 0) {
+            return res.status(400).json({ message: "El usuario seguidor no existe" });
+        }
+
+        // comprobar si el usuario a seguir existe
+        const result_user2 = await client.execute("SELECT * FROM Usuario WHERE nombre_usuario = ?", [nombre_usuario_a_seguir]);
+        if (result_user2.rows.length == 0) {
+            return res.status(400).json({ message: "El usuario a seguir no existe" });
+        }
+
+        // comprobar que no se siga a uno mismo
+        if (nombre_usuario === nombre_usuario_a_seguir) {
+            return res.status(400).json({ message: "No puedes seguirte a ti mismo" });
+        }
+
+        es_seguidor = false;
+
+        // comprobar que no intenta seguir a un usuario que ya se sigue
+        const result_follow = await client.execute("SELECT * FROM Sigue_a_usuario WHERE nombre_usuario1 = ? AND nombre_usuario2 = ?", [nombre_usuario, nombre_usuario_a_seguir]);
+        if (result_follow.rows.length > 0) {
+            es_seguidor = true;
+        }
+
+        res.status(200).json({
+            es_seguidor: es_seguidor
+        });
+
+    } catch (error) {
+        console.error("Error al ver si sigue al usuario:", error);
+        res.status(500).json({ message: "Hubo un error al ver si sigue al usuario" });
+    }
+};
+
+// Ver si un usuario sigue a un creador
+const isAFollowerOfCreator = async (req, res) => {
+    try {
+        const { nombre_usuario, nombre_creador } = req.body;
+
+        if (!nombre_creador || !nombre_usuario) { // ningun campo vacio
+            return res.status(400).json({ message: "Hay que rellener todos los campos" });
+        }
+
+        // comprobar si el usuario existe
+        const result_user = await client.execute("SELECT * FROM Usuario WHERE nombre_usuario = ?", [nombre_usuario]);
+        if (result_user.rows.length == 0) {
+            return res.status(400).json({ message: "El usuario no existe" });
+        }
+
+        // comprobar si el creador existe
+        const result_creador = await client.execute("SELECT * FROM Creador WHERE nombre_creador = ?", [nombre_creador]);
+        if (result_creador.rows.length == 0) {
+            return res.status(400).json({ message: "El creador no existe" });
+        }
+
+        es_seguidor = false;
+
+        // comprobar si el usuario sigue al creador
+        const result_follow = await client.execute("SELECT * FROM Sigue_a_creador WHERE nombre_usuario = ? AND nombre_creador = ?", [nombre_usuario, nombre_creador]);
+        if (result_follow.rows.length > 0) {
+            es_seguidor = true;
+        }
+
+        res.status(200).json({
+            es_seguidor: es_seguidor
+        });
+
+    } catch (error) {
+        console.error("Error al ver si sigue al creador:", error);
+        res.status(500).json({ message: "Hubo un error al ver si sigue al creador" });
+    }
+};
+
+
+module.exports = { followUser, followCreator, addToFavourites, unfollowUser, unfollowCreator, isAFollowerOfUser, isAFollowerOfCreator };
