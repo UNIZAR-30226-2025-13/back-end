@@ -119,11 +119,11 @@ router.post('/follow-creator', followCreator);
 
 /**
  * @swagger
- * /follow-creator:
+ * /add-to-favourites:
  *   post:
- *     summary: Seguir a un creador
+ *     summary: Añadir a favoritos un contenido multimedia
  *     tags: [Favourites]
- *     description: Un usuario sigue a un creador.
+ *     description: Añade un contenido multimedia a los favoritos de un usuario (en función de si es una canción o un episodio).
  *     requestBody:
  *       required: true
  *       content:
