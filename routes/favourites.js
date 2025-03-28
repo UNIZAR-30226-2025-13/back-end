@@ -295,22 +295,19 @@ router.post('/unfollow-creator', unfollowCreator);
  *     summary: Obtiene si un usuario sigue a otro usuario
  *     tags: [Favourites]
  *     description: Devuelve true si un usuario sigue a otro usuario, false en caso contrario.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - nombre_usuario
- *               - nombre_usuario_a_seguir
- *             properties:
- *               nombre_usuario:
- *                 type: string
- *                 description: Nombre único del usuario que quiere ver si sigue al otro usuario.
- *               nombre_usuario_a_seguir:
- *                 type: string
- *                 description: Nombre único del usuario del que se quiere ver si se sigue.
+ *     parameters:
+ *       - in: query
+ *         name: nombre_usuario
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Nombre único del usuario que quiere ver si sigue al otro usuario.
+ *       - in: query
+ *         name: nombre_usuario_a_seguir
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Nombre único del usuario del que se quiere ver si se sigue.
  *     responses:
  *       200:
  *         description: Información sobre seguimiento obtenida correctamente
@@ -352,22 +349,19 @@ router.get('/is-a-follower-of-user', isAFollowerOfUser);
  *     summary: Obtiene si un usuario sigue a un creador
  *     tags: [Favourites]
  *     description: Devuelve true si un usuario sigue a un creador, false en caso contrario.
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - nombre_usuario
- *               - nombre_creador
- *             properties:
- *               nombre_usuario:
- *                 type: string
- *                 description: Nombre único del usuario que quiere ver si sigue al otro usuario.
- *               nombre_creador:
- *                 type: string
- *                 description: Nombre del creador del que se quiere ver si se sigue.
+ *     parameters:
+ *       - in: query
+ *         name: nombre_usuario
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Nombre único del usuario que quiere ver si sigue al creador.
+ *       - in: query
+ *         name: nombre_creador
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Nombre del creador del que se quiere ver si se sigue.
  *     responses:
  *       200:
  *         description: Información sobre seguimiento obtenida correctamente
@@ -390,7 +384,7 @@ router.get('/is-a-follower-of-user', isAFollowerOfUser);
  *                   type: string
  *                   example: "El usuario seguidor no existe"
  *       500:
- *         description: Error al ver si sigue al usuario
+ *         description: Error al ver si sigue al creador
  *         content:
  *           application/json:
  *             schema:
@@ -401,5 +395,4 @@ router.get('/is-a-follower-of-user', isAFollowerOfUser);
  *                   example: "Hubo un error al ver si sigue al creador"
  */
 router.get('/is-a-follower-of-creator', isAFollowerOfCreator);
-
 module.exports = router;

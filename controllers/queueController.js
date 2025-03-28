@@ -3,7 +3,7 @@ const { checkUserExists } = require("./utils/exists");
 
 const getCM = async (req, res) => {
     try {
-        const { nombre_usuario, posicion } = req.body;
+        const { nombre_usuario, posicion } = req.query;
 
         const userExists = await checkUserExists(nombre_usuario);
 
@@ -192,7 +192,8 @@ const shuffleQueue = async (req, res) => {
 
 const showQueue = async (req, res) => {
     try {
-        const { nombre_usuario, posicion } = req.body;
+        const { nombre_usuario, posicion } = req.query;
+        const posicionNum = parseInt(posicion, 10);
 
         // Verificar si el usuario existe
         const userExists = await checkUserExists(nombre_usuario);
@@ -202,11 +203,12 @@ const showQueue = async (req, res) => {
 
         // Obtener la cola de reproducción del usuario después de cierta posición
         const result = await client.execute(
-            "SELECT id_cm, posicion FROM Cola_Reproduccion WHERE propietario = ? AND posicion > ? ORDER BY posicion ASC",
-            [nombre_usuario, posicion]
+            "SELECT id_cm, posicion FROM Cola_Reproduccion WHERE propietario = ? AND posicion >= ? ORDER BY posicion ASC",
+            [nombre_usuario, posicionNum]
         );
-
+        console.log(result.rows);
         const queue = [];
+
 
         for (const row of result.rows) {
             const { id_cm } = row;

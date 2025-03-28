@@ -231,7 +231,7 @@ const unfollowCreator = async (req, res) => {
 // Ver si un usuario sigue a otro
 const isAFollowerOfUser = async (req, res) => {
     try {
-        const { nombre_usuario, nombre_usuario_a_seguir } = req.body;
+        const { nombre_usuario, nombre_usuario_a_seguir } = req.query;
 
         if (!nombre_usuario_a_seguir || !nombre_usuario) { // ningun campo vacio
             return res.status(400).json({ message: "Hay que rellener todos los campos" });
@@ -275,7 +275,7 @@ const isAFollowerOfUser = async (req, res) => {
 // Ver si un usuario sigue a un creador
 const isAFollowerOfCreator = async (req, res) => {
     try {
-        const { nombre_usuario, nombre_creador } = req.body;
+        const { nombre_usuario, nombre_creador } = req.query;
 
         if (!nombre_creador || !nombre_usuario) { // ningun campo vacio
             return res.status(400).json({ message: "Hay que rellener todos los campos" });

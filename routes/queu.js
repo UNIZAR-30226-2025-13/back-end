@@ -31,25 +31,22 @@ module.exports = (io) => {
      *     description: Devuelve el contenido multimedia correspondiente a una posición en la cola de reproducción de un usuario.
      *     tags:
      *       - Queue
-     *     requestBody:
-     *       required: true
-     *       content:
-     *         application/json:
-     *           schema:
-     *             type: object
-     *             properties:
-     *               nombre_usuario:
-     *                 type: string
-     *                 description: Nombre de usuario del propietario de la cola de reproducción
-     *               posicion:
-     *                 type: integer
-     *                 description: Posición en la cola de reproducción para obtener el contenido multimedia correspondiente
-     *             required:
-     *               - nombre_usuario
-     *               - posicion
+     *     parameters:
+     *       - in: query
+     *         name: nombre_usuario
+     *         required: true
+     *         schema:
+     *           type: string
+     *         description: Nombre de usuario del propietario de la cola de reproducción.
+     *       - in: query
+     *         name: posicion
+     *         required: true
+     *         schema:
+     *           type: integer
+     *         description: Posición en la cola de reproducción para obtener el contenido multimedia correspondiente.
      *     responses:
      *       200:
-     *         description: Contenido multimedia encontrado y devuelto
+     *         description: Contenido multimedia encontrado y devuelto.
      *         content:
      *           application/json:
      *             schema:
@@ -57,9 +54,9 @@ module.exports = (io) => {
      *               properties:
      *                 id_cm:
      *                   type: integer
-     *                   description: ID del contenido multimedia en la cola
+     *                   description: ID del contenido multimedia en la cola.
      *       400:
-     *         description: Error si el usuario no existe o si la posición es incorrecta
+     *         description: Error si el usuario no existe o si la posición es incorrecta.
      *         content:
      *           application/json:
      *             schema:
@@ -73,7 +70,7 @@ module.exports = (io) => {
      *                     posicion_incorrecta:
      *                       value: "Posición incorrecta"
      *       500:
-     *         description: Error interno del servidor al obtener el contenido
+     *         description: Error interno del servidor al obtener el contenido.
      *         content:
      *           application/json:
      *             schema:
@@ -208,30 +205,26 @@ module.exports = (io) => {
      * @swagger
      * /queue/show:
      *   get:
-     *     summary: Obtiene la cola de reproducción de un usuario
+     *     summary: Obtiene la cola de reproducción de un usuario.
      *     description: Devuelve la lista de contenidos multimedia en la cola de reproducción de un usuario, incluyendo canciones y episodios de podcast.
      *     tags:
      *       - Queue
      *     parameters:
-     *       - in: body
-     *         name: body
+     *       - in: query
+     *         name: nombre_usuario
      *         required: true
-     *         description: Datos del usuario y posición inicial en la cola.
      *         schema:
-     *           type: object
-     *           required:
-     *             - nombre_usuario
-     *             - posicion
-     *           properties:
-     *             nombre_usuario:
-     *               type: string
-     *               example: "usuario123"
-     *             posicion:
-     *               type: integer
-     *               example: 2
+     *           type: string
+     *         description: Nombre del usuario cuya cola de reproducción se va a obtener.
+     *       - in: query
+     *         name: posicion
+     *         required: true
+     *         schema:
+     *           type: integer
+     *         description: Posición inicial en la cola de reproducción.
      *     responses:
      *       200:
-     *         description: Cola de reproducción obtenida con éxito
+     *         description: Cola de reproducción obtenida con éxito.
      *         content:
      *           application/json:
      *             schema:
@@ -270,7 +263,7 @@ module.exports = (io) => {
      *                         type: string
      *                         example: "Podcast Ejemplo"
      *       400:
-     *         description: El usuario no existe
+     *         description: El usuario no existe.
      *         content:
      *           application/json:
      *             schema:
@@ -280,7 +273,7 @@ module.exports = (io) => {
      *                   type: string
      *                   example: "El usuario no existe"
      *       500:
-     *         description: Error en el servidor al obtener la cola de reproducción
+     *         description: Error en el servidor al obtener la cola de reproducción.
      *         content:
      *           application/json:
      *             schema:
@@ -291,6 +284,5 @@ module.exports = (io) => {
      *                   example: "Error al obtener la cola de reproducción"
      */
     router.get("/show", showQueue);
-
     return router;
 };

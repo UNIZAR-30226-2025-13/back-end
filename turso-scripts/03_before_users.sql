@@ -512,3 +512,67 @@ INSERT INTO Listas_de_carpeta (id_carpeta, id_lista) VALUES
 (4, 26), (4, 27), (4, 28),
 (5, 29), (5, 30), (5, 31), (5, 32), (5, 33), (5, 34), (5, 35), (5, 36),
 (6, 37), (6, 38), (6, 39), (6, 40), (6, 41), (6, 42), (6, 43), (6, 44),(6, 45), (6, 46);
+
+
+-- NAVE DRAGÓN
+INSERT INTO Contenido_multimedia (link_cm, titulo, duracion, link_compartir, link_imagen, fecha_pub) VALUES
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1743078790/MISION005_flow9n.mp3', 'MISSION005', '00:00:35', 'https://example.com/share/mission005', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1743078759/4300052df349822d362f5ad93605315d.1000x1000x1_xxnons.jpg', '2025-03-28'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1743078788/1000COSAS_iu4vwl.mp3', '1000COSAS', '00:00:16', 'https://example.com/share/1000cosas', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1743078759/4300052df349822d362f5ad93605315d.1000x1000x1_xxnons.jpg', '2025-03-28'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1743078788/SINAUTOTUNE_r791wl.mp3', 'SIN AUTOTUNE', '00:00:20', 'https://example.com/share/sinautotuone','https://res.cloudinary.com/djsm3jfht/image/upload/v1743078759/4300052df349822d362f5ad93605315d.1000x1000x1_xxnons.jpg', '2025-03-28'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1743078788/QSOMOS_mwxftx.mp3', 'Q SOMOS?', '00:00:24', '','https://res.cloudinary.com/djsm3jfht/image/upload/v1743078759/4300052df349822d362f5ad93605315d.1000x1000x1_xxnons.jpg', '2025-03-28'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1743078788/MICOLETA_dporvj.mp3', 'MI COLETA', '00:00:44', '','https://res.cloudinary.com/djsm3jfht/image/upload/v1743078759/4300052df349822d362f5ad93605315d.1000x1000x1_xxnons.jpg', '2025-03-28'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1743078788/PERREITPALLORAR_vbfnr1.mp3', 'PERREITO PA LLORAR', '00:00:20', '','https://res.cloudinary.com/djsm3jfht/image/upload/v1743078759/4300052df349822d362f5ad93605315d.1000x1000x1_xxnons.jpg', '2025-03-28'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1743078790/YOTELLEVO_rzynxg.mp3', 'YO TE LLEVO', '00:03:00', '','https://res.cloudinary.com/djsm3jfht/image/upload/v1743078759/4300052df349822d362f5ad93605315d.1000x1000x1_xxnons.jpg', '2025-03-28'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1743078787/LAREINAREMIX_avnnou.mp3', 'LA REINA REMIX', '00:00:19','','https://res.cloudinary.com/djsm3jfht/image/upload/v1743078759/4300052df349822d362f5ad93605315d.1000x1000x1_xxnons.jpg', '2025-03-28');
+
+INSERT INTO Cancion (id_cancion, n_repros, letra) VALUES
+(44, 0, 'Letra de MISSION005'),
+(45, 0, 'Letra de 1000COSAS'),
+(46, 0, 'Letra de SIN AUTOTUNE'),
+(47, 0, 'Letra de Q SOMOS?'),
+(48, 0, 'Letra de MI COLETA'),
+(49, 0, 'Letra de PERREITO PA LLORAR'),
+(50, 0, 'Letra de YO TE LLEVO'),
+(51, 0, 'Letra de LA REINA REMIX');
+
+INSERT INTO Artista_principal (nombre_artista, id_cancion) VALUES
+('Lola Índigo', 44),
+('Lola Índigo', 45),
+('Lola Índigo', 46),
+('Lola Índigo', 47),
+('Lola Índigo', 48),
+('Lola Índigo', 49),
+('Lola Índigo', 50),
+('Lola Índigo', 51);
+
+INSERT INTO Featuring (nombre_artista, id_cancion) VALUES
+('María Becerra', 51),
+('Paulo Londra', 49);
+
+INSERT INTO Album (nombre_album, fecha_pub, link_imagen, link_compartir, es_disco) VALUES
+('NAVE DRAGÓN', '2025-03-28', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1743078759/4300052df349822d362f5ad93605315d.1000x1000x1_xxnons.jpg','',1);
+
+INSERT INTO Artista_posee_albumes (nombre_artista, id_album) VALUES
+('Lola Índigo', 13);
+
+INSERT INTO Numero_cancion_en_album (id_album, id_cancion, numero_cancion) VALUES
+(13, 44, 1),
+(13, 45, 2),
+(13, 46, 3),
+(13, 11, 4),
+(13, 47, 5),
+(13, 48, 6),
+(13, 15, 7),
+(13, 49, 8),
+(13, 50, 9),
+(13, 51, 10);
+
+INSERT INTO Canciones_en_playlist (id_playlist, id_cancion) VALUES
+(10, 44),
+(10, 45),
+(10, 46),
+(10, 47),
+(10, 48),
+(10, 49),
+(10, 50),
+(10, 51);
