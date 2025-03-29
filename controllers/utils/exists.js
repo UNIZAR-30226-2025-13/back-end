@@ -17,4 +17,9 @@ const checkUserExists = async (username) => {
     }
 };
 
-module.exports = { checkUserExists };
+const checkIsASong = async (id_cm) => {
+    const result = await client.execute(`SELECT * FROM Cancion WHERE id_cancion == ?`, [id_cm]);
+    return result.rows.length > 0;
+};
+
+module.exports = { checkUserExists, checkIsASong };

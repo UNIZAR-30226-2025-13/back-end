@@ -1,5 +1,42 @@
 const client = require("../db");
-const { checkUserExists } = require("./utils/exists");
+const { checkUserExists, checkIsASong } = require("./utils/exists");
+const { suggestSongs, suggestPodcasts } = require("./utils/suggestions");
+
+const addCMInterna = async (id_cm, nombre_usuario) => {
+    // Verificar que la canción exista
+    const cmExists = await client.execute("SELECT * FROM Contenido_multimedia WHERE id_cm = ?", [
+        id_cm,
+    ]);
+    if (cmExists.rows.length == 0) {
+        return res.status(400).json({ message: "El contenido multimedia no existe" });
+    }
+    const userExists = await checkUserExists(nombre_usuario);
+    if (!userExists) {
+        return res.status(400).json({ error: "El usuario no existe" });
+    }
+
+    // Obtener la última posición en la cola del usuario
+    const lastPosition = await client.execute(
+        `
+        SELECT COALESCE(MAX(posicion), -1) + 1 AS next_position
+        FROM Cola_Reproduccion 
+        WHERE propietario = ?
+        `,
+        [nombre_usuario]
+    );
+
+    if (lastPosition.rows[0].next_position < 0) {
+        return res.status(400).json({ error: "Error lastPosition" });
+    }
+
+    await client.execute(
+        `
+        INSERT INTO Cola_Reproduccion (propietario, id_cm, posicion) 
+        VALUES (?, ?, ?)
+        `,
+        [nombre_usuario, id_cm, lastPosition.rows[0].next_position]
+    );
+};
 
 const getCM = async (req, res) => {
     try {
@@ -22,7 +59,36 @@ const getCM = async (req, res) => {
                     id_cm: cm.rows[0].id_cm,
                 });
             } else {
-                return res.status(400).json({ error: "Posición incorrecta" });
+                // Obtener CM recomendadas
+                let recomendaciones = [];
+                const lastPosition = posicion - 1;
+                const cm = await client.execute(
+                    `
+                    SELECT id_cm
+                    FROM Cola_Reproduccion 
+                    WHERE propietario = ? AND posicion = ?
+                    `,
+                    [nombre_usuario, lastPosition]
+                );
+
+                if (cm.rows.length === 0) {
+                    return res.status(400).json({
+                        error: "Error al obtener la última canción previa a la solicitada",
+                    });
+                }
+
+                id_cm = cm.rows[0].id_cm;
+                console.log(id_cm);
+                if (checkIsASong(id_cm) == true) {
+                    recomendaciones = await suggestSongs(nombre_usuario);
+                } else {
+                    console.log("Sugiriendo episodios");
+                    recomendaciones = await suggestPodcasts(nombre_usuario);
+                }
+                for (const rec of recomendaciones) {
+                    await addCMInterna(rec, nombre_usuario);
+                }
+                return res.status(200).json({ mensaje: "Contenido añadido" });
             }
         } else {
             return res.status(400).json({ error: "El usuario no existe" });
@@ -40,44 +106,7 @@ const addSong = async (req, res, io) => {
             return res.status(400).json({ error: "Hay que rellenar todos los parámetros" });
         }
 
-        // Verificar que la canción exista
-        const cmExists = await client.execute(
-            "SELECT * FROM Contenido_multimedia WHERE id_cm = ?",
-            [id_cm]
-        );
-        if (cmExists.rows.length == 0) {
-            return res.status(400).json({ message: "El contenido multimedia no existe" });
-        }
-
-        // Verificar que el usuario existe
-        const userExists = await client.execute("SELECT * FROM Usuario WHERE nombre_usuario = ?", [
-            nombre_usuario,
-        ]);
-        if (userExists.rows.length == 0) {
-            return res.status(400).json({ error: "El usuario no existe" });
-        }
-
-        // Obtener la última posición en la cola del usuario
-        const lastPosition = await client.execute(
-            `
-            SELECT COALESCE(MAX(posicion), -1) + 1 AS next_position
-            FROM Cola_Reproduccion 
-            WHERE propietario = ?
-            `,
-            [nombre_usuario]
-        );
-
-        if (lastPosition.rows[0].next_position < 0) {
-            return res.status(400).json({ error: "Error lastPosition" });
-        }
-
-        await client.execute(
-            `
-            INSERT INTO Cola_Reproduccion (propietario, id_cm, posicion) 
-            VALUES (?, ?, ?)
-            `,
-            [nombre_usuario, id_cm, lastPosition.rows[0].next_position]
-        );
+        await addCMInterna(id_cm, nombre_usuario);
 
         const updatedQueue = await client.execute(
             `
@@ -166,8 +195,6 @@ const shuffleQueue = async (req, res) => {
                         const nuevoValor = posicionesDisponibles[i]; // Nueva posición aleatoria
                         const item = cola[i].id_cola;
 
-                        // console.log("El id: " + item + " va a tener posición: " + nuevoValor);
-
                         // Actualizar la base de datos
                         await client.execute(
                             "UPDATE Cola_Reproduccion SET posicion = ? WHERE id_cola = ?",
@@ -206,9 +233,7 @@ const showQueue = async (req, res) => {
             "SELECT id_cm, posicion FROM Cola_Reproduccion WHERE propietario = ? AND posicion >= ? ORDER BY posicion ASC",
             [nombre_usuario, posicionNum]
         );
-        console.log(result.rows);
         const queue = [];
-
 
         for (const row of result.rows) {
             const { id_cm } = row;
