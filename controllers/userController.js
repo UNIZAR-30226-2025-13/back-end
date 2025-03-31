@@ -258,5 +258,70 @@ const changeListPrivacy = async (req, res) => {
     }
 };
 
-module.exports = { getProfile, changePassword, getLists, createList, getPlaylists, getPublicLists, changeListPrivacy };
+const deleteAccount = async (req, res) => {
+    try {
+        const { nombre_usuario, contrasena } = req.body;
+
+        if (!nombre_usuario || !contrasena) {
+            return res.status(400).json({ message: "Faltan parámetros en la solicitud" });
+        }
+
+        // Buscar usuario y verificar contraseña
+        const userQuery = 'SELECT contrasena FROM Usuario WHERE nombre_usuario = ?';
+        const result = await client.execute(userQuery, [nombre_usuario]);
+
+        if (!result || !result.rows || result.rows.length === 0) {
+            return res.status(400).json({ message: "Usuario no encontrado" });
+        }
+
+        const passwordMatch = await bcrypt.compare(contrasena, result.rows[0].contrasena);
+        if (!passwordMatch) {
+            return res.status(400).json({ message: "Contraseña incorrecta" });
+        }
+
+        // Obtener todas las listas del usuario
+        const listasResult = await client.execute(
+            "SELECT id_lista FROM Listas_del_usuario WHERE nombre_usuario = ?",
+            [nombre_usuario]
+        );
+        const listas = listasResult.rows.map(row => row.id_lista);
+
+        // Eliminar todas las listas del usuario
+        if (listas.length > 0) {
+            const placeholders = listas.map(() => "?").join(",");
+            await client.execute(`DELETE FROM Canciones_en_playlist WHERE id_playlist IN (${placeholders})`, listas);
+            await client.execute(`DELETE FROM Episodios_de_lista WHERE id_lista_ep IN (${placeholders})`, listas);
+            await client.execute(`DELETE FROM Listas_del_usuario WHERE id_lista IN (${placeholders})`, listas);
+            await client.execute(`DELETE FROM Playlist WHERE id_playlist IN (${placeholders})`, listas);
+            await client.execute(`DELETE FROM Lista_Episodios WHERE id_lista_ep IN (${placeholders})`, listas);
+            await client.execute(`DELETE FROM Lista_reproduccion WHERE id_lista IN (${placeholders})`, listas);
+        }
+
+        // Obtener todas las carpetas del usuario
+        const carpetasResult = await client.execute(
+            "SELECT id_carpeta FROM Carpetas_del_Usuario WHERE nombre_usuario = ?",
+            [nombre_usuario]
+        );
+        const carpetas = carpetasResult.rows.map(row => row.id_carpeta);
+
+        // Eliminar todas las carpetas del usuario
+        if (carpetas.length > 0) {
+            const placeholders = carpetas.map(() => "?").join(",");
+            await client.execute(`DELETE FROM Listas_de_carpeta WHERE id_carpeta IN (${placeholders})`, carpetas);
+            await client.execute(`DELETE FROM Carpetas_del_Usuario WHERE id_carpeta IN (${placeholders})`, carpetas);
+            await client.execute(`DELETE FROM Carpeta WHERE id_carpeta IN (${placeholders})`, carpetas);
+        }
+
+        // Eliminar la cuenta del usuario
+        await client.execute("DELETE FROM Usuario WHERE nombre_usuario = ?", [nombre_usuario]);
+
+        res.status(200).json({ message: "Cuenta eliminada correctamente" });
+    } catch (error) {
+        console.error("Error al eliminar la cuenta:", error);
+        res.status(500).json({ message: "Hubo un error al eliminar la cuenta" });
+    }
+};
+
+
+module.exports = { getProfile, changePassword, getLists, createList, getPlaylists, getPublicLists, changeListPrivacy, deleteAccount };
 

@@ -92,7 +92,7 @@ app.use(favoritos);
 
 // prueba inicial
 app.get("/", (req, res) => {
-    res.send("Bienvenido a la API de usuarios");
+    res.send("Bienvenido a la API de Spongefy");
 });
 
 app.listen(3000, () => {

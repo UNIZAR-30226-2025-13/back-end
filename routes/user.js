@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { getProfile, changePassword, getLists, createList, getPlaylists, getPublicLists, changeListPrivacy } = require('../controllers/userController');
+const { getProfile, changePassword, getLists, createList, getPlaylists, getPublicLists, changeListPrivacy, deleteAccount } = require('../controllers/userController');
 
 const { verifyToken } = require('../middleware/autorizationMiddleware');
 
@@ -461,5 +461,58 @@ router.get("/get-public-lists", getPublicLists);
  *                   example: "Hubo un error al cambiar la privacidad de la lista"
  */
 router.post("/change-list-privacy", changeListPrivacy);
+
+/**
+ * @swagger
+ * /delete-account:
+ *   post:
+ *     summary: Elimina la cuenta de un usuario
+ *     tags: [Usuarios]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombre_usuario:
+ *                 type: string
+ *                 example: "usuario123"
+ *               contrasena:
+ *                 type: string
+ *                 example: "Password123!"
+ *     responses:
+ *       200:
+ *         description: Cuenta eliminada correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Cuenta eliminada correctamente"
+ *       400:
+ *         description: Error en la solicitud (faltan parámetros o credenciales incorrectas)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Credenciales incorrectas o falta información"
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Hubo un error al eliminar la cuenta"
+ */
+router.post("/delete-account", deleteAccount);
 
 module.exports = router;
