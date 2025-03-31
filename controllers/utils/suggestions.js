@@ -29,18 +29,23 @@ const suggestSongs = async (nombre_usuario) => {
     const songDetails = await client.execute(
         `SELECT c.id_cm, g.genero, i.idioma, a.nombre_artista 
      FROM Contenido_multimedia c
-     JOIN Generos g ON c.id_cm = g.id_cancion
-     JOIN Idiomas_multimedia i ON c.id_cm = i.id_cm
-     JOIN Artista_principal a ON c.id_cm = a.id_cancion
+     LEFT JOIN Generos g ON c.id_cm = g.id_cancion
+     LEFT JOIN Idiomas_multimedia i ON c.id_cm = i.id_cm
+     LEFT JOIN Artista_principal a ON c.id_cm = a.id_cancion
      WHERE c.id_cm IN (${placeholders})`,
         queueIds
     );
 
-    // Buscar canciones del mismo género, artista o idioma
     // Filtra los valores vacíos o undefined para evitar pasar valores no válidos
-    const generos = songDetails.rows.map((row) => row.genero).filter(Boolean);
-    const idiomas = songDetails.rows.map((row) => row.idioma).filter(Boolean);
-    const artistas = songDetails.rows.map((row) => row.nombre_artista).filter(Boolean);
+    const generos = songDetails.rows
+        .map((row) => row.genero)
+        .filter((genero) => genero != null);  // Considera también valores nulos
+    const idiomas = songDetails.rows
+        .map((row) => row.idioma)
+        .filter((idioma) => idioma != null);  // Considera también valores nulos
+    const artistas = songDetails.rows
+        .map((row) => row.nombre_artista)
+        .filter((artista) => artista != null);  // Considera también valores nulos
 
     // Si no hay géneros, idiomas ni artistas, podemos retornar una respuesta vacía para evitar consultas innecesarias
     if (generos.length === 0 && idiomas.length === 0 && artistas.length === 0) {
@@ -49,34 +54,58 @@ const suggestSongs = async (nombre_usuario) => {
     }
 
     // Crear los marcadores de posición para los valores de cada array
-    const placeholdersGeneros = generos.map(() => "?").join(",");
-    const placeholdersIdiomas = idiomas.map(() => "?").join(",");
-    const placeholdersArtistas = artistas.map(() => "?").join(",");
+    const placeholdersGeneros = generos.length > 0 ? generos.map(() => "?").join(",") : "";
+    const placeholdersIdiomas = idiomas.length > 0 ? idiomas.map(() => "?").join(",") : "";
+    const placeholdersArtistas = artistas.length > 0 ? artistas.map(() => "?").join(",") : "";
 
-    // Ejecutar la consulta SQL con los placeholders dinámicos
-    let suggestedSongs = await client.execute(
-        `SELECT DISTINCT c.id_cm 
-     FROM Contenido_multimedia c
-     JOIN Generos g ON c.id_cm = g.id_cancion
-     JOIN Idiomas_multimedia i ON c.id_cm = i.id_cm
-     JOIN Artista_principal a ON c.id_cm = a.id_cancion
-     WHERE g.genero IN (${placeholdersGeneros}) 
-        OR i.idioma IN (${placeholdersIdiomas}) 
-        OR a.nombre_artista IN (${placeholdersArtistas})
-     LIMIT 50`,
-        [...generos, ...idiomas, ...artistas] // Pasar los valores de los arrays a la consulta
-    );
+    // Ejecutar la consulta SQL con los placeholders dinámicos solo si hay valores disponibles
+    let suggestedSongs = [];
+    if (generos.length > 0 || idiomas.length > 0 || artistas.length > 0) {
+        suggestedSongs = await client.execute(
+            `SELECT DISTINCT c.id_cm, a.nombre_artista 
+         FROM Contenido_multimedia c
+         LEFT JOIN Generos g ON c.id_cm = g.id_cancion
+         LEFT JOIN Idiomas_multimedia i ON c.id_cm = i.id_cm
+         LEFT JOIN Artista_principal a ON c.id_cm = a.id_cancion
+         JOIN Cancion ON c.id_cm = Cancion.id_cancion
+         WHERE (${generos.length > 0 ? `g.genero IN (${placeholdersGeneros})` : '1=1'})
+            OR (${idiomas.length > 0 ? `i.idioma IN (${placeholdersIdiomas})` : '1=1'})
+            OR (${artistas.length > 0 ? `a.nombre_artista IN (${placeholdersArtistas})` : '1=1'})
+         LIMIT 50`,
+            [...generos, ...idiomas, ...artistas]
+        );
+    }
 
     let suggestedSongIds = suggestedSongs.rows.map((row) => row.id_cm);
+    const suggestedSongsWithWeights = suggestedSongIds.map((id) => {
+        let weight = 1; // Peso por defecto
+
+        // Aumentar el peso si la canción está en favoritos
+        if (favoriteSongIds.includes(id)) {
+            weight += 2; // Puedes ajustar este valor según el peso deseado
+        }
+
+        // Aumentar el peso si la canción es del mismo artista
+        const song = suggestedSongs.rows.find((song) => song.id_cm === id);
+        if (song && artistas.includes(song.nombre_artista)) {
+            weight += 1; // Puedes ajustar este valor según el peso deseado
+        }
+
+        return { id, weight };
+    });
 
     // Filtrar canciones que ya están en la cola o que son favoritas
-    suggestedSongIds = suggestedSongIds.filter(
-        (id) => !queueIds.includes(id) && !favoriteSongIds.includes(id)
+    const filteredSongs = suggestedSongsWithWeights.filter(
+        (song) => !queueIds.includes(song.id) && !favoriteSongIds.includes(song.id)
     );
 
-    // Devolver 10 canciones aleatorias
-    suggestedSongIds = suggestedSongIds.sort(() => 0.5 - Math.random()).slice(0, 10);
-    return suggestedSongIds;
+    // Ordenar las canciones por su peso (de mayor a menor)
+    filteredSongs.sort((a, b) => b.weight - a.weight);
+
+    // Devolver 10 canciones con mayor peso
+    const topSuggestedSongs = filteredSongs.slice(0, 10).map((song) => song.id);
+
+    return topSuggestedSongs;
 };
 
 const suggestPodcasts = async (nombre_usuario) => {

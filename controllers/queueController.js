@@ -78,17 +78,22 @@ const getCM = async (req, res) => {
                 }
 
                 id_cm = cm.rows[0].id_cm;
-                console.log(id_cm);
-                if (checkIsASong(id_cm) == true) {
+            
+                if (await checkIsASong(id_cm) == true) {
+                    console.log("Canción" + id_cm);
                     recomendaciones = await suggestSongs(nombre_usuario);
                 } else {
-                    console.log("Sugiriendo episodios");
+                    console.log("Podcast" + id_cm);
                     recomendaciones = await suggestPodcasts(nombre_usuario);
                 }
                 for (const rec of recomendaciones) {
                     await addCMInterna(rec, nombre_usuario);
                 }
-                return res.status(200).json({ mensaje: "Contenido añadido" });
+                console.log("Recomendaciones " + recomendaciones);
+                console.log("Siguiente cancion " + recomendaciones[0]);
+                return res.status(200).json({
+                    id_cm: recomendaciones[0]
+                });
             }
         } else {
             return res.status(400).json({ error: "El usuario no existe" });
