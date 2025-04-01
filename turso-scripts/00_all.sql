@@ -812,3 +812,249 @@ INSERT INTO Listas_del_usuario (nombre_usuario, id_lista) VALUES
 ('spongefy', 46);
 
 
+-- NAVE DRAGÓN
+INSERT INTO Contenido_multimedia (link_cm, titulo, duracion, link_compartir, link_imagen, fecha_pub) VALUES
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1743078790/MISION005_flow9n.mp3', 'MISSION005', '00:00:35', 'https://example.com/share/mission005', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1743078759/4300052df349822d362f5ad93605315d.1000x1000x1_xxnons.jpg', '2025-03-28'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1743078788/1000COSAS_iu4vwl.mp3', '1000COSAS', '00:00:16', 'https://example.com/share/1000cosas', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1743078759/4300052df349822d362f5ad93605315d.1000x1000x1_xxnons.jpg', '2025-03-28'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1743078788/SINAUTOTUNE_r791wl.mp3', 'SIN AUTOTUNE', '00:00:20', 'https://example.com/share/sinautotuone','https://res.cloudinary.com/djsm3jfht/image/upload/v1743078759/4300052df349822d362f5ad93605315d.1000x1000x1_xxnons.jpg', '2025-03-28'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1743078788/QSOMOS_mwxftx.mp3', 'Q SOMOS?', '00:00:24', '','https://res.cloudinary.com/djsm3jfht/image/upload/v1743078759/4300052df349822d362f5ad93605315d.1000x1000x1_xxnons.jpg', '2025-03-28'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1743078788/MICOLETA_dporvj.mp3', 'MI COLETA', '00:00:44', '','https://res.cloudinary.com/djsm3jfht/image/upload/v1743078759/4300052df349822d362f5ad93605315d.1000x1000x1_xxnons.jpg', '2025-03-28'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1743078788/PERREITPALLORAR_vbfnr1.mp3', 'PERREITO PA LLORAR', '00:00:20', '','https://res.cloudinary.com/djsm3jfht/image/upload/v1743078759/4300052df349822d362f5ad93605315d.1000x1000x1_xxnons.jpg', '2025-03-28'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1743078790/YOTELLEVO_rzynxg.mp3', 'YO TE LLEVO', '00:03:00', '','https://res.cloudinary.com/djsm3jfht/image/upload/v1743078759/4300052df349822d362f5ad93605315d.1000x1000x1_xxnons.jpg', '2025-03-28'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1743078787/LAREINAREMIX_avnnou.mp3', 'LA REINA REMIX', '00:00:19','','https://res.cloudinary.com/djsm3jfht/image/upload/v1743078759/4300052df349822d362f5ad93605315d.1000x1000x1_xxnons.jpg', '2025-03-28');
+
+INSERT INTO Cancion (id_cancion, n_repros, letra) VALUES
+(44, 0, 'Letra de MISSION005'),
+(45, 0, 'Letra de 1000COSAS'),
+(46, 0, 'Letra de SIN AUTOTUNE'),
+(47, 0, 'Letra de Q SOMOS?'),
+(48, 0, 'Letra de MI COLETA'),
+(49, 0, 'Letra de PERREITO PA LLORAR'),
+(50, 0, 'Letra de YO TE LLEVO'),
+(51, 0, 'Letra de LA REINA REMIX');
+
+INSERT INTO Generos (id_cancion, genero) VALUES
+(44, 'Reguetón'),
+(45, 'Reguetón'),
+(46, 'Reguetón'),
+(47, 'Reguetón'),
+(48, 'Reguetón'),
+(49, 'Reguetón'),
+(50, 'Reguetón'),
+(51, 'Reguetón');
+
+INSERT INTO Idiomas_multimedia (id_cm, idioma) VALUES
+(44, 'Español'),
+(45, 'Español'),
+(46, 'Español'),
+(47, 'Español'),
+(48, 'Español'),
+(49, 'Español'),
+(50, 'Español'),
+(51, 'Español');
+
+INSERT INTO Canciones_en_playlist (id_playlist, id_cancion) VALUES
+(1, 44),
+(1, 45),
+(1, 46),
+(1, 47),
+(1, 48),
+(1, 49),
+(1, 50),
+(1, 51),
+(5, 44),
+(5, 45),
+(5, 46),
+(5, 47),
+(5, 48),
+(5, 49),
+(5, 50),
+(5, 51);
+
+INSERT INTO Artista_principal (nombre_artista, id_cancion) VALUES
+('Lola Índigo', 44),
+('Lola Índigo', 45),
+('Lola Índigo', 46),
+('Lola Índigo', 47),
+('Lola Índigo', 48),
+('Lola Índigo', 49),
+('Lola Índigo', 50),
+('Lola Índigo', 51);
+
+INSERT INTO Featuring (nombre_artista, id_cancion) VALUES
+('María Becerra', 51),
+('Paulo Londra', 49);
+
+INSERT INTO Album (nombre_album, fecha_pub, link_imagen, link_compartir, es_disco) VALUES
+('NAVE DRAGÓN', '2025-03-28', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1743078759/4300052df349822d362f5ad93605315d.1000x1000x1_xxnons.jpg','',1);
+
+INSERT INTO Artista_posee_albumes (nombre_artista, id_album) VALUES
+('Lola Índigo', 13);
+
+INSERT INTO Numero_cancion_en_album (id_album, id_cancion, numero_cancion) VALUES
+(13, 44, 1),
+(13, 45, 2),
+(13, 46, 3),
+(13, 11, 4),
+(13, 47, 5),
+(13, 48, 6),
+(13, 15, 7),
+(13, 49, 8),
+(13, 50, 9),
+(13, 51, 10);
+
+INSERT INTO Canciones_en_playlist (id_playlist, id_cancion) VALUES
+(10, 44),
+(10, 45),
+(10, 46),
+(10, 47),
+(10, 48),
+(10, 49),
+(10, 50),
+(10, 51);
+
+-- REYES DEL PALIQUE
+INSERT INTO Podcast (id_podcast, nombre, link_imagen, link_compartir, descripcion) VALUES
+(3, 'Reyes del Palique', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1743423604/reyes_del_palique_edzim4.jpg', 'https://example.com/share/reyesdelpalique', 'Un podcast donde se discuten temas de actualidad y cultura pop con un toque de humor.');
+
+INSERT INTO Creador (nombre_creador, link_imagen, link_compartir) VALUES
+('Uy Albert y Fizpireta', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1743423604/reyes_del_palique_edzim4.jpg', 'https://example.com/share/reyesdelpalique');
+
+INSERT INTO Podcaster (nombre_podcaster) VALUES
+('Uy Albert y Fizpireta');
+
+INSERT INTO Tiene_podcast (nombre_podcaster, id_podcast) VALUES
+('Uy Albert y Fizpireta', 3);
+
+INSERT INTO Contenido_multimedia (link_cm, titulo, duracion, link_compartir, link_imagen, fecha_pub) VALUES
+("https://res.cloudinary.com/djsm3jfht/video/upload/v1743423608/dan_bofwpk.mp3", "EXCLUSIVAS de última hora con Dan | Reyes del Palique", "00:00:06", "", "https://res.cloudinary.com/djsm3jfht/image/upload/v1743423604/reyes_del_palique_edzim4.jpg", "2025-03-31" ),
+("https://res.cloudinary.com/djsm3jfht/video/upload/v1743423608/shannis_rgchzh.mp3", "Liarse solo con famosos: la nueva realidad de SHANNIS | Reyes del Palique", "00:00:14", "", "https://res.cloudinary.com/djsm3jfht/image/upload/v1743423604/reyes_del_palique_edzim4.jpg", "2025-04-01" ),
+("https://res.cloudinary.com/djsm3jfht/video/upload/v1743423608/clerss_fvanhu.mp3", "La chica más MISTERIOSA de internet, Clersssss | Reyes del Palique", "00:00:06", "", "https://res.cloudinary.com/djsm3jfht/image/upload/v1743423604/reyes_del_palique_edzim4.jpg", "2025-04-02" );
+
+INSERT INTO Episodio (id_ep, id_podcast, descripcion) VALUES
+(52, 3, "En este episodio, Dan nos trae las últimas exclusivas del mundo del espectáculo."),
+(53, 3, "Shannis comparte su experiencia de liarse solo con famosos y cómo ha cambiado su vida."),
+(54, 3, "Clersssss revela los secretos detrás de su misteriosa presencia en internet.");
+
+INSERT INTO Tematica_podcast (id_podcast, tematica) VALUES
+(3, 'Cultura'),
+(3, 'Comedia'),
+(3, 'Sociedad');
+
+INSERT INTO Idiomas_multimedia (id_cm, idioma) VALUES
+(52, 'Español'),
+(53, 'Español'),
+(54, 'Español');
+
+INSERT INTO Lista_reproduccion (nombre, es_publica, color, link_compartir) VALUES
+('This is Uy Albert y Fizpireta', TRUE, '#000000', 'https://example.com/share/thisisuyalbertyfizpireta');
+
+INSERT INTO Listas_del_usuario (nombre_usuario, id_lista) VALUES
+('spongefy', 66);
+
+INSERT INTO Lista_Episodios (id_lista_ep) VALUES
+(66);
+
+INSERT INTO Episodios_de_lista (id_lista_ep, id_ep, id_podcast) VALUES
+(66, 52, 3),
+(66, 53, 3),
+(66, 54, 3);
+
+INSERT INTO Listas_de_carpeta (id_carpeta, id_lista) VALUES
+(4, 66);
+
+-- CLUB DE LA CORCHEA
+INSERT INTO Podcast (id_podcast, nombre, link_imagen, link_compartir, descripcion) VALUES
+(4, 'Club de la Corchea', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1743427387/club_de_la_corchea_xbfhzi.jpg', 'https://example.com/share/clubdelacorchea', 'Un podcast donde se exploran temas de música y cultura con un enfoque divertido.');
+
+INSERT INTO Creador (nombre_creador, link_imagen, link_compartir) VALUES
+('Javi y Dani', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1743427387/club_de_la_corchea_xbfhzi.jpg', 'https://example.com/share/clubdelacorchea');
+
+INSERT INTO Podcaster (nombre_podcaster) VALUES 
+('Javi y Dani');
+
+INSERT INTO Tiene_podcast (nombre_podcaster, id_podcast) VALUES 
+('Javi y Dani', 4);
+
+INSERT INTO Contenido_multimedia (link_cm, titulo, duracion, link_compartir, link_imagen, fecha_pub) VALUES
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1743427761/lola_indigo_g0aoxc.mp3', 'Lola índigo: "El pop ya no es un género" | Club de la Corchea', '00:02:43', '', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1743427387/club_de_la_corchea_xbfhzi.jpg', '2025-03-31'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1743427758/quevedo_r9yd30.mp3', 'Quevedo "Saqué una canción y nadie la ha encontrado" | Club de la Corchea', '00:00:40', '', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1743427387/club_de_la_corchea_xbfhzi.jpg', '2025-04-01'),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1743427758/novedades_h9vhnb.mp3', 'Novedades Musicales 2 de abril 2025', '00:00:20', '', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1743427387/club_de_la_corchea_xbfhzi.jpg', '2025-04-02');
+
+INSERT INTO Episodio (id_ep, id_podcast, descripcion) VALUES 
+(55, 4, 'En este episodio, Lola Índigo habla sobre su carrera y cómo ha evolucionado el pop en la música actual.'),
+(56, 4, 'Quevedo comparte su experiencia de lanzar una canción y la dificultad de que sea encontrada por el público.'),
+(57, 4, 'Un resumen de las novedades musicales más destacadas del día.');
+
+INSERT INTO Tematica_podcast (id_podcast, tematica) VALUES 
+(4, 'Música');
+
+INSERT INTO Idiomas_multimedia (id_cm, idioma) VALUES
+(55, 'Español'),
+(56, 'Español'),
+(57, 'Español');
+
+INSERT INTO Lista_reproduccion (nombre, es_publica, color, link_compartir) VALUES
+('This is Javi y Dani', TRUE, '#000000', 'https://example.com/share/thisisjaviydani');
+
+INSERT INTO Listas_del_usuario (nombre_usuario, id_lista) VALUES
+('spongefy', 67);
+
+INSERT INTO Lista_Episodios (id_lista_ep) VALUES
+(67);
+
+INSERT INTO Episodios_de_lista (id_lista_ep, id_ep, id_podcast) VALUES 
+(67, 55, 4),
+(67, 56, 4),
+(67, 57, 4);
+
+INSERT INTO Listas_de_carpeta (id_carpeta, id_lista) VALUES
+(4, 67);
+
+-- CLUB 113
+INSERT INTO Podcast (id_podcast, nombre, link_imagen, link_compartir, descripcion) VALUES 
+(5, 'Club 113', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1743428547/club113_wivim4.jpg', 'https://example.com/share/club113', 'Un podcast donde se discuten temas de actualidad y cultura pop con un toque de humor.');
+
+INSERT INTO Creador (nombre_creador, link_imagen, link_compartir) VALUES
+('Club 113', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1743428547/club113_wivim4.jpg', 'https://example.com/share/club113');
+
+INSERT INTO Podcaster (nombre_podcaster) VALUES 
+('Club 113');
+
+INSERT INTO Tiene_podcast (nombre_podcaster, id_podcast) VALUES  
+('Club 113', 5);
+
+INSERT INTO Contenido_multimedia (link_cm, titulo, duracion, link_compartir, link_imagen, fecha_pub) VALUES
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1743428786/belen_esteban_msjxtx.mp3', 'CLUB 113 feat. BELÉN ESTEBAN' , '00:01:29', '', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1743428547/club113_wivim4.jpg', '2025-03-31' ),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1743428785/ciborg_buersn.mp3', 'Cyborgs humanos' , '00:00:55', '', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1743428547/club113_wivim4.jpg', '2025-04-01' ),
+('https://res.cloudinary.com/djsm3jfht/video/upload/v1743428784/sech_di1oww.mp3', 'CLUB 113 feat. Sech' , '00:00:45', '', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1743428547/club113_wivim4.jpg', '2025-04-02' );
+
+INSERT INTO Episodio (id_ep, id_podcast, descripcion) VALUES  
+(58, 5, 'En este episodio, Belén Esteban se une al Club 113 para hablar sobre su carrera y su vida personal.'),
+(59, 5, 'Una discusión sobre la posibilidad de que los humanos se conviertan en cyborgs en el futuro.'),
+(60, 5, 'Sech comparte su experiencia en la industria musical y su carrera.');
+
+INSERT INTO Tematica_podcast (id_podcast, tematica) VALUES  
+(5, 'Cultura');
+
+INSERT INTO Idiomas_multimedia (id_cm, idioma) VALUES 
+(58, 'Español'),
+(59, 'Español'),
+(60, 'Español');
+
+INSERT INTO Lista_reproduccion (nombre, es_publica, color, link_compartir) VALUES 
+('This is Club 113', TRUE, '#000000', 'https://example.com/share/thisisclub113');
+
+INSERT INTO Listas_del_usuario (nombre_usuario, id_lista) VALUES 
+('spongefy', 68);
+
+INSERT INTO Lista_Episodios (id_lista_ep) VALUES    
+(68);
+
+INSERT INTO Episodios_de_lista (id_lista_ep, id_ep, id_podcast) VALUES 
+(68, 58, 5),
+(68, 59, 5),
+(68, 60, 5);
+
+INSERT INTO Listas_de_carpeta (id_carpeta, id_lista) VALUES
+(4, 68);
