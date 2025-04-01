@@ -23,6 +23,12 @@ const { getListData } = require('../controllers/listsController');
  *           description: ID de la lista que se quiere consultar.
  *           schema:
  *             type: integer
+ *         - in: query
+ *           name: nombre_usuario
+ *           required: true
+ *           description: Nombre único del usuario que quiere consultar la lista.
+ *           schema:
+ *             type: string
  *       responses:
  *         200:
  *           description: Datos de la lista obtenidos exitosamente.
@@ -82,6 +88,12 @@ const { getListData } = require('../controllers/listsController');
  *                         nombre_grupo:
  *                           type: string
  *                           description: Nombre del podcast o album del contenido multimedia.
+ *                         valoracion_del_usuario:
+ *                           type: integer
+ *                           description: Valoración del contenido multimedia por parte del usuario (null si no ha hecho)
+ *                         valoracion_media:
+ *                           type: integer
+ *                           description: Valoración media del contenido multimedia (null si no hay)
  *         400:
  *           description: La lista no existe.
  *           content:

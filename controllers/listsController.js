@@ -1,8 +1,9 @@
 const client = require('../db');
+const { getRating, getAverageRating } = require('./ratesController');
 
 const getListData = async (req, res) => {
     try{
-        const { id_lista } = req.query; // obtener id de la lista de reproducción
+        const { id_lista, nombre_usuario } = req.query;
 
         // Comprobar lista válida
         const list_valida = await client.execute(
@@ -16,7 +17,7 @@ const getListData = async (req, res) => {
         const nombre_usuario_result = await client.execute(
             'SELECT nombre_usuario FROM Listas_del_usuario WHERE id_lista = ?', [id_lista]
         );
-        const nombre_usuario = nombre_usuario_result.rows[0].nombre_usuario;
+        const nombre_usuario_lista = nombre_usuario_result.rows[0].nombre_usuario;
 
         // Saber si es una playlist o una lista de episodios
         const es_playlist = await client.execute(
@@ -72,13 +73,29 @@ const getListData = async (req, res) => {
                 // realizar la 1a consulta
                 const canciones_info_result = await client.execute(query, list_canciones);
                 // se almacena la información
-                contenido_multimedia = canciones_info_result.rows;
+                for (const row of canciones_info_result.rows) {
+                    const valoracion_del_usuario = await getRating(row.id_cm, nombre_usuario);
+                    const valoracion_media = await getAverageRating(row.id_cm);
+        
+                    contenido_multimedia.push({
+                        id_cm: row.id_cm,
+                        titulo: row.titulo,
+                        link_imagen: row.link_imagen,
+                        duracion: row.duracion,
+                        nombre_creador: row.nombre_creador,
+                        artistas_feat: row.artistas_feat,
+                        id_grupo: row.id_grupo,
+                        nombre_grupo: row.nombre_grupo,
+                        valoracion_del_usuario,
+                        valoracion_media
+                    });
+                }
             }
         } else { // es una lista de episodios
             es_una_playlist = false;
 
             // obtenemos los episodios de una lista
-            const episodios_lista = await client.execute(
+            const episodios_lista_result = await client.execute(
                 `SELECT DISTINCT e.id_ep AS id_cm, cm.titulo AS titulo, cm.link_imagen, cm.duracion, cm.fecha_pub,
                     '' AS nombre_creador,
                     '' AS artistas_feat, p.id_podcast AS id_grupo, p.nombre AS nombre_grupo
@@ -89,7 +106,23 @@ const getListData = async (req, res) => {
                  JOIN Tiene_podcast tp ON tp.id_podcast = el.id_podcast
                  WHERE el.id_lista_ep = ?`,
                 [id_lista]);
-            contenido_multimedia = episodios_lista.rows;
+            for (const row of episodios_lista_result.rows) {
+                const valoracion_del_usuario = await getRating(row.id_cm, nombre_usuario);
+                const valoracion_media = await getAverageRating(row.id_cm);
+    
+                contenido_multimedia.push({
+                    id_cm: row.id_cm,
+                    titulo: row.titulo,
+                    link_imagen: row.link_imagen,
+                    duracion: row.duracion,
+                    nombre_creador: row.nombre_creador,
+                    artistas_feat: row.artistas_feat,
+                    id_grupo: row.id_grupo,
+                    nombre_grupo: row.nombre_grupo,
+                    valoracion_del_usuario,
+                    valoracion_media
+                });
+            }
         }
 
         res.status(200).json({
@@ -97,7 +130,7 @@ const getListData = async (req, res) => {
             color: color,
             es_playlist: es_una_playlist,
             es_publica: es_publica,
-            nombre_usuario: nombre_usuario,
+            nombre_usuario: nombre_usuario_lista,
             contenido: contenido_multimedia
         });
 
