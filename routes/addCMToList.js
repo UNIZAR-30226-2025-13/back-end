@@ -1,6 +1,9 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { addSongToPlaylist } = require('../controllers/playlistsController');
+const {
+    addSongToPlaylist,
+    addEpToListaEpisodios,
+} = require("../controllers/addCMToListController");
 
 /**
  * @swagger
@@ -59,6 +62,8 @@ const { addSongToPlaylist } = require('../controllers/playlistsController');
  *                   message:
  *                     type: string
  */
-router.post("/add-song-playlist", addSongToPlaylist)
+router.post("/add-song-playlist", addSongToPlaylist);
+
+router.post("/add-ep-lista-episodios", addEpToListaEpisodios);
 
 module.exports = router;

@@ -1,13 +1,13 @@
-const client = require('../db');
-const { getRating, getAverageRating } = require('./ratesController');
+const client = require("../db");
+const { getRating, getAverageRating } = require("./ratesController");
 
 const getListData = async (req, res) => {
-    try{
+    try {
         const { id_lista, nombre_usuario } = req.query;
 
         // Comprobar lista válida
         const list_valida = await client.execute(
-            'SELECT * FROM Lista_reproduccion WHERE id_lista = ?',
+            "SELECT * FROM Lista_reproduccion WHERE id_lista = ?",
             [id_lista]
         );
         if (list_valida.rows.length === 0) {
@@ -15,39 +15,45 @@ const getListData = async (req, res) => {
         }
 
         const nombre_usuario_result = await client.execute(
-            'SELECT nombre_usuario FROM Listas_del_usuario WHERE id_lista = ?', [id_lista]
+            "SELECT nombre_usuario FROM Listas_del_usuario WHERE id_lista = ?",
+            [id_lista]
         );
         const nombre_usuario_lista = nombre_usuario_result.rows[0].nombre_usuario;
 
         // Saber si es una playlist o una lista de episodios
-        const es_playlist = await client.execute(
-            'SELECT * FROM Playlist WHERE id_playlist = ?', [id_lista]
-        );
+        const es_playlist = await client.execute("SELECT * FROM Playlist WHERE id_playlist = ?", [
+            id_lista,
+        ]);
 
         let es_una_playlist = null;
         let contenido_multimedia = [];
 
         // Obtener datos lista -> nombre, color, privacidad
         const datos_playlist = await client.execute(
-            'SELECT nombre, color, es_publica FROM Lista_reproduccion WHERE id_lista = ?',
+            "SELECT nombre, color, es_publica FROM Lista_reproduccion WHERE id_lista = ?",
             [id_lista]
         );
         const color = datos_playlist.rows[0].color;
         const nombre = datos_playlist.rows[0].nombre;
         const es_publica = datos_playlist.rows[0].es_publica;
 
-        if (es_playlist.rows.length > 0) { // es una playlist
+        if (es_playlist.rows.length > 0) {
+            // es una playlist
             es_una_playlist = true;
 
             // Obtenemos los id's que pertenecen a una playlist
-            const canciones_playlist = await client.execute("SELECT id_cancion FROM Canciones_en_playlist WHERE id_playlist = ?", [id_lista]);
-            let list_canciones = []
-            if (canciones_playlist.rows.length > 0) { // se almacenan las canciones de las que el artista sea artista principal
+            const canciones_playlist = await client.execute(
+                "SELECT id_cancion FROM Canciones_en_playlist WHERE id_playlist = ?",
+                [id_lista]
+            );
+            let list_canciones = [];
+            if (canciones_playlist.rows.length > 0) {
+                // se almacenan las canciones de las que el artista sea artista principal
                 list_canciones = canciones_playlist.rows.map((row) => row.id_cancion);
             }
 
             // Canciones una a una de la playlist
-            if (list_canciones.length > 0) {                
+            if (list_canciones.length > 0) {
                 // creación de lista dinamica en función del nº de canciones que haya en el array canciones
                 const dynamic = list_canciones.map(() => "?").join(",");
                 // se obtiene la informacion necesaria únicamente de las canciones
@@ -76,7 +82,7 @@ const getListData = async (req, res) => {
                 for (const row of canciones_info_result.rows) {
                     const valoracion_del_usuario = await getRating(row.id_cm, nombre_usuario);
                     const valoracion_media = await getAverageRating(row.id_cm);
-        
+
                     contenido_multimedia.push({
                         id_cm: row.id_cm,
                         titulo: row.titulo,
@@ -88,11 +94,12 @@ const getListData = async (req, res) => {
                         id_grupo: row.id_grupo,
                         nombre_grupo: row.nombre_grupo,
                         valoracion_del_usuario,
-                        valoracion_media
+                        valoracion_media,
                     });
                 }
             }
-        } else { // es una lista de episodios
+        } else {
+            // es una lista de episodios
             es_una_playlist = false;
 
             // obtenemos los episodios de una lista
@@ -106,11 +113,12 @@ const getListData = async (req, res) => {
                  JOIN Contenido_multimedia cm ON cm.id_cm = el.id_ep
                  JOIN Tiene_podcast tp ON tp.id_podcast = el.id_podcast
                  WHERE el.id_lista_ep = ?`,
-                [id_lista]);
+                [id_lista]
+            );
             for (const row of episodios_lista_result.rows) {
                 const valoracion_del_usuario = await getRating(row.id_cm, nombre_usuario);
                 const valoracion_media = await getAverageRating(row.id_cm);
-    
+
                 contenido_multimedia.push({
                     id_cm: row.id_cm,
                     titulo: row.titulo,
@@ -122,7 +130,7 @@ const getListData = async (req, res) => {
                     id_grupo: row.id_grupo,
                     nombre_grupo: row.nombre_grupo,
                     valoracion_del_usuario,
-                    valoracion_media
+                    valoracion_media,
                 });
             }
         }
@@ -133,13 +141,112 @@ const getListData = async (req, res) => {
             es_playlist: es_una_playlist,
             es_publica: es_publica,
             nombre_usuario: nombre_usuario_lista,
-            contenido: contenido_multimedia
+            contenido: contenido_multimedia,
         });
-
     } catch (error) {
         console.error("Error al obtener la lista:", error);
         res.status(500).json({ message: "Hubo un error al obtener la lista" });
     }
-}
+};
 
-module.exports = { getListData }
+const removeCMFromList = async (req, res) => {
+    try {
+        const { id_cm, id_lista } = req.query;
+
+        // Verificar si la lista es de episodios o de canciones
+        const checkPlaylistType = await client.execute(
+            `
+            SELECT * 
+            FROM Playlist 
+            WHERE id_playlist = ?`,
+            [id_lista]
+        );
+
+        if (checkPlaylistType.rows.length > 0) {
+            // Es una playlist de canciones, eliminar de Canciones_en_playlist
+            await client.execute(
+                `
+                DELETE FROM Canciones_en_playlist 
+                WHERE id_playlist = ? AND id_cancion = ?`,
+                [id_lista, id_cm]
+            );
+
+            return res.status(200).json({ message: "Canción eliminada de la lista correctamente" });
+        }
+
+        // Si no está en Playlist, verificar si es una lista de episodios
+        const checkEpisodeList = await client.execute(
+            `
+            SELECT * 
+            FROM Lista_Episodios 
+            WHERE id_lista_ep = ?`,
+            [id_lista]
+        );
+
+        if (checkEpisodeList.rows.length > 0) {
+            // Es una lista de episodios, eliminar de Episodios_de_lista
+            await client.execute(
+                `
+                DELETE FROM Episodios_de_lista 
+                WHERE id_lista_ep = ? AND id_ep = ?`,
+                [id_lista, id_cm]
+            );
+
+            return res
+                .status(200)
+                .json({ message: "Episodio eliminado de la lista correctamente" });
+        }
+
+        res.status(400).json({
+            message: "La lista no existe o el contenido multimedia no se encuentra en ella",
+        });
+    } catch (error) {
+        console.error("Error al eliminar contenido multimedia de la lista:", error);
+        res.status(500).json({
+            message: "Hubo un error al eliminar el contenido multimedia de la lista",
+        });
+    }
+};
+
+const deleteList = async (req, res) => {
+    try {
+        const { id_lista } = req.query;
+
+        // Verificar si la lista existe en Playlist
+        const checkPlaylist = await client.execute(
+            `
+            SELECT id_playlist FROM Playlist WHERE id_playlist = ?`,
+            [id_lista]
+        );
+
+        if (checkPlaylist.rows.length > 0) {
+            // Si es una playlist de canciones, eliminarla
+            await client.execute(`DELETE FROM Playlist WHERE id_playlist = ?`, [id_lista]);
+            await client.execute(`DELETE FROM Lista_reproduccion WHERE id_lista = ?`, [id_lista]);
+
+            return res.status(200).json({ message: "Playlist eliminada correctamente" });
+        }
+
+        // Verificar si la lista existe en Lista_Episodios
+        const checkEpisodeList = await client.execute(
+            `
+            SELECT id_lista_ep FROM Lista_Episodios WHERE id_lista_ep = ?`,
+            [id_lista]
+        );
+
+        if (checkEpisodeList.rows.length > 0) {
+            // Si es una lista de episodios, eliminarla
+            await client.execute(`DELETE FROM Lista_Episodios WHERE id_lista_ep = ?`, [id_lista]);
+            await client.execute(`DELETE FROM Lista_reproduccion WHERE id_lista = ?`, [id_lista]);
+
+            return res.status(200).json({ message: "Lista de episodios eliminada correctamente" });
+        }
+
+        res.status(400).json({ message: "La lista no existe" });
+    } catch (error) {
+        console.error("Error al eliminar la lista:", error);
+        res.status(500).json({ message: "Hubo un error al eliminar la lista" });
+    }
+};
+
+module.exports = { getListData, removeCMFromList, deleteList };

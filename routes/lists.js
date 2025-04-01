@@ -1,6 +1,6 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { getListData } = require('../controllers/listsController');
+const { getListData, removeCMFromList, deleteList } = require("../controllers/listsController");
 
 /**
  * @swagger
@@ -75,7 +75,7 @@ const { getListData } = require('../controllers/listsController');
  *                           type: string
  *                           format: date
  *                           description: Fecha de publicación del contenido multimedia YYYY-MM-DD
- *                           example: "2021-09-30" 
+ *                           example: "2021-09-30"
  *                         nombre_creador:
  *                           type: string
  *                           description: Nombre del creador de la canción o '' para el creador de un episodio.
@@ -114,6 +114,110 @@ const { getListData } = require('../controllers/listsController');
  *                     type: string
  */
 
-router.get('/get-list-data', getListData);
+router.get("/get-list-data", getListData);
+
+/**
+ * @swagger
+ * /remove-cm-from:
+ *   delete:
+ *     summary: Eliminar una canción o episodio de una lista.
+ *     description: Elimina una canción de una lista de reproducción o un episodio de una lista de episodios según el ID de la lista y el ID del contenido multimedia.
+ *     tags:
+ *       - Lists
+ *     parameters:
+ *       - in: query
+ *         name: id_cm
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del contenido multimedia (canción o episodio) a eliminar.
+ *       - in: query
+ *         name: id_lista
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID de la lista de reproducción o lista de episodios de la cual eliminar el contenido.
+ *     responses:
+ *       200:
+ *         description: Contenido eliminado correctamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Canción eliminada de la lista correctamente"
+ *       400:
+ *         description: La lista no existe o el contenido no se encuentra en ella.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "La lista no existe o el contenido multimedia no se encuentra en ella"
+ *       500:
+ *         description: Error interno del servidor al eliminar el contenido.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Hubo un error al eliminar el contenido multimedia de la lista"
+ */
+router.post("/remove-cm-from", removeCMFromList);
+
+/**
+ * @swagger
+ * /delete-list:
+ *   delete:
+ *     summary: Eliminar una lista de reproducción o una lista de episodios.
+ *     description: Elimina una lista de reproducción si existe en la tabla Playlist o una lista de episodios si está en Lista_Episodios.
+ *     tags:
+ *       - Lists
+ *     parameters:
+ *       - in: query
+ *         name: id_lista
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID de la lista de reproducción o lista de episodios a eliminar.
+ *     responses:
+ *       200:
+ *         description: Lista eliminada correctamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Playlist eliminada correctamente"
+ *       400:
+ *         description: La lista no existe.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "La lista no existe"
+ *       500:
+ *         description: Error interno del servidor al eliminar la lista.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Hubo un error al eliminar la lista"
+ */
+router.post("/delete-list", deleteList);
 
 module.exports = router;
