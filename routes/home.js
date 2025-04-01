@@ -33,7 +33,7 @@ const { getHomePodcast } = require('../controllers/homePodcastController');
  *                       type: object
  *                       properties:
  *                         id_podcast:
- *                           type: string
+ *                           type: integer
  *                           description: El ID único del podcast.
  *                         nombre:
  *                           type: string
@@ -48,7 +48,7 @@ const { getHomePodcast } = require('../controllers/homePodcastController');
  *                       type: object
  *                       properties:
  *                         id_lista:
- *                           type: string
+ *                           type: integer
  *                           description: El ID de la lista de reproducción.
  *                         nombre:
  *                           type: string
@@ -63,7 +63,7 @@ const { getHomePodcast } = require('../controllers/homePodcastController');
  *                       type: object
  *                       properties:
  *                         id_lista:
- *                           type: string
+ *                           type: integer
  *                           description: El ID de la lista de reproducción.
  *                         nombre:
  *                           type: string
@@ -78,7 +78,7 @@ const { getHomePodcast } = require('../controllers/homePodcastController');
  *                       type: object
  *                       properties:
  *                         id_lista:
- *                           type: string
+ *                           type: integer
  *                           description: El ID de la lista de reproducción.
  *                         nombre:
  *                           type: string
