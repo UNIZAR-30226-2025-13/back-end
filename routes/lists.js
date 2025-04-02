@@ -119,7 +119,7 @@ router.get("/get-list-data", getListData);
 /**
  * @swagger
  * /remove-cm-from:
- *   delete:
+ *   post:
  *     summary: Eliminar una canción o episodio de una lista.
  *     description: Elimina una canción de una lista de reproducción o un episodio de una lista de episodios según el ID de la lista y el ID del contenido multimedia.
  *     tags:
@@ -174,7 +174,7 @@ router.post("/remove-cm-from", removeCMFromList);
 /**
  * @swagger
  * /delete-list:
- *   delete:
+ *   post:
  *     summary: Eliminar una lista de reproducción o una lista de episodios.
  *     description: Elimina una lista de reproducción si existe en la tabla Playlist o una lista de episodios si está en Lista_Episodios.
  *     tags:
