@@ -1,7 +1,6 @@
 const client = require("../../db");
 const utils = require("../utils/buscadorUtils");
 
-// Función que contiene la lógica de negocio para obtener contenido multimedia similar
 const obtenerMultimediaSimilares = async (cadena) => {
     if (!cadena) {
         throw new Error("La cadena no puede estar vacía");
@@ -10,41 +9,37 @@ const obtenerMultimediaSimilares = async (cadena) => {
     const cadenaNormalizada = utils.quitarTildesYPuntuacion(cadena);
 
     // Consulta para obtener todos los contenidos multimedia
-    const result = await client.execute(`SELECT id_cm, titulo, link_imagen, duracion, fecha_pub
-                                         FROM Contenido_multimedia`);
+    const result = await client.execute(
+        `SELECT id_cm, titulo, link_imagen, duracion, fecha_pub FROM Contenido_multimedia`
+    );
 
-    // Filtrar los contenidos que contienen la subcadena
-    const multimediaFiltrados = result.rows.filter((cm) => {
-        const nombreNormalizado = utils.quitarTildesYPuntuacion(cm.titulo);
-        return utils.contieneSubcadena(cadenaNormalizada, nombreNormalizado);
-    });
+    // Filtrar los contenidos con similitud válida
+    const multimediaConSimilitud = result.rows
+        .map((cm) => {
+            const nombreNormalizado = utils.quitarTildesYPuntuacion(cm.titulo);
+            const palabras = nombreNormalizado.split(" ");
 
-    if (multimediaFiltrados.length === 0) {
+            const minDistancia = Math.min(
+                ...palabras.map((palabra) => utils.calcularLevenshtein(cadenaNormalizada, palabra)),
+                Number.MAX_VALUE
+            );
+
+            return { ...cm, similitud: minDistancia };
+        })
+        .filter((cm) => cm.similitud !== Number.MAX_VALUE); // Evita elementos sin coincidencias
+
+    if (multimediaConSimilitud.length === 0) {
         throw new Error("No se encontraron contenidos multimedia similares.");
     }
 
-    // Ordenar los contenidos por la cantidad de palabras que contienen la subcadena
-    const multimediaConSimilitud = multimediaFiltrados.map((cm) => {
-        const nombreNormalizado = utils.quitarTildesYPuntuacion(cm.titulo);
-        const palabras = nombreNormalizado.split(" ");
-        const coincidencias = palabras.filter((palabra) =>
-            utils.contieneSubcadena(cadenaNormalizada, palabra)
-        ).length;
-        return {
-            ...cm,
-            similitud: coincidencias,
-        };
-    });
-
-    // Ordenar por la cantidad de coincidencias (más coincidencias = más relevante)
-    multimediaConSimilitud.sort((a, b) => b.similitud - a.similitud);
+    // Ordenar por similitud (menor distancia = más relevante)
+    multimediaConSimilitud.sort((a, b) => a.similitud - b.similitud);
 
     // Tomamos los 10 primeros resultados
     const top10 = multimediaConSimilitud.slice(0, 10);
-
     const idsTop10 = top10.map((c) => c.id_cm);
 
-    // Obtener los episodios relacionados
+    // Obtener episodios relacionados
     const episodiosResult = await client.execute(
         `SELECT e.id_ep AS id_ep, e.id_podcast, p.nombre AS nombre_podcast 
          FROM Episodio e
@@ -58,8 +53,8 @@ const obtenerMultimediaSimilares = async (cadena) => {
         episodiosMap.set(ep.id_ep, ep.nombre_podcast);
     });
 
-    // Obtener los artistas principales y featurings
-    const cantantes_result = await client.execute(
+    // Obtener artistas principales y featurings
+    const cantantesResult = await client.execute(
         `SELECT 
             a.nombre_artista, 
             a.id_cancion,
@@ -71,29 +66,21 @@ const obtenerMultimediaSimilares = async (cadena) => {
         idsTop10
     );
 
-    const cantantesSet = new Map();
-    const featuringSet = new Map();
-    cantantes_result.rows.forEach((cant) => {
-        cantantesSet.set(cant.id_cancion, cant.nombre_artista);
-        featuringSet.set(cant.id_cancion, cant.artistas_feat);
+    const cantantesMap = new Map();
+    const featuringMap = new Map();
+    cantantesResult.rows.forEach((cant) => {
+        cantantesMap.set(cant.id_cancion, cant.nombre_artista);
+        featuringMap.set(cant.id_cancion, cant.artistas_feat);
     });
 
-    // Mapear los contenidos multimedia y asignar tipo, nombre del podcast, artistas, etc.
-    const top10Completo = top10.map((cm) => {
-        const tipo = episodiosMap.has(cm.id_cm) ? "Episodio" : "Canción";
-        const nombrePodcast = episodiosMap.get(cm.id_cm) || null;
-        const nombreArtista = cantantesSet.get(cm.id_cm) || null;
-        const nombreFeat = featuringSet.get(cm.id_cm) || null;
-        return {
-            ...cm,
-            tipo,
-            podcast: nombrePodcast,
-            cantante: nombreArtista,
-            feat: nombreFeat,
-        };
-    });
-
-    return top10Completo;
+    // Mapear los contenidos multimedia
+    return top10.map((cm) => ({
+        ...cm,
+        tipo: episodiosMap.has(cm.id_cm) ? "Episodio" : "Canción",
+        podcast: episodiosMap.get(cm.id_cm) || null,
+        cantante: cantantesMap.get(cm.id_cm) || null,
+        feat: featuringMap.get(cm.id_cm) || null,
+    }));
 };
 
 // Función que maneja la petición HTTP
@@ -106,7 +93,8 @@ const getSimilarMultimedia = async (req, res) => {
         }
 
         // Llamada a la función que contiene la lógica de negocio
-        const multimediaSimilares = await obtenerMultimediaSimilares(cadena);
+        //const multimediaSimilares = await obtenerMultimediaSimilares(cadena);
+        const multimediaSimilares = await popularSongs(cadena);
 
         return res.status(200).json({ top10Completo: multimediaSimilares });
     } catch (error) {

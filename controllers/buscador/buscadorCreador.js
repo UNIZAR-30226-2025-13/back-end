@@ -7,20 +7,23 @@ const obtenerCreadoresSimilares = async (cadena) => {
         throw new Error("La cadena no puede estar vacía");
     }
 
-    const cadenaNormalizada = utils.quitarTildesYPuntuacion(cadena);
+    // Normalizar la cadena de entrada (eliminar tildes y puntuación) y quitar los espacios
+    const cadenaNormalizada = utils.quitarTildesYPuntuacion(cadena.replace(/\s+/g, ""));
 
     // Consulta para obtener todos los creadores
     const result = await client.execute(`SELECT nombre_creador, link_imagen FROM Creador`);
 
     // Calcular la similitud de cada creador
     const creadoresConSimilitud = result.rows.map((creador) => {
-        const nombreNormalizado = utils.quitarTildesYPuntuacion(creador.nombre_creador);
-        const palabras = nombreNormalizado.split(" ");
-
-        // Calcular la distancia más baja contra cualquier palabra
-        const minDistancia = Math.min(
-            ...palabras.map((palabra) => utils.calcularLevenshtein(cadenaNormalizada, palabra))
+        // Normalizar el nombre del creador (eliminar tildes y puntuación) y quitar los espacios
+        const nombreNormalizado = utils.quitarTildesYPuntuacion(
+            creador.nombre_creador.replace(/\s+/g, "")
         );
+
+        // Calcular la distancia más baja contra cualquier palabra de la cadena de entrada
+        const minDistancia = utils.calcularLevenshtein(cadenaNormalizada, nombreNormalizado);
+
+        console.log(creador.nombre_creador + " -> Similitud: " + minDistancia);
 
         return {
             ...creador,
