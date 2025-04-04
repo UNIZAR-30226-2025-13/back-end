@@ -94,7 +94,7 @@ const getSimilarMultimedia = async (req, res) => {
 
         // Llamada a la función que contiene la lógica de negocio
         //const multimediaSimilares = await obtenerMultimediaSimilares(cadena);
-        const multimediaSimilares = await popularSongs(cadena);
+        const multimediaSimilares = await obtenerMultimediaSimilares(cadena);
 
         return res.status(200).json({ top10Completo: multimediaSimilares });
     } catch (error) {
