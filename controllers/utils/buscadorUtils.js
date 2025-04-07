@@ -42,9 +42,18 @@ const contieneSubcadena = (cadena, texto) => {
     return texto.includes(cadena); // Verifica si la cadena está contenida en el título
 };
 
+function bonificacionPrefijo(nombre, cadena) {
+    let i = 0;
+    while (i < nombre.length && i < cadena.length && nombre[i] === cadena[i]) {
+        i++;
+    }
+    return i; // número de caracteres que coinciden desde el inicio
+}
+
 module.exports = {
     quitarTildesYPuntuacion,
     calcularLevenshtein,
     calcularSimilitud,
     contieneSubcadena,
+    bonificacionPrefijo,
 };

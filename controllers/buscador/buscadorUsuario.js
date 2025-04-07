@@ -1,5 +1,6 @@
 const client = require("../../db");
 const utils = require("../utils/buscadorUtils");
+const { distance } = require("fastest-levenshtein");
 
 // Función que contiene la lógica de negocio para obtener usuarios similares
 const obtenerUsuariosSimilares = async (cadena) => {
@@ -15,33 +16,24 @@ const obtenerUsuariosSimilares = async (cadena) => {
         FROM Usuario;
     `);
 
-    // Filtrar los usuarios que contienen la subcadena
-    const usuariosFiltrados = result.rows.filter((usuario) => {
-        const nombreNormalizado = utils.quitarTildesYPuntuacion(usuario.nombre_usuario);
-        return utils.contieneSubcadena(cadenaNormalizada, nombreNormalizado);
-    });
-
-    if (usuariosFiltrados.length === 0) {
-        throw new Error("No se encontraron usuarios similares.");
-    }
-
     // Ordenar los usuarios por la cantidad de coincidencias
-    const usuariosConSimilitud = usuariosFiltrados.map((usuario) => {
+    const usuariosConSimilitud = result.rows.map((usuario) => {
         const nombreNormalizado = utils.quitarTildesYPuntuacion(usuario.nombre_usuario);
-        const palabras = nombreNormalizado.split(" ");
 
-        const coincidencias = palabras.filter((palabra) =>
-            utils.contieneSubcadena(cadenaNormalizada, palabra)
-        ).length;
+        let dist = distance(cadenaNormalizada, nombreNormalizado);
+
+        // Bonificación proporcional a la coincidencia inicial
+        const bono = utils.bonificacionPrefijo(nombreNormalizado, cadenaNormalizada);
+        dist -= bono; // Cuanto más coincidan al principio, más se resta
 
         return {
             ...usuario,
-            similitud: coincidencias,
+            similitud: Math.max(0, dist),
         };
     });
 
     // Ordenar por la cantidad de coincidencias (más coincidencias = más relevante)
-    usuariosConSimilitud.sort((a, b) => b.similitud - a.similitud);
+    usuariosConSimilitud.sort((a, b) => a.similitud - b.similitud);
 
     // Tomamos los 10 primeros resultados
     const top10 = usuariosConSimilitud.slice(0, 10);

@@ -1,5 +1,6 @@
 const client = require("../../db");
 const utils = require("../utils/buscadorUtils");
+const { distance } = require("fastest-levenshtein");
 
 // Función que contiene la lógica de negocio para obtener creadores similares
 const obtenerCreadoresSimilares = async (cadena) => {
@@ -16,18 +17,20 @@ const obtenerCreadoresSimilares = async (cadena) => {
     // Calcular la similitud de cada creador
     const creadoresConSimilitud = result.rows.map((creador) => {
         // Normalizar el nombre del creador (eliminar tildes y puntuación) y quitar los espacios
-        const nombreNormalizado = utils.quitarTildesYPuntuacion(
-            creador.nombre_creador.replace(/\s+/g, "")
-        );
+        const nombreNormalizado = utils.quitarTildesYPuntuacion(creador.nombre_creador);
 
         // Calcular la distancia más baja contra cualquier palabra de la cadena de entrada
-        const minDistancia = utils.calcularLevenshtein(cadenaNormalizada, nombreNormalizado);
+        let dist = distance(cadenaNormalizada, nombreNormalizado);
 
-        console.log(creador.nombre_creador + " -> Similitud: " + minDistancia);
+        // Bonificación proporcional a la coincidencia inicial
+        const bono = utils.bonificacionPrefijo(nombreNormalizado, cadenaNormalizada);
+        dist -= bono; // Cuanto más coincidan al principio, más se resta
+
+        console.log(creador.nombre_creador + " -> Similitud: " + dist);
 
         return {
             ...creador,
-            similitud: minDistancia,
+            similitud: Math.max(0, dist),
         };
     });
 

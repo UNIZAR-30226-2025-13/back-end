@@ -1,5 +1,6 @@
 const client = require("../../db");
 const utils = require("../utils/buscadorUtils");
+const { distance } = require("fastest-levenshtein");
 
 // Función que contiene la lógica de negocio para obtener listas similares
 const obtenerListasSimilares = async (cadena) => {
@@ -17,15 +18,15 @@ const obtenerListasSimilares = async (cadena) => {
     // Mapeamos las listas con similitud usando Levenshtein
     const listasConSimilitud = result.rows.map((lista) => {
         const nombreNormalizado = utils.quitarTildesYPuntuacion(lista.nombre);
-        const palabras = nombreNormalizado.split(" ");
+        let dist = distance(cadenaNormalizada, nombreNormalizado);
 
-        const minDistancia = Math.min(
-            ...palabras.map((palabra) => utils.calcularLevenshtein(cadenaNormalizada, palabra))
-        );
+        // Bonificación proporcional a la coincidencia inicial
+        const bono = utils.bonificacionPrefijo(nombreNormalizado, cadenaNormalizada);
+        dist -= bono; // Cuanto más coincidan al principio, más se resta
 
         return {
             ...lista,
-            similitud: minDistancia,
+            similitud: Math.max(0, dist),
         };
     });
 

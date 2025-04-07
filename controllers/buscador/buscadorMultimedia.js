@@ -1,5 +1,6 @@
 const client = require("../../db");
 const utils = require("../utils/buscadorUtils");
+const { distance } = require("fastest-levenshtein");
 
 const obtenerMultimediaSimilares = async (cadena) => {
     if (!cadena) {
@@ -17,14 +18,14 @@ const obtenerMultimediaSimilares = async (cadena) => {
     const multimediaConSimilitud = result.rows
         .map((cm) => {
             const nombreNormalizado = utils.quitarTildesYPuntuacion(cm.titulo);
-            const palabras = nombreNormalizado.split(" ");
 
-            const minDistancia = Math.min(
-                ...palabras.map((palabra) => utils.calcularLevenshtein(cadenaNormalizada, palabra)),
-                Number.MAX_VALUE
-            );
+            let dist = distance(cadenaNormalizada, nombreNormalizado);
 
-            return { ...cm, similitud: minDistancia };
+            // Bonificación proporcional a la coincidencia inicial
+            const bono = utils.bonificacionPrefijo(nombreNormalizado, cadenaNormalizada);
+            dist -= bono; // Cuanto más coincidan al principio, más se resta
+
+            return { ...cm, similitud: Math.max(0, dist) };
         })
         .filter((cm) => cm.similitud !== Number.MAX_VALUE); // Evita elementos sin coincidencias
 
