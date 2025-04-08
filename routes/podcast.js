@@ -77,7 +77,7 @@ router.get('/get-episode', getEpisode);
  *     description: Devuelve toda la información necesaria para mostrar la pantalla de un podcast.
  *     parameters:
  *       - in: query
- *         name: id_ep
+ *         name: id_podcast
  *         required: true
  *         schema:
  *           type: integer
