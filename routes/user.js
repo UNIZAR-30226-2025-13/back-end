@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { getProfile, changePassword, getLists, createList, getPlaylists, getPublicLists, changeListPrivacy, deleteAccount } = require('../controllers/userController');
+const { getProfile, changePassword, getLists, createList, getPlaylists, getEpisodeLists, getPublicLists, changeListPrivacy, deleteAccount } = require('../controllers/userController');
 
 const { verifyToken } = require('../middleware/autorizationMiddleware');
 
@@ -245,7 +245,7 @@ router.get("/get-user-library",  getLists);
  * @swagger
  * /get-playlists:
  *   get:
- *     summary: Obtiene las playlists del usuario (excluyendo "Tus canciones favoritas" y "Tus episodios favoritos")
+ *     summary: Obtiene las playlists del usuario (excluyendo "Tus canciones favoritas")
  *     tags: [Usuarios]
  *     parameters:
  *       - in: query
@@ -293,6 +293,56 @@ router.get("/get-user-library",  getLists);
  */
 router.get("/get-playlists", getPlaylists);
 
+/**
+ * @swagger
+ * /get-episode-lists:
+ *   get:
+ *     summary: Obtiene las listas de episodios del usuario (excluyendo "Tus episodios favoritos")
+ *     tags: [Usuarios]
+ *     parameters:
+ *       - in: query
+ *         name: nombre_usuario
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Nombre de usuario para obtener sus listas de episodios
+ *     responses:
+ *       200:
+ *         description: Listas de episodios obtenidas correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id_lista:
+ *                     type: integer
+ *                     example: 15
+ *                   nombre:
+ *                     type: string
+ *       400:
+ *         description: Faltan parámetros en la solicitud
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Falta el parámetro nombre_usuario"
+ *       500:
+ *         description: Error interno al obtener las listas de episodios
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Hubo un error al obtener las listas de episodios"
+ */
+router.get("/get-episode-lists", getEpisodeLists);
 
 /**
  * @swagger

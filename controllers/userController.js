@@ -116,20 +116,28 @@ const getLists = async (req, res) => {
     }
 }
 
-
+// Dado un nombre de usuario devuelve todas las playlists que tiene
 const getPlaylists = async (req, res) => {
     try {
         const { nombre_usuario } = req.query; // obtener nombre_usuario
 
         // Obtener listas y carpetas del usuario
         const listasResult = await client.execute(
-            'SELECT lr.id_lista, lr.nombre FROM Lista_reproduccion lr JOIN Listas_del_usuario lu ON lr.id_lista = lu.id_lista WHERE lu.nombre_usuario = ?;',
+            `SELECT lr.id_lista, lr.nombre 
+             FROM Lista_reproduccion lr 
+             JOIN Listas_del_usuario lu ON lr.id_lista = lu.id_lista 
+             JOIN Playlist p ON lr.id_lista = p.id_playlist
+             WHERE lu.nombre_usuario = ?;`,
             [nombre_usuario]
         );
         const listas = listasResult.rows || []; // Acceder a 'rows'
 
         const listas_en_carpetasResult = await client.execute(
-            'SELECT lr.id_lista, lr.nombre FROM Lista_reproduccion lr JOIN Listas_de_carpeta lc ON lr.id_lista = lc.id_lista WHERE EXISTS (SELECT 1 FROM Carpetas_del_Usuario cu WHERE cu.id_carpeta = lc.id_carpeta AND cu.nombre_usuario = ?);',
+            `SELECT lr.id_lista, lr.nombre 
+             FROM Lista_reproduccion lr 
+             JOIN Listas_de_carpeta lc ON lr.id_lista = lc.id_lista
+             JOIN Playlist p ON lr.id_lista = p.id_playlist 
+             WHERE EXISTS (SELECT 1 FROM Carpetas_del_Usuario cu WHERE cu.id_carpeta = lc.id_carpeta AND cu.nombre_usuario = ?);`,
             [nombre_usuario]
         );
         const listas_en_carpetas = listas_en_carpetasResult.rows || []; // Acceder a 'rows'
@@ -139,7 +147,7 @@ const getPlaylists = async (req, res) => {
 
         // Filtrar las listas específicas que no quieres incluir
         const listas_filtradas = todas_las_listas.filter(lista => 
-            lista.nombre !== 'Tus canciones favoritas' && lista.nombre !== 'Tus episodios favoritos'
+            lista.nombre !== 'Tus canciones favoritas'
         );
 
         // Eliminar duplicados si es necesario, por ejemplo, si las listas tienen el mismo id_lista
@@ -151,8 +159,55 @@ const getPlaylists = async (req, res) => {
         res.status(200).json(listas_unicas);
 
     } catch (error) {
-        console.error("Error al obtener listas:", error);
-        res.status(500).json({ message: "Hubo un error al obtener las listas" });
+        console.error("Error al obtener playlists:", error);
+        res.status(500).json({ message: "Hubo un error al obtener las playlists" });
+    }
+};
+
+// Dado un usuario, muestra todas las listas de episodios que tiene
+const getEpisodeLists = async (req, res) => {
+    try {
+        const { nombre_usuario } = req.query; // obtener nombre_usuario
+
+        const listasResult = await client.execute(
+            `SELECT lr.id_lista, lr.nombre 
+             FROM Lista_reproduccion lr 
+             JOIN Listas_del_usuario lu ON lr.id_lista = lu.id_lista 
+             JOIN Lista_Episodios le ON lr.id_lista = le.id_lista_ep
+             WHERE lu.nombre_usuario = ?;`,
+            [nombre_usuario]
+        );
+        const listas = listasResult.rows || [];
+
+        const listas_en_carpetasResult = await client.execute(
+            `SELECT lr.id_lista, lr.nombre 
+             FROM Lista_reproduccion lr 
+             JOIN Listas_de_carpeta lc ON lr.id_lista = lc.id_lista 
+             JOIN Lista_Episodios le ON lr.id_lista = le.id_lista_ep
+             WHERE EXISTS (SELECT 1 FROM Carpetas_del_Usuario cu WHERE cu.id_carpeta = lc.id_carpeta AND cu.nombre_usuario = ?);`,
+            [nombre_usuario]
+        );
+        const listas_en_carpetas = listas_en_carpetasResult.rows || [];
+
+        // Unir listas y listas_en_carpetas
+        const todas_las_listas = [...listas, ...listas_en_carpetas];
+
+        // Filtrar las listas específicas que no quieres incluir
+        const listas_filtradas = todas_las_listas.filter(lista => 
+            lista.nombre !== 'Tus episodios favoritos'
+        );
+
+        // Eliminar duplicados si es necesario, por ejemplo, si las listas tienen el mismo id_lista
+        const listas_unicas = [
+            ...new Map(listas_filtradas.map(item => [item.id_lista, item])).values()
+        ];
+
+        // Devolver el resultado combinado
+        res.status(200).json(listas_unicas);
+
+    } catch (error) {
+        console.error("Error al obtener listas de episodios:", error);
+        res.status(500).json({ message: "Hubo un error al obtener las listas de episodios" });
     }
 };
 
@@ -323,5 +378,5 @@ const deleteAccount = async (req, res) => {
 };
 
 
-module.exports = { getProfile, changePassword, getLists, createList, getPlaylists, getPublicLists, changeListPrivacy, deleteAccount };
+module.exports = { getProfile, changePassword, getLists, createList, getPlaylists, getEpisodeLists, getPublicLists, changeListPrivacy, deleteAccount };
 
