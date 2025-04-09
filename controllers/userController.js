@@ -377,6 +377,74 @@ const deleteAccount = async (req, res) => {
     }
 };
 
+const getFriendsList = async (req, res) => {
+    try {
+        const { nombre_usuario } = req.query;
 
-module.exports = { getProfile, changePassword, getLists, createList, getPlaylists, getEpisodeLists, getPublicLists, changeListPrivacy, deleteAccount };
+        if (!nombre_usuario) {
+            return res.status(400).json({ message: "Hay que rellenar todos los campos" });
+        }
+
+        // Comprobamos que exista el usuario
+        const result_usuario = await client.execute("SELECT * FROM Usuario WHERE nombre_usuario = ?", [nombre_usuario]);
+        if (result_usuario.rows.length === 0) {
+            return res.status(400).json({ message: "El usuario no existe" });
+        }
+        
+        // Obtener la lista de amigos (usuarios que se siguen mutuamente)
+        const result_amigos = await client.execute(
+            `SELECT s1.nombre_usuario2 AS amigo
+             FROM Sigue_a_usuario s1
+             JOIN Sigue_a_usuario s2 ON s1.nombre_usuario2 = s2.nombre_usuario1
+             WHERE s1.nombre_usuario1 = ? AND s2.nombre_usuario2 = ?`, [nombre_usuario, nombre_usuario]);
+
+        const amigos = result_amigos.rows.map(row => row.amigo);
+
+        res.status(200).json({ amigos });
+
+    } catch (error) {
+        console.error("Error al mostrar la lista de amigos del usuario:", error);
+        res.status(500).json({ message: "Hubo un error al mostrar la lista de amigos del usuario" });
+    }
+};
+
+const getNumberFollowersAndFollowing = async (req, res) => {
+    try {
+        const { nombre_usuario } = req.query;
+
+        if (!nombre_usuario) {
+            return res.status(400).json({ message: "Hay que rellenar todos los campos" });
+        }
+
+        // Comprobamos que exista el usuario
+        const result_usuario = await client.execute("SELECT * FROM Usuario WHERE nombre_usuario = ?", [nombre_usuario]);
+        if (result_usuario.rows.length === 0) {
+            return res.status(400).json({ message: "El usuario no existe" });
+        }
+
+        // Obtener el número de seguidores y seguidos
+        const result = await client.execute(
+            `SELECT COUNT(*) AS num_seguidores
+             FROM Sigue_a_usuario
+             WHERE nombre_usuario2 = ?`, [nombre_usuario]);
+
+        const num_seguidores = result.rows[0].num_seguidores;
+
+        const result2 = await client.execute(
+            `SELECT COUNT(*) AS num_seguidos
+             FROM Sigue_a_usuario
+             WHERE nombre_usuario1 = ?`, [nombre_usuario]);
+
+        const num_seguidos = result2.rows[0].num_seguidos;
+
+        res.status(200).json({ num_seguidores, num_seguidos });
+
+    } catch (error) {
+        console.error("Error al obtener el número de seguidores y seguidos:", error);
+        res.status(500).json({ message: "Hubo un error al obtener el número de seguidores y seguidos" });
+    }
+}
+
+
+module.exports = { getProfile, changePassword, getLists, createList, getPlaylists, getEpisodeLists, getPublicLists, changeListPrivacy, deleteAccount, getFriendsList, getNumberFollowersAndFollowing };
 
