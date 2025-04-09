@@ -132,3 +132,5 @@ dist
 
 # Base de datos
 local.db*
+
+/uploads
