@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { getProfile, changePassword, getLists, createList, getPlaylists, getEpisodeLists, getPublicLists, changeListPrivacy, deleteAccount } = require('../controllers/userController');
+const { getProfile, changePassword, getLists, createList, getPlaylists, getEpisodeLists, getPublicLists, changeListPrivacy, deleteAccount, getFriendsList, getNumberFollowersAndFollowing } = require('../controllers/userController');
 
 const { verifyToken } = require('../middleware/autorizationMiddleware');
 
@@ -564,5 +564,54 @@ router.post("/change-list-privacy", changeListPrivacy);
  *                   example: "Hubo un error al eliminar la cuenta"
  */
 router.post("/delete-account", deleteAccount);
+
+/**
+ * @swagger
+ * /get-friends-list:
+ *   get:
+ *     summary: Obtiene las lista de amigos del usuario (se siguen mutuamente)
+ *     tags: [Usuarios]
+ *     parameters:
+ *       - in: query
+ *         name: nombre_usuario
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Nombre de usuario para obtener su lista de amigos
+ *     responses:
+ *       200:
+ *         description: Lista de amigos obtenida correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: string
+ *                 example: "username123"
+ *       400:
+ *         description: Error en la solicitud (faltan parámetros o usuario no existe)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Hay que rellenar todos los campos"
+ *       500:
+ *         description: Error al mostrar la lista de amigos del usuario
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Hubo un error al mostrar la lista de amigos del usuario"
+ */
+router.get("/get-friends-list", getFriendsList);
+
+router.get("/get-number-followers-and-following", getNumberFollowersAndFollowing);
+
 
 module.exports = router;
