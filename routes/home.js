@@ -449,6 +449,8 @@ router.get('/home-music', getHomeMusic);
  *                  podcast:
  *                    type: object
  *                    properties:
+ *                      id_podcast:
+ *                        type: integer
  *                      nombre_podcast:
  *                        type: string
  *                      foto_podcast:
