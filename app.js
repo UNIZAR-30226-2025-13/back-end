@@ -75,6 +75,7 @@ const favoritos = require("./routes/favourites");
 const song = require("./routes/song");
 const podcast = require("./routes/podcast");
 const valoraciones = require("./routes/rates");
+const mensajes = require("./routes/messages");
 
 // hace que las rutas empiecen por esa palabra
 // ej: si pones app.use("/usuario", usuario); la ruta para login es http://localhost:8080/usuario/login
@@ -94,6 +95,7 @@ app.use(favoritos);
 app.use("/song", song);
 app.use(podcast);
 app.use(valoraciones);
+app.use(mensajes);
 
 
 // prueba inicial

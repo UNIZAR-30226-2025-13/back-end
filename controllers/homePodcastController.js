@@ -82,6 +82,7 @@ const getHomePodcast = async (req, res) => {
             listas_podcasters_info: listas_podcasters_final,
             listas_aleatorio_info: listas_aleatorio_info,
             podcast: {
+                id_podcast: podcast_random.id_podcast,
                 nombre_podcast: podcast_random.nombre,
                 foto_podcast: podcast_random.link_imagen,
                 episodios_recientes: episodios_random_result.rows
