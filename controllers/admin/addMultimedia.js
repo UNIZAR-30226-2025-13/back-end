@@ -202,10 +202,10 @@ const uploadFileToCloudinary = async (req, res) => {
         }
         // Respuesta exitosa
         res.json({
-            message: "Archivos subidos con éxito",
+            message: "Multimedia creado con éxito",
         });
     } catch (error) {
-        console.error("Error al subir archivos:", error);
+        console.error("Error creando multimedia:", error);
         res.status(500).json({
             error: "Error al subir los archivos a Cloudinary o al insertar en la base de datos",
         });

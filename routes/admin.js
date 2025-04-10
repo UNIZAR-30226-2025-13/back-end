@@ -8,6 +8,7 @@ module.exports = (io) => {
     const multer = require("multer");
     const cloudinary = require("cloudinary").v2;
     const { uploadFileToCloudinary } = require("../controllers/admin/addMultimedia");
+    const { uploadAlbum } = require("../controllers/admin/addAlbum");
 
     const app = express();
     const upload = multer({ dest: "uploads/" }); // Carpeta temporal para archivos
@@ -137,6 +138,75 @@ module.exports = (io) => {
         ]),
         uploadFileToCloudinary
     );
+
+    /**
+     * @swagger
+     * /admin/upload-album:
+     *   post:
+     *     summary: Crea un nuevo álbum con su respectiva portada e información.
+     *     tags: [Admin]
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         multipart/form-data:
+     *           schema:
+     *             type: object
+     *             required:
+     *               - imagen
+     *               - nombre_album
+     *               - creadores
+     *               - fecha_pub
+     *             properties:
+     *               imagen:
+     *                 type: string
+     *                 format: binary
+     *                 description: Imagen de portada del álbum.
+     *               nombre_album:
+     *                 type: string
+     *                 description: Nombre del álbum.
+     *                 example: Mi Primer Álbum
+     *               creadores:
+     *                 type: string
+     *                 description: Nombres de los creadores separados por comas.
+     *                 example: Artista1, Artista2
+     *               fecha_pub:
+     *                 type: string
+     *                 format: date
+     *                 description: Fecha de publicación en formato AAAA-MM-DD.
+     *                 example: 2024-05-01
+     *     responses:
+     *       200:
+     *         description: Álbum creado con éxito.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 message:
+     *                   type: string
+     *                   example: Album creado con éxito
+     *       400:
+     *         description: Parámetros faltantes o archivo no enviado.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: string
+     *                   example: Faltan parámetros básicos como nombre, creadores o fecha de publicación
+     *       500:
+     *         description: Error interno al subir la portada o insertar en la base de datos.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: string
+     *                   example: Error al subir la portada a Cloudinary o al insertarlo en la BD
+     */
+    router.post("/upload-album", upload.fields([{ name: "imagen", maxCount: 1 }]), uploadAlbum);
 
     return router;
 };
