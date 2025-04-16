@@ -11,7 +11,7 @@ const io = new Server(server, {
     cors: { origin: ["http://localhost:4200", "http://localhost:8081"] },
 });
 
-// como el frontend está en otro puerto
+// Como el frontend está en otro puerto
 const cors = require("cors");
 // Definir los orígenes permitidos
 const allowedOrigins = ["http://localhost:4200", "http://localhost:8081"];
@@ -48,7 +48,7 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: "http://localhost:3000",
+                url: "http://localhost:8080",
                 description: "Servidor de desarrollo",
             },
         ],
@@ -76,6 +76,7 @@ const song = require("./routes/song");
 const podcast = require("./routes/podcast");
 const valoraciones = require("./routes/rates");
 const mensajes = require("./routes/messages");
+const { saveMessage, unsaveMessage } = require("./controllers/messagesController");
 
 // hace que las rutas empiecen por esa palabra
 // ej: si pones app.use("/usuario", usuario); la ruta para login es http://localhost:8080/usuario/login
@@ -103,16 +104,83 @@ app.get("/", (req, res) => {
     res.send("Bienvenido a la API de Spongefy");
 });
 
-app.listen(3000, () => {
-    console.log("Servidor corriendo en http://localhost:3000/api-docs");
+server.listen(8080, () => {
+    console.log("Servidor corriendo en http://localhost:8080/api-docs");
 });
+
+const userSockets = new Map();
 
 io.on("connection", (socket) => {
     console.log("Usuario conectado: ", socket.id);
 
+    socket.on("login", (userId) => {
+        const oldSocketId = userSockets.get(userId);
+        if (oldSocketId && oldSocketId !== socket.id) {
+            io.to(oldSocketId).emit("forceLogout");
+            io.sockets.sockets.get(oldSocketId)?.disconnect();
+        }
+
+        userSockets.set(userId, socket.id);
+        socket.userId = userId;
+    });
+
+    socket.on("sendMessage", async ({ nombre_usuario_envia, nombre_usuario_recibe, mensaje }) => {
+        try {
+            // Guardar el mensaje en la base de datos
+            await saveMessage(nombre_usuario_envia, nombre_usuario_recibe, mensaje);
+    
+            // Emitir el mensaje al receptor si está conectado
+            const receptorSocketId = userSockets.get(nombre_usuario_recibe);
+            if (receptorSocketId) {
+                io.to(receptorSocketId).emit("newMessage", {
+                    from: nombre_usuario_envia,
+                    to: nombre_usuario_recibe,
+                    content: mensaje,
+                });
+            }
+    
+            // Emitir de vuelta al emisor para actualizar su chat
+            socket.emit("messageSent", {
+                to: nombre_usuario_recibe,
+                content: mensaje,
+            });
+    
+        } catch (error) {
+            console.error("Error al enviar mensaje:", error);
+            socket.emit("errorMessage", "Hubo un error al enviar el mensaje");
+        }
+    });
+
+    // Evento para eliminar un mensaje
+    socket.on("deleteMessage", async ({ id_mensaje }) => {
+        try {
+            // Llamar a la función que elimina el mensaje y obtiene los usuarios
+            const { nombre_usuario_envia, nombre_usuario_recibe } = await unsaveMessage(id_mensaje);
+
+            // Emitir el evento solo a los sockets del emisor y receptor
+            const emisorSocketId = userSockets.get(nombre_usuario_envia);
+            if (emisorSocketId) {
+                io.to(emisorSocketId).emit("messageDeleted", { id_mensaje });
+            }
+
+            const receptorSocketId = userSockets.get(nombre_usuario_recibe);
+            if (receptorSocketId) {
+                io.to(receptorSocketId).emit("messageDeleted", { id_mensaje });
+            }
+
+        } catch (error) {
+            console.error("Error al eliminar el mensaje:", error);
+            socket.emit("errorMessage", "Hubo un error al eliminar el mensaje");
+        }
+    });
+
     socket.on("disconnect", () => {
+        if (socket.userId && userSockets.get(socket.userId) === socket.id) {
+            userSockets.delete(socket.userId);
+        }
         console.log("Usuario desconectado");
     });
 });
+
 
 module.exports = app;

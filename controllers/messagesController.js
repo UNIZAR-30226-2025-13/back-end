@@ -1,5 +1,17 @@
 const client = require('../db');
 
+const saveMessage = async (nombre_usuario_envia, nombre_usuario_recibe, mensaje) => {
+    try {
+        await client.execute(
+            "INSERT INTO Mensaje (nombre_usuario_envia, nombre_usuario_recibe, contenido, fecha) VALUES (?, ?, ?, ?)",
+            [nombre_usuario_envia, nombre_usuario_recibe, mensaje, new Date().toISOString().slice(0, 19).replace('T', ' ')]
+        );
+    } catch (error) {
+        throw error;
+    }
+};
+
+
 // Función para enviar un mensaje de un usuario a otro
 const sendMessage = async (req, res) => { 
     try { 
@@ -20,13 +32,28 @@ const sendMessage = async (req, res) => {
         if (result_usuario_recibe.rows.length === 0) {
             return res.status(400).json({ message: "El usuario no existe" });
         }
-
-        await client.execute("INSERT INTO Mensaje (nombre_usuario_envia, nombre_usuario_recibe, contenido, fecha) VALUES (?, ?, ?, ?)", [nombre_usuario_envia, nombre_usuario_recibe, mensaje, new Date().toISOString().slice(0, 19).replace('T', ' ')]);
+        saveMessage(nombre_usuario_envia, nombre_usuario_recibe, mensaje);
         return res.status(200).json({ message: "Mensaje enviado" });
 
     } catch (error) {
         console.error("Error al enviar el mensaje:", error);
         res.status(500).json({ message: "Hubo un error al enviar el mensaje" });
+    }
+};
+
+const unsaveMessage = async (id_mensaje) => {
+    try {
+        const result_mensaje = await client.execute("SELECT * FROM Mensaje WHERE id_mensaje = ?", [id_mensaje]);
+        
+        // Obtenemos los usuarios emisor y receptor
+        const mensaje = result_mensaje.rows[0];
+        const nombre_usuario_envia = mensaje.nombre_usuario_envia;
+        const nombre_usuario_recibe = mensaje.nombre_usuario_recibe;
+
+        await client.execute("DELETE FROM Mensaje WHERE id_mensaje = ?", [id_mensaje]);
+        return { nombre_usuario_envia, nombre_usuario_recibe };
+    } catch (error) {
+        throw error;
     }
 };
 
@@ -45,8 +72,14 @@ const deleteMessage = async (req, res) => {
             return res.status(400).json({ message: "El mensaje no existe" });
         }
 
-        await client.execute("DELETE FROM Mensaje WHERE id_mensaje = ?", [id_mensaje]);
-        return res.status(200).json({ message: "Mensaje eliminado" });
+        const { nombre_usuario_envia, nombre_usuario_recibe } = await unsaveMessage(id_mensaje);
+
+        return res.status(200).json({ 
+            message: "Mensaje eliminado", 
+            nombre_usuario_envia,
+            nombre_usuario_recibe 
+        });
+
     } catch (error) {
         console.error("Error al borrar el mensaje:", error);
         res.status(500).json({ message: "Hubo un error al borrar el mensaje" });
@@ -89,4 +122,4 @@ const getMessages = async (req, res) => {
     }  
 };
 
-module.exports = { sendMessage, deleteMessage, getMessages };
+module.exports = { saveMessage, sendMessage, unsaveMessage, deleteMessage, getMessages };
