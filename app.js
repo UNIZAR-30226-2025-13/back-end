@@ -8,8 +8,15 @@ const app = express();
 
 const server = createServer(app);
 const io = new Server(server, {
-    cors: { origin: ["http://localhost:4200", "http://localhost:8081"] },
-});
+    cors: {
+      origin: ["http://localhost:4200", "http://localhost:8081"],
+      methods: ["GET", "POST"],
+      credentials: true,
+    },
+  });
+  ;
+
+
 
 // Como el frontend está en otro puerto
 const cors = require("cors");
@@ -117,13 +124,21 @@ io.on("connection", (socket) => {
 
     socket.on("login", (userId) => {
         const oldSocketId = userSockets.get(userId);
-        if (oldSocketId && oldSocketId !== socket.id) {
+
+        if (oldSocketId) {
+            // Emite el evento 'forceLogout' si ya existe un socket anterior
             io.to(oldSocketId).emit("forceLogout");
-            io.sockets.sockets.get(oldSocketId)?.disconnect();
+
+            // Si el socket anterior es diferente, desconectamos el socket anterior
+            if (oldSocketId !== socket.id) {
+                console.log(`Desconectando socket antiguo: ${oldSocketId}`);
+                io.sockets.sockets.get(oldSocketId)?.disconnect();
+            }
         }
 
         userSockets.set(userId, socket.id);
         socket.userId = userId;
+        console.log(`Usuario conectado: ${userId} con socket ${socket.id}`);
     });
 
     socket.on("sendMessage", async ({ nombre_usuario_envia, nombre_usuario_recibe, mensaje }) => {
