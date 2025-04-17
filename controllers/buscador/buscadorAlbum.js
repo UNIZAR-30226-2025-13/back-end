@@ -11,10 +11,16 @@ const obtenerDiscosSimilares = async (cadena) => {
     const cadenaNormalizada = utils.quitarTildesYPuntuacion(cadena);
 
     const result = await client.execute(`
-        SELECT alb.id_album, alb.nombre_album, alb.link_imagen, alb.fecha_pub, apa.nombre_artista AS artista
+        SELECT
+            alb.id_album,
+            alb.nombre_album,
+            alb.link_imagen,
+            alb.fecha_pub,
+            STRING_AGG(apa.nombre_artista, ', ') AS artistas
         FROM Album alb
         JOIN Artista_posee_albumes apa ON alb.id_album = apa.id_album
-        WHERE alb.es_disco = true;
+        WHERE alb.es_disco = true
+        GROUP BY alb.id_album, alb.nombre_album, alb.link_imagen, alb.fecha_pub;
     `);
 
     const discosConSimilitud = result.rows.map((disco) => {

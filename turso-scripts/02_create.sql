@@ -2,7 +2,7 @@
 CREATE TABLE Creador (
     nombre_creador      VARCHAR(255) PRIMARY KEY,
     biografia           TEXT,
-    link_compartir      VARCHAR(500) NOT NULL,
+    link_compartir      VARCHAR(500),
     link_imagen         VARCHAR(500) NOT NULL
 );
 
@@ -103,7 +103,7 @@ CREATE TABLE Episodio (
 );
 
 CREATE TABLE Podcast (
-    id_podcast      INT PRIMARY KEY,
+    id_podcast      INTEGER PRIMARY KEY AUTOINCREMENT,
     nombre          VARCHAR(255) NOT NULL,
     link_imagen     VARCHAR(500),
     link_compartir  VARCHAR(500),

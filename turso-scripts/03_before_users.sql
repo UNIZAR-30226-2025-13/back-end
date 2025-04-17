@@ -585,13 +585,19 @@ INSERT INTO Artista_principal (nombre_artista, id_cancion) VALUES
 
 INSERT INTO Featuring (nombre_artista, id_cancion) VALUES
 ('María Becerra', 51),
-('Paulo Londra', 49);
+('Paulo Londra', 49),
+('Rels B', 69),
+('Quevedo', 67);
 
 INSERT INTO Album (nombre_album, fecha_pub, link_imagen, link_compartir, es_disco) VALUES
 ('NAVE DRAGÓN', '2025-03-28', 'https://res.cloudinary.com/djsm3jfht/image/upload/v1743078759/4300052df349822d362f5ad93605315d.1000x1000x1_xxnons.jpg','',1);
 
 INSERT INTO Artista_posee_albumes (nombre_artista, id_album) VALUES
-('Lola Índigo', 13);
+('Lola Índigo', 13),
+('Cruz Cafuné', 14),
+('Cruz Cafuné', 15),
+('Rels B', 15);
+
 
 INSERT INTO Numero_cancion_en_album (id_album, id_cancion, numero_cancion) VALUES
 (13, 44, 1),
@@ -877,3 +883,10 @@ A ti te gusta el party, tú Clyde y yo Bonnie
 Yo soy Lola Bunny, be my Bugs, Bugs Bunny
 A ti te gusta el party, tú Clyde y yo Bonnie'
 WHERE id_cancion = 23;
+
+INSERT INTO Artista_principal (nombre_artista, id_cancion) VALUES
+('Cruz Cafuné', 62),
+('Cruz Cafuné', 63),
+('Cruz Cafuné', 67),
+('Cruz Cafuné', 69);
+ 
