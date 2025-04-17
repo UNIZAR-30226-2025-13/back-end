@@ -2,7 +2,7 @@
 CREATE TABLE Creador (
     nombre_creador      VARCHAR(255) PRIMARY KEY,
     biografia           TEXT,
-    link_compartir      VARCHAR(500) NOT NULL,
+    link_compartir      VARCHAR(500),
     link_imagen         VARCHAR(500) NOT NULL
 );
 

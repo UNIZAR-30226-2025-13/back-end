@@ -1,4 +1,5 @@
 const express = require("express");
+const { uploadCreator } = require("../controllers/admin/addCreator");
 
 module.exports = (io) => {
     const router = express.Router();
@@ -10,6 +11,7 @@ module.exports = (io) => {
     const { uploadFileToCloudinary } = require("../controllers/admin/addMultimedia");
     const { uploadAlbum } = require("../controllers/admin/addAlbum");
     const { uploadPodcast } = require("../controllers/admin/addPodcast");
+    const { uploadCreator } = require("../controllers/admin/addCreator");
 
     const app = express();
     const upload = multer({ dest: "uploads/" }); // Carpeta temporal para archivos
@@ -268,6 +270,74 @@ module.exports = (io) => {
      *                   type: string
      */
     router.post("/upload-podcast", upload.fields([{ name: "imagen", maxCount: 1 }]), uploadPodcast);
+
+    /**
+     * @swagger
+     * /admin/upload-creator:
+     *   post:
+     *     summary: Sube un nuevo creador (artista o podcaster) con su imagen y biografía.
+     *     description: Permite a un administrador crear un nuevo creador, ya sea un artista o un podcaster, subiendo su imagen de perfil y biografía. También clasifica automáticamente según el tipo (artista o podcaster).
+     *     tags: [Admin]
+     *     consumes:
+     *       - multipart/form-data
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         multipart/form-data:
+     *           schema:
+     *             type: object
+     *             required:
+     *               - imagen
+     *               - nombre_creador
+     *               - biografia
+     *               - es_podcaster
+     *             properties:
+     *               imagen:
+     *                 type: string
+     *                 format: binary
+     *                 description: Imagen de perfil del creador (archivo).
+     *               nombre_creador:
+     *                 type: string
+     *                 description: Nombre del creador (único).
+     *               biografia:
+     *                 type: string
+     *                 description: Breve biografía del creador.
+     *               es_podcaster:
+     *                 type: boolean
+     *                 description: Indica si el creador es un podcaster (`true`) o un artista (`false`).
+     *     responses:
+     *       200:
+     *         description: Creador creado con éxito.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 message:
+     *                   type: string
+     *                   example: Creador creado con éxito
+     *       400:
+     *         description: Error por campos faltantes o creador ya existente.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: string
+     *                   example: Faltan campos obligatorios
+     *       500:
+     *         description: Error interno en la subida de imagen o base de datos.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: string
+     *                   example: Error al subir los archivos a Cloudinary o al insertar en la base de datos
+     */
+    router.post("/upload-creator", upload.fields([{ name: "imagen", maxCount: 1 }]), uploadCreator);
 
     return router;
 };
