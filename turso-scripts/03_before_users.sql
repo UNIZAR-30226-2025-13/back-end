@@ -760,3 +760,120 @@ INSERT INTO Episodios_de_lista (id_lista_ep, id_ep, id_podcast) VALUES
 
 INSERT INTO Listas_de_carpeta (id_carpeta, id_lista) VALUES
 (4, 68);
+
+UPDATE Cancion
+SET letra = 'Bellaquita  
+Bellaquita  
+Eh, ey, yo, es Ousi  
+Yeah-yeah  
+Dei V, Underwater (bellaquita)  
+  
+Me diste follow y te di followback  
+Me diste like y yo te di dos pa''atrá  
+Toma, al otro día me pusiste en los close friends  
+Eso es lo que tú quieres, ma  
+  
+Voy pa''l DM, de espalda, de lao o de frente  
+En toas las fotito'' se ve bien  
+Mami, te lo doy ahora y después también  
+Subió una story cerca, toy que le llego a pie, eh  
+  
+Oh, ma, yo quiero que tú seas mi loba'
+WHERE id_cancion = 2;
+
+UPDATE Cancion
+SET letra = 'Me queda bien cuando me mienten
+Me queda bien ser el de siempre
+Me queda bien to'' lo que inventen, yeah
+Me queda bien
+
+Me queda bien cuando me mienten
+Me queda bien ser el de siempre
+Me queda bien to'' lo que inventen
+Me queda bien, yeah, yeah, yeah
+
+Mami, dale, agarrame la'' mano'', sentir el calor que como tos'' nos miran
+Que si al menos vos estás a mi lado se me hace más fácil afronta'' esa vida
+Estos blancos ahora quieren matarnos porque no toleran vernos tan arriba
+Yo fronteando, contando lo que vivo sin tener que poner contar mentiras, eh, yeh
+
+Y ahora vivo en la mansión
+A pocas cuadras de mi avenida
+Casi que la veo desde el balcón
+Mientras estoy quemando porquería
+
+¿Que quién me creo que soy? El mejor, al menos en estos días
+Cada liga tiene su Jordan y es obvio que yo soy el de la mía
+
+Yo no tengo seriedad, niño lombardo simpatía
+Liga Italia, serie A, Niño Icardi, buena vida'
+WHERE id_cancion = 4;
+
+UPDATE Cancion
+SET letra = 'Yo soy Lola Bunny, be my Bugs, Bugs Bunny
+A ti te gusta el party, tú Clyde y yo Bonnie
+Yo soy Lola Bunny, be my Bugs, Bugs Bunny
+A ti te gusta el party, tú Clyde y yo Bonnie
+
+Lola Indigo (Epa)
+Don Patricio, mami
+Mm-mh, yeah, shhh
+¿Qué fue, eh?
+
+Con ese flow tan suavecito
+Me vacilaste, ya te conozco un poquito
+Tú eres un Locoplaya bajo el solecito (Oye)
+Ahora es de noche, tienes que hablarme bajito
+Tate tranquilito, que yo no te miento
+No estoy pega'', yo soy el p*to pegamento
+Aún queda mucho pa''l final de mi concierto (Uoh uoh)
+Relaja, coge asiento (Uoh uoh)
+
+Yo soy Lola Bunny, be my Bugs, Bugs Bunny
+A ti te gusta el party, tú Clyde y yo Bonnie
+Yo soy Lola Bunny, be my Bugs, Bugs Bunny
+A ti te gusta el party, tú Clyde y yo Bonnie
+
+Ya no salgo casi, estoy jodiendo con la Loli
+Me verás bailando el boogie-boogie bajo el sunny
+Yo no canto bien, pero me sobra el autotune y
+Cuando paso todos dicen «Don Patricio», mami
+
+Y aunque puse a casi todas mirando a Miami
+Yo, que tuve casi todo, prefiero tu party
+Solo me llena esta mierda porque estás conmigo
+Cuando no sienta nada, me retiro y cojo el money
+
+Esa noche fuimo'' a vacilar con to'' la tropa
+Dice que lo tengo todo cuando se coloca
+Mami, no te hagas que yo sé que estás loca
+Cuando miras pa'' acá se te nota
+
+Yo soy Lola Bunny, be my Bugs, Bugs Bunny
+A ti te gusta el party, tú Clyde y yo Bonnie
+Yo soy Lola Bunny, be my Bugs, Bugs Bunny
+A ti te gusta el party, tú Clyde y yo Bonnie
+
+Yo soy Lola Bunny, be my Bugs, Bugs Bunny
+A ti te gusta el party, tú Clyde y yo Bonnie
+Yo soy Lola Bunny, be my Bugs, Bugs Bunny
+A ti te gusta el party, tú Clyde y yo Bonnie
+
+Y a mí me gustan los flaquitos
+A cualquier cosa que me pida yo le invito
+¿Quieres un pase? Baby, yo a ti te lo acredito
+Estás nervioso, no te me pongas rojito
+Te hago un bailecito, hey
+
+Papi, rómpetelo
+
+Yo soy Lola Bunny, be my Bugs, Bugs Bunny
+A ti te gusta el party, tú Clyde y yo Bonnie
+Yo soy Lola Bunny, be my Bugs, Bugs Bunny
+A ti te gusta el party, tú Clyde y yo Bonnie
+
+Yo soy Lola Bunny, be my Bugs, Bugs Bunny
+A ti te gusta el party, tú Clyde y yo Bonnie
+Yo soy Lola Bunny, be my Bugs, Bugs Bunny
+A ti te gusta el party, tú Clyde y yo Bonnie'
+WHERE id_cancion = 23;

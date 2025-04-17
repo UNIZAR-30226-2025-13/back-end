@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { getProfile, changePassword, getLists, createList, getPlaylists, getEpisodeLists, getPublicLists, changeListPrivacy, deleteAccount, getFriendsList, getNumberFollowersAndFollowing } = require('../controllers/userController');
+const { getProfile, changePassword, changeUserPassword, getLists, createList, getPlaylists, getEpisodeLists, getPublicLists, changeListPrivacy, deleteAccount, getFriendsList, getNumberFollowersAndFollowing } = require('../controllers/userController');
 
 const { verifyToken } = require('../middleware/autorizationMiddleware');
 
@@ -152,6 +152,60 @@ router.get("/perfil", verifyToken, getProfile);
  *                   example: "Hubo un error al cambiar la contraseña"
  */
 router.post("/change-password", changePassword);
+
+
+/**
+ * @swagger
+ * /change-user-password:
+ *   post:
+ *     summary: Cambia la contraseña del usuario (sin necesidad del correo electrónico)
+ *     tags: [Usuarios]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombre_usuario:
+ *                 type: string
+ *                 example: "ejemplo"
+ *               nueva_contrasena:
+ *                 type: string
+ *                 example: "Jaja123_"
+ *     responses:
+ *       200:
+ *         description: Contraseña del usuario cambiada correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Contraseña cambiada correctamente"
+ *       400:
+ *         description: Faltan parámetros en la solicitud
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Hay que rellenar todos los campos"
+ *       500:
+ *         description: Error interno al cambiar la contraseña del usuario
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Hubo un error al cambiar la contraseña del usuario"
+ */
+router.post("/change-user-password", changeUserPassword);
 
 /**
  * @swagger

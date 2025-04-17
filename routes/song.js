@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { showSong } = require("../controllers/songController");
+const { showSong, showLyrics } = require("../controllers/songController");
 
 /**
  * @swagger
@@ -65,5 +65,52 @@ const { showSong } = require("../controllers/songController");
  *         description: Error interno del servidor o el ID no corresponde a una canción.
  */
 router.get("/show", showSong);
+
+/**
+ * @swagger
+ * /song/show-lyrics:
+ *   get:
+ *     summary: Obtiene la letra de una canción mediante su ID.
+ *     tags: [Songs]
+ *     parameters:
+ *       - in: query
+ *         name: id_cancion
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Identificador de la canción.
+ *     responses:
+ *       200:
+ *         description: Letra de la canción obtenida con éxito.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 letra:
+ *                   type: string
+ *                   description: Letra de la canción.
+ *       400:
+ *         description: Faltan parámetros en la solicitud
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Hay que rellenar todos los campos"
+ *       500:
+ *         description: Error interno al obtener la letra de la canción
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Hubo un error al obtener la letra de la canción"
+ */
+router.get("/show-lyrics", showLyrics);
 
 module.exports = router;

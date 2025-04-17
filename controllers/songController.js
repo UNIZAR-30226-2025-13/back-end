@@ -49,4 +49,33 @@ const showSong = async (req, res) => {
     }
 };
 
-module.exports = { showSong };
+// Dado un id de una cancion, devuelve la letra de la canción
+const showLyrics = async (req, res) => {
+    try {
+        const { id_cancion } = req.query;
+
+        if (!id_cancion) {
+            return res.status(400).json({ message: "Hay que rellenar todos los campos" });
+        }
+
+        if (!(await checkIsASong(id_cancion))) {
+            return res.status(500).json({ message: "El identificador dado no pertenece a una cancion" });
+        }
+
+        const result = await client.execute(
+            "SELECT letra FROM Cancion WHERE id_cancion = ?",
+            [id_cancion]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: "No se encontró la letra de la canción" });
+        }
+        res.status(200).json({ letra: result.rows[0].letra });
+
+    } catch (error) {
+        console.error("Error al obtener la letra de la canción:", error);
+        res.status(500).json({ message: "Hubo un error al mostrar la letra de la canción" });
+    }
+}
+
+module.exports = { showSong, showLyrics };

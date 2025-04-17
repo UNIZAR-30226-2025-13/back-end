@@ -67,6 +67,33 @@ const changePassword = async (req, res) => {
     }
 };
 
+// Cambiar la contraseña de un usuario dado su nombre de usuario y su nueva contraseña
+const changeUserPassword = async (req, res) => {
+    try {
+        const { nombre_usuario, nueva_contrasena } = req.body;
+        if (!nombre_usuario || !nueva_contrasena) {
+            return res.status(400).json({ message: "Hay que rellenar todos los campos" });
+        }
+
+        // Comprobamos que exista el usuario
+        const result_usuario = await client.execute("SELECT * FROM Usuario WHERE nombre_usuario = ?", [nombre_usuario]);
+        if (result_usuario.rows.length === 0) {
+            return res.status(400).json({ message: "El usuario no existe" });
+        }
+        
+        const salt = await bcrypt.genSalt(10); // generamos salt para el hash
+        const hashContrasena = await bcrypt.hash(nueva_contrasena, salt); // generamos el hash de la contraseña
+  
+        // insertar usuario
+        await client.execute("UPDATE Usuario SET contrasena = ? WHERE nombre_usuario = ?", [hashContrasena, nombre_usuario]);
+        res.status(200).json({ message: "Contraseña cambiada correctamente" });
+
+    } catch (error) {
+        console.error("Error al cambiar contraseña del usuario:", error);
+        res.status(500).json({ message: "Hubo un error al cambiar la contraseña del usuario" });
+    }
+};
+
 // Obtener las listas del usuario para mostrarlas en su biblioteca
 const getLists = async (req, res) => {
     try{
@@ -446,5 +473,5 @@ const getNumberFollowersAndFollowing = async (req, res) => {
 }
 
 
-module.exports = { getProfile, changePassword, getLists, createList, getPlaylists, getEpisodeLists, getPublicLists, changeListPrivacy, deleteAccount, getFriendsList, getNumberFollowersAndFollowing };
+module.exports = { getProfile, changePassword, changeUserPassword, getLists, createList, getPlaylists, getEpisodeLists, getPublicLists, changeListPrivacy, deleteAccount, getFriendsList, getNumberFollowersAndFollowing };
 
