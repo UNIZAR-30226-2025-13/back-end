@@ -1,7 +1,6 @@
 const cloudinary = require("cloudinary").v2;
 const client = require("../../db");
 const fs = require("fs");
-const { format } = require("path");
 
 const uploadAlbum = async (req, res) => {
     try {

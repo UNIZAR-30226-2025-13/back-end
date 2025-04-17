@@ -9,6 +9,7 @@ module.exports = (io) => {
     const cloudinary = require("cloudinary").v2;
     const { uploadFileToCloudinary } = require("../controllers/admin/addMultimedia");
     const { uploadAlbum } = require("../controllers/admin/addAlbum");
+    const { uploadPodcast } = require("../controllers/admin/addPodcast");
 
     const app = express();
     const upload = multer({ dest: "uploads/" }); // Carpeta temporal para archivos
@@ -33,8 +34,6 @@ module.exports = (io) => {
      *   post:
      *     summary: Sube un archivo de audio (canción o episodio) a Cloudinary y guarda su metadata en la base de datos.
      *     tags: [Admin]
-     *     consumes:
-     *       - multipart/form-data
      *     requestBody:
      *       required: true
      *       content:
@@ -207,6 +206,68 @@ module.exports = (io) => {
      *                   example: Error al subir la portada a Cloudinary o al insertarlo en la BD
      */
     router.post("/upload-album", upload.fields([{ name: "imagen", maxCount: 1 }]), uploadAlbum);
+
+    /**
+     * @swagger
+     * /admin/upload-podcast:
+     *   post:
+     *     summary: Subir un nuevo podcast con su portada, creadores y temáticas.
+     *     description: Carga un nuevo podcast incluyendo la imagen de portada, los nombres de los creadores y las temáticas asociadas. La imagen se sube a Cloudinary.
+     *     tags: [Admin]
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         multipart/form-data:
+     *           schema:
+     *             type: object
+     *             properties:
+     *               imagen:
+     *                 type: string
+     *                 format: binary
+     *                 description: Imagen de portada del podcast.
+     *               nombre_podcast:
+     *                 type: string
+     *                 description: Nombre del podcast.
+     *               creadores:
+     *                 type: string
+     *                 description: Lista de creadores separada por comas (o array si es posible).
+     *               tematicas:
+     *                 type: string
+     *                 description: Lista de temáticas separada por comas (o array si es posible).
+     *               descripcion:
+     *                 type: string
+     *                 description: Descripción breve del podcast.
+     *     responses:
+     *       200:
+     *         description: Podcast creado con éxito.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 message:
+     *                   type: string
+     *                   example: Podcast creado con éxito
+     *       400:
+     *         description: Error por falta de parámetros obligatorios o portada.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: string
+     *       500:
+     *         description: Error interno al subir imagen o insertar en la base de datos.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: string
+     */
+    router.post("/upload-podcast", upload.fields([{ name: "imagen", maxCount: 1 }]), uploadPodcast);
 
     return router;
 };
