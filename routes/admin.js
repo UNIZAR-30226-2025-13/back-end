@@ -1,5 +1,5 @@
 const express = require("express");
-const { uploadCreator } = require("../controllers/admin/addCreator");
+const { updateCreator } = require("../controllers/admin/updateCreator");
 
 module.exports = (io) => {
     const router = express.Router();
@@ -12,6 +12,11 @@ module.exports = (io) => {
     const { uploadAlbum } = require("../controllers/admin/addAlbum");
     const { uploadPodcast } = require("../controllers/admin/addPodcast");
     const { uploadCreator } = require("../controllers/admin/addCreator");
+
+    const { updateMultimedia } = require("../controllers/admin/updateMultimedia");
+    const { updateAlbum } = require("../controllers/admin/updateAlbum");
+    const { updatePodcast } = require("../controllers/admin/updatePodcast");
+    const { updateCreator } = require("../controllers/admin/updateCreator");
 
     const app = express();
     const upload = multer({ dest: "uploads/" }); // Carpeta temporal para archivos
@@ -338,6 +343,315 @@ module.exports = (io) => {
      *                   example: Error al subir los archivos a Cloudinary o al insertar en la base de datos
      */
     router.post("/upload-creator", upload.fields([{ name: "imagen", maxCount: 1 }]), uploadCreator);
+
+    /**
+     * @swagger
+     * /admin/update-multimedia:
+     *   post:
+     *     summary: Actualiza un contenido multimedia (canción o episodio)
+     *     description: Actualiza información de un contenido multimedia existente (audio, imagen, título, idiomas, etc.). Puede actualizar parcial o totalmente. Soporta multipart/form-data.
+     *     tags:
+     *       - Admin
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         multipart/form-data:
+     *           schema:
+     *             type: object
+     *             properties:
+     *               id_cm:
+     *                 type: integer
+     *                 description: ID del contenido multimedia a actualizar
+     *               audio:
+     *                 type: string
+     *                 format: binary
+     *                 description: Nuevo archivo de audio (opcional)
+     *               imagen:
+     *                 type: string
+     *                 format: binary
+     *                 description: Nueva imagen de portada (opcional)
+     *               titulo:
+     *                 type: string
+     *                 description: Nuevo título del contenido (opcional)
+     *               creador:
+     *                 type: string
+     *                 description: Nombre del creador principal (solo para canciones)
+     *               es_cancion:
+     *                 type: boolean
+     *                 description: Indica si es canción (true) o episodio (false)
+     *               fecha_pub:
+     *                 type: string
+     *                 format: date
+     *                 description: Nueva fecha de publicación (AAAA-MM-DD)
+     *               letra:
+     *                 type: string
+     *                 description: Nueva letra de la canción (solo canciones)
+     *               featurings:
+     *                 type: array
+     *                 items:
+     *                   type: string
+     *                 description: Lista de artistas colaboradores (solo canciones)
+     *               generos:
+     *                 type: array
+     *                 items:
+     *                   type: string
+     *                 description: Lista de géneros musicales (solo canciones)
+     *               id_podcast:
+     *                 type: string
+     *                 description: Nuevo ID del podcast asociado (solo episodios)
+     *               descripcion:
+     *                 type: string
+     *                 description: Nueva descripción del episodio (solo episodios)
+     *               idiomas:
+     *                 type: array
+     *                 items:
+     *                   type: string
+     *                 description: Lista de idiomas en que está disponible el contenido (opcional)
+     *               id_album:
+     *                 type: string
+     *                 description: ID del álbum al que pertenece la canción (opcional, solo canciones)
+     *     responses:
+     *       200:
+     *         description: Contenido multimedia actualizado con éxito
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 message:
+     *                   type: string
+     *                   example: Contenido multimedia actualizado con éxito
+     *       400:
+     *         description: Error de validación (faltan campos o datos incorrectos)
+     *       500:
+     *         description: Error interno del servidor (fallo al actualizar datos o subir archivos)
+     */
+    router.post(
+        "/update-multimedia",
+        upload.fields([
+            { name: "audio", maxCount: 1 },
+            { name: "imagen", maxCount: 1 },
+        ]),
+        updateMultimedia
+    );
+    /**
+     * @swagger
+     * /admin/update-album:
+     *   post:
+     *     tags:
+     *       - Admin
+     *     summary: Actualiza un álbum existente
+     *     description: |
+     *       Permite actualizar los datos de un álbum, incluyendo nombre, fecha de publicación, portada (imagen) y creadores.
+     *       Solo se actualizan los campos enviados en la solicitud.
+     *       Si se envían nuevos creadores, se reemplazan los anteriores.
+     *     consumes:
+     *       - multipart/form-data
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         multipart/form-data:
+     *           schema:
+     *             type: object
+     *             required:
+     *               - id_album
+     *             properties:
+     *               id_album:
+     *                 type: integer
+     *                 description: ID del álbum que se desea actualizar.
+     *               nombre_album:
+     *                 type: string
+     *                 description: Nuevo nombre del álbum (opcional).
+     *               fecha_pub:
+     *                 type: string
+     *                 format: date
+     *                 description: Nueva fecha de publicación en formato AAAA-MM-DD (opcional).
+     *               creadores:
+     *                 type: array
+     *                 items:
+     *                   type: string
+     *                 description: Lista de nombres de creadores (opcional). Puede enviarse como array o string separado por comas.
+     *               imagen:
+     *                 type: string
+     *                 format: binary
+     *                 description: Nueva portada del álbum (opcional).
+     *     responses:
+     *       200:
+     *         description: Álbum actualizado con éxito
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 message:
+     *                   type: string
+     *                   example: Álbum actualizado con éxito
+     *       400:
+     *         description: Error por falta de parámetros obligatorios
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: string
+     *                   example: Se requiere el id_album para actualizar
+     *       500:
+     *         description: Error interno al actualizar el álbum
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: string
+     *                   example: Error al actualizar el álbum en la base de datos o la portada en Cloudinary
+     */
+
+    router.post("/update-album", upload.fields([{ name: "imagen", maxCount: 1 }]), updateAlbum);
+
+    /**
+     * @swagger
+     * /admin/update-podcast:
+     *   post:
+     *     tags:
+     *       - Admin
+     *     summary: Actualiza un podcast existente
+     *     description: |
+     *       Permite actualizar los datos de un podcast, incluyendo nombre, descripción, portada (imagen), creadores y temáticas.
+     *       Solo se actualizan los campos enviados en la solicitud.
+     *       Si se envían nuevos creadores o temáticas, se reemplazan los anteriores.
+     *     consumes:
+     *       - multipart/form-data
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         multipart/form-data:
+     *           schema:
+     *             type: object
+     *             required:
+     *               - id_podcast
+     *             properties:
+     *               id_podcast:
+     *                 type: integer
+     *                 description: ID del podcast que se desea actualizar.
+     *               nombre_podcast:
+     *                 type: string
+     *                 description: Nuevo nombre del podcast (opcional).
+     *               descripcion:
+     *                 type: string
+     *                 description: Nueva descripción del podcast (opcional).
+     *               creadores:
+     *                 type: array
+     *                 items:
+     *                   type: string
+     *                 description: Lista de nombres de podcasters (opcional). Puede enviarse como array o como string separado por comas.
+     *               tematicas:
+     *                 type: array
+     *                 items:
+     *                   type: string
+     *                 description: Lista de temáticas del podcast (opcional). Puede enviarse como array o como string separado por comas.
+     *               imagen:
+     *                 type: string
+     *                 format: binary
+     *                 description: Nueva portada del podcast (opcional).
+     *     responses:
+     *       200:
+     *         description: Podcast actualizado con éxito
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 message:
+     *                   type: string
+     *                   example: Podcast actualizado con éxito
+     *       400:
+     *         description: Error por falta de parámetros obligatorios
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: string
+     *                   example: Se requiere el id_podcast para actualizar
+     *       500:
+     *         description: Error interno al actualizar el podcast
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: string
+     *                   example: Error al actualizar el podcast en la base de datos o la portada en Cloudinary
+     */
+    router.post("/update-podcast", upload.fields([{ name: "imagen", maxCount: 1 }]), updatePodcast);
+
+    /**
+     * @swagger
+     * /admin/update-creator:
+     *   post:
+     *     tags:
+     *       - Admin
+     *     summary: Actualiza un creador (artista o podcaster)
+     *     description: |
+     *       Permite actualizar los datos de un creador, incluyendo biografía e imagen de perfil.
+     *       No está permitido cambiar el tipo de creador (de artista a podcaster o viceversa).
+     *     consumes:
+     *       - multipart/form-data
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         multipart/form-data:
+     *           schema:
+     *             type: object
+     *             required:
+     *               - nombre_creador
+     *             properties:
+     *               nombre_creador:
+     *                 type: string
+     *                 description: Nombre del creador que se desea actualizar.
+     *               biografia:
+     *                 type: string
+     *                 description: Nueva biografía del creador (opcional).
+     *               imagen:
+     *                 type: string
+     *                 format: binary
+     *                 description: Nueva imagen de perfil del creador (opcional).
+     *     responses:
+     *       200:
+     *         description: Creador actualizado con éxito
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 message:
+     *                   type: string
+     *                   example: Creador actualizado con éxito
+     *       400:
+     *         description: Error por falta de nombre_creador
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: string
+     *       500:
+     *         description: Error interno al actualizar el creador
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: object
+     *               properties:
+     *                 error:
+     *                   type: string
+     *                   example: Error al actualizar el creador en la base de datos o la imagen en Cloudinary
+     */
+    router.post("/update-creator", upload.fields([{ name: "imagen", maxCount: 1 }]), updateCreator);
 
     return router;
 };
