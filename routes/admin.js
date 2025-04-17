@@ -18,6 +18,13 @@ module.exports = (io) => {
     const { updatePodcast } = require("../controllers/admin/updatePodcast");
     const { updateCreator } = require("../controllers/admin/updateCreator");
 
+    const {
+        deleteMultimedia,
+        deleteAlbum,
+        deletePodcast,
+        deleteCreador,
+    } = require("../controllers/admin/deletes");
+
     const app = express();
     const upload = multer({ dest: "uploads/" }); // Carpeta temporal para archivos
 
@@ -652,6 +659,119 @@ module.exports = (io) => {
      *                   example: Error al actualizar el creador en la base de datos o la imagen en Cloudinary
      */
     router.post("/update-creator", upload.fields([{ name: "imagen", maxCount: 1 }]), updateCreator);
+
+    /**
+     * @swagger
+     * /admin/delete-multimedia:
+     *   post:
+     *     summary: Borra un contenido multimedia
+     *     description: Elimina un contenido multimedia existente a partir de su ID.
+     *     tags:
+     *       - Admin
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             type: object
+     *             properties:
+     *               id_cm:
+     *                 type: integer
+     *                 description: ID del contenido multimedia a eliminar
+     *     responses:
+     *       200:
+     *         description: Contenido multimedia borrado con éxito
+     *       400:
+     *         description: Faltan parámetros necesarios
+     *       500:
+     *         description: Error interno del servidor
+     */
+    router.post("/delete-multimedia", deleteMultimedia);
+
+    /**
+     * @swagger
+     * /admin/delete-album:
+     *   post:
+     *     summary: Borra un álbum
+     *     description: Elimina un álbum existente a partir de su ID.
+     *     tags:
+     *       - Admin
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             type: object
+     *             properties:
+     *               id_album:
+     *                 type: integer
+     *                 description: ID del álbum a eliminar
+     *     responses:
+     *       200:
+     *         description: Álbum borrado con éxito
+     *       400:
+     *         description: Faltan parámetros necesarios
+     *       500:
+     *         description: Error interno del servidor
+     */
+    router.post("/delete-album", deleteAlbum);
+
+    /**
+     * @swagger
+     * /admin/delete-podcast:
+     *   post:
+     *     summary: Borra un podcast
+     *     description: Elimina un podcast existente a partir de su ID.
+     *     tags:
+     *       - Admin
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             type: object
+     *             properties:
+     *               id_podcast:
+     *                 type: integer
+     *                 description: ID del podcast a eliminar
+     *     responses:
+     *       200:
+     *         description: Podcast borrado con éxito
+     *       400:
+     *         description: Faltan parámetros necesarios
+     *       500:
+     *         description: Error interno del servidor
+     */
+    router.post("/delete-podcast", deletePodcast);
+
+    /**
+     * @swagger
+     * /admin/delete-creator:
+     *   post:
+     *     summary: Borra un creador
+     *     description: Elimina un creador existente a partir de su nombre.
+     *     tags:
+     *       - Admin
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             type: object
+     *             properties:
+     *               nombre_creador:
+     *                 type: string
+     *                 description: Nombre del creador a eliminar
+     *                 example: "Juan Pérez"
+     *     responses:
+     *       200:
+     *         description: Creador borrado con éxito
+     *       400:
+     *         description: Faltan parámetros necesarios
+     *       500:
+     *         description: Error interno del servidor
+     */
+    router.post("/delete-creator", deleteCreador);
 
     return router;
 };
