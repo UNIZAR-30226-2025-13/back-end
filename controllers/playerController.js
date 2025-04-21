@@ -96,6 +96,12 @@ const playCM = async (req, res) => {
             artistas_feat = artists_result.rows[0]?.artistas_feat
                 ? artists_result.rows[0].artistas_feat.split(",").join(", ")
                 : "";
+
+            // Aumentar el número de reproducciones de la canción
+            await client.execute(
+                "UPDATE Cancion SET n_repros = n_repros + 1 WHERE id_cancion = ?",
+                [id_cm]
+            );
         } else {
             // Si no es una canción, intentar obtener información del episodio
             const podcast_query = `
