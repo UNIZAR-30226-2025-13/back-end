@@ -64,6 +64,56 @@ const {
  */
 router.post("/add-song-playlist", addSongToPlaylist);
 
+/**
+ * @swagger
+ *   /add-ep-lista-episodios:
+ *     post:
+ *       summary: Añadir un episodio a una lista de episodios
+ *       description: Añade un episodio a una lista de episodios, verificando que ambas existan y que el episodio no este ya en la lista.
+ *       tags: [Playlist]
+ *       parameters:
+ *         - in: body
+ *           name: body
+ *           description: Objeto con los IDs del episodio y de la lista.
+ *           required: true
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_ep:
+ *                 type: integer
+ *                 description: El ID del episodio a añadir.
+ *               id_lista_ep:
+ *                 type: integer
+ *                 description: El ID de la playlist donde se añadirá la canción.
+ *       responses:
+ *         200:
+ *           description: Episodio añadido correctamente.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *         400:
+ *           description: Error debido a que falta algún campo necesario, el episodio no existe, o  ya está en la lista.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ *         500:
+ *           description: Error interno del servidor.
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   message:
+ *                     type: string
+ */
 router.post("/add-ep-lista-episodios", addEpToListaEpisodios);
 
 module.exports = router;
