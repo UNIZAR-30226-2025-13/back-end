@@ -9,19 +9,23 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server, {
     cors: {
-      origin: ["http://localhost:4200", "http://localhost:8081"],
-      methods: ["GET", "POST"],
-      credentials: true,
+        origin: [
+            "http://localhost:4200",
+            "http://localhost:8081",
+            "https://front-end-web-5130.onrender.com",
+        ],
+        methods: ["GET", "POST"],
+        credentials: true,
     },
-  });
-  ;
-
-
-
+});
 // Como el frontend está en otro puerto
 const cors = require("cors");
 // Definir los orígenes permitidos
-const allowedOrigins = ["http://localhost:4200", "http://localhost:8081"];
+const allowedOrigins = [
+    "http://localhost:4200",
+    "http://localhost:8081",
+    "https://front-end-web-5130.onrender.com",
+];
 
 // Configurar CORS con una función personalizada
 app.use(
@@ -107,7 +111,6 @@ app.use(valoraciones);
 app.use("/admin", admin);
 app.use(mensajes);
 
-
 // prueba inicial
 app.get("/", (req, res) => {
     res.send("Bienvenido a la API de Spongefy");
@@ -145,7 +148,7 @@ io.on("connection", (socket) => {
         try {
             // Guardar el mensaje en la base de datos
             await saveMessage(nombre_usuario_envia, nombre_usuario_recibe, mensaje);
-    
+
             // Emitir el mensaje al receptor si está conectado
             const receptorSocketId = userSockets.get(nombre_usuario_recibe);
             if (receptorSocketId) {
@@ -155,13 +158,12 @@ io.on("connection", (socket) => {
                     content: mensaje,
                 });
             }
-    
+
             // Emitir de vuelta al emisor para actualizar su chat
             socket.emit("messageSent", {
                 to: nombre_usuario_recibe,
                 content: mensaje,
             });
-    
         } catch (error) {
             console.error("Error al enviar mensaje:", error);
             socket.emit("errorMessage", "Hubo un error al enviar el mensaje");
@@ -184,7 +186,6 @@ io.on("connection", (socket) => {
             if (receptorSocketId) {
                 io.to(receptorSocketId).emit("messageDeleted", { id_mensaje });
             }
-
         } catch (error) {
             console.error("Error al eliminar el mensaje:", error);
             socket.emit("errorMessage", "Hubo un error al eliminar el mensaje");
@@ -198,6 +199,5 @@ io.on("connection", (socket) => {
         console.log("Usuario desconectado");
     });
 });
-
 
 module.exports = app;
