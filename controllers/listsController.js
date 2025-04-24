@@ -249,4 +249,128 @@ const deleteList = async (req, res) => {
     }
 };
 
-module.exports = { getListData, removeCMFromList, deleteList };
+const updateThisIsListsArtistas = async (req, res) => {
+    try {
+        const creadores = await client.execute("SELECT nombre_artista FROM Artista");
+        for (const row of creadores.rows) {
+            const nombre_artista = row.nombre_artista;
+            const nombre_lista = "This is " + nombre_artista;
+
+            console.log("Actualizando lista: " + nombre_lista);
+
+            const id_lista = await client.execute(
+                `SELECT lr.id_lista 
+                FROM Lista_reproduccion lr 
+                JOIN Playlist p ON lr.id_lista = p.id_playlist
+                JOIN Listas_del_usuario lu ON lr.id_lista = lu.id_lista 
+                WHERE lr.nombre = ? AND lu.nombre_usuario = 'spongefy'
+                `,
+                [nombre_lista]
+            );
+
+            // Obtener 15 canciones random del artista
+            const canciones_artista = await client.execute(
+                `
+            SELECT DISTINCT c.id_cancion
+            FROM Cancion c
+            JOIN (
+                SELECT id_cancion
+                FROM Artista_principal
+                WHERE nombre_artista = ?
+                UNION
+                SELECT id_cancion
+                FROM Featuring
+                WHERE nombre_artista = ?
+            ) AS canciones_artista
+            ON c.id_cancion = canciones_artista.id_cancion
+            ORDER BY RANDOM()
+            LIMIT 15;
+            `,
+                [nombre_artista, nombre_artista]
+            );
+
+            // Borrar las canciones previas de la lista
+            await client.execute(`DELETE FROM Canciones_en_playlist WHERE id_playlist = ?`, [
+                id_lista.rows[0].id_lista,
+            ]);
+
+            // Insertar las nuevas canciones en la lista
+            for (const row of canciones_artista.rows) {
+                await client.execute(
+                    `INSERT INTO Canciones_en_playlist (id_playlist, id_cancion) VALUES (?, ?)`,
+                    [id_lista.rows[0].id_lista, row.id_cancion]
+                );
+            }
+        }
+
+        res.status(200).json({ message: "Listas 'This is' artistas actualizadas correctamente" });
+    } catch (error) {
+        console.error("Error al actualizar listas 'This is':", error);
+        res.status(500).json({
+            message: "Hubo un error al actualizar las listas 'This is' artistas",
+        });
+    }
+};
+
+const updateThisIsListsPodcasters = async (req, res) => {
+    try {
+        const creadores = await client.execute("SELECT nombre_podcaster FROM Podcaster");
+        for (const row of creadores.rows) {
+            const nombre_podcaster = row.nombre_podcaster;
+            const nombre_lista = "This is " + nombre_podcaster;
+
+            console.log("Actualizando lista: " + nombre_lista);
+
+            const id_lista = await client.execute(
+                `SELECT lr.id_lista 
+                FROM Lista_reproduccion lr 
+                JOIN Lista_Episodios le ON lr.id_lista = le.id_lista_ep
+                JOIN Listas_del_usuario lu ON lr.id_lista = lu.id_lista 
+                WHERE lr.nombre = ? AND lu.nombre_usuario = 'spongefy'
+                `,
+                [nombre_lista]
+            );
+
+            // Obtener 15 episodios random del artista
+            const ep_podcaster = await client.execute(
+                `
+            SELECT e.id_ep, e.id_podcast
+            FROM Episodio e
+            JOIN Tiene_podcast tp ON e.id_podcast = tp.id_podcast
+            WHERE tp.nombre_podcaster = ?
+            ORDER BY RANDOM()
+            LIMIT 15;
+            `,
+                [nombre_podcaster]
+            );
+
+            // Borrar los episodios previas de la lista
+            await client.execute(`DELETE FROM Episodios_de_lista WHERE id_lista_ep = ?`, [
+                id_lista.rows[0].id_lista,
+            ]);
+
+            // Insertar los nuevos episodios en la lista
+            for (const row of ep_podcaster.rows) {
+                await client.execute(
+                    `INSERT INTO Episodios_de_lista (id_lista_ep, id_ep, id_podcast) VALUES (?, ?, ?)`,
+                    [id_lista.rows[0].id_lista, row.id_ep, row.id_podcast]
+                );
+            }
+        }
+
+        res.status(200).json({ message: "Listas 'This is' podcaster actualizadas correctamente" });
+    } catch (error) {
+        console.error("Error al actualizar listas 'This is' podcaster:", error);
+        res.status(500).json({
+            message: "Hubo un error al actualizar las listas 'This is' podcaster",
+        });
+    }
+};
+
+module.exports = {
+    getListData,
+    removeCMFromList,
+    deleteList,
+    updateThisIsListsArtistas,
+    updateThisIsListsPodcasters,
+};

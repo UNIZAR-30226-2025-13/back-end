@@ -1,6 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { getListData, removeCMFromList, deleteList } = require("../controllers/listsController");
+const {
+    getListData,
+    removeCMFromList,
+    deleteList,
+    updateThisIsListsArtistas,
+    updateThisIsListsPodcasters,
+} = require("../controllers/listsController");
 
 /**
  * @swagger
@@ -219,5 +225,37 @@ router.post("/remove-cm-from", removeCMFromList);
  *                   example: "Hubo un error al eliminar la lista"
  */
 router.post("/delete-list", deleteList);
+
+/**
+ * @swagger
+ * /update-this-is-lists-artists:
+ *   post:
+ *     summary: Actualiza automáticamente las listas "This Is" de artistas.
+ *     description: Actualiza las listas de reproducción tipo "This Is" para artistas en base a 15 canciones aleatorias.
+ *     tags:
+ *       - Listas
+ *     responses:
+ *       200:
+ *         description: Listas actualizadas correctamente.
+ *       500:
+ *         description: Error del servidor al actualizar las listas.
+ */
+router.post("/update-this-is-lists-artists", updateThisIsListsArtistas);
+
+/**
+ * @swagger
+ * /update-this-is-lists-podcaster:
+ *   post:
+ *     summary: Actualiza automáticamente las listas "This Is" de podcasters.
+ *     description:  Actualiza listas tipo "This Is" para podcasters en base a los episodios de sus podcasts 15 aleatorios.
+ *     tags:
+ *       - Listas
+ *     responses:
+ *       200:
+ *         description: Listas actualizadas correctamente.
+ *       500:
+ *         description: Error del servidor al actualizar las listas.
+ */
+router.post("/update-this-is-lists-podcaster", updateThisIsListsPodcasters);
 
 module.exports = router;
