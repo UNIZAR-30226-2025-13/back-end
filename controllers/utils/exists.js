@@ -18,6 +18,22 @@ const checkUserExists = async (username) => {
     }
 };
 
+// Verifica si existe un usuario con nombre_usuario
+const checkEmailExists = async (email) => {
+    try {
+        if (!email) {
+            throw new Error("Se requiere un nombre de correo");
+        }
+
+        const user_result = await client.execute("SELECT * FROM Usuario WHERE correo = ?", [email]);
+
+        return user_result.rows.length > 0;
+    } catch (error) {
+        console.error("Error al verificar el correo:", error);
+        throw new Error("Hubo un error al verificar el correo");
+    }
+};
+
 // Verifica si el contenido multimedia id_cm es una canción
 const checkIsASong = (id_cm) => {
     return client
@@ -171,4 +187,4 @@ const checkCreatorExists = async (nombre_creador) => {
     }
 };
 
-module.exports = { checkUserExists, checkIsASong, checkCreatorExists };
+module.exports = { checkUserExists, checkIsASong, checkCreatorExists, checkEmailExists };

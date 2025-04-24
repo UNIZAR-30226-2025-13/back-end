@@ -1,9 +1,23 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-const { getProfile, changePassword, changeUserPassword, getLists, createList, getPlaylists, getEpisodeLists, getPublicLists, changeListPrivacy, deleteAccount, getFriendsList, getNumberFollowersAndFollowing } = require('../controllers/userController');
+const {
+    getProfile,
+    changePassword,
+    changeUserPassword,
+    getLists,
+    createList,
+    getPlaylists,
+    getEpisodeLists,
+    getPublicLists,
+    changeListPrivacy,
+    deleteAccount,
+    getFriendsList,
+    getNumberFollowersAndFollowing,
+    updateEmailOrPassword,
+} = require("../controllers/userController");
 
-const { verifyToken } = require('../middleware/autorizationMiddleware');
+const { verifyToken } = require("../middleware/autorizationMiddleware");
 
 /**
  * @swagger
@@ -153,7 +167,6 @@ router.get("/perfil", verifyToken, getProfile);
  */
 router.post("/change-password", changePassword);
 
-
 /**
  * @swagger
  * /change-user-password:
@@ -293,7 +306,7 @@ router.post("/change-user-password", changeUserPassword);
  *                   type: string
  *                   example: "Hubo un error al obtener las listas"
  */
-router.get("/get-user-library",  getLists);
+router.get("/get-user-library", getLists);
 
 /**
  * @swagger
@@ -667,5 +680,62 @@ router.get("/get-friends-list", getFriendsList);
 
 router.get("/get-number-followers-and-following", getNumberFollowersAndFollowing);
 
+/**
+ * @swagger
+ * /update-profile:
+ *   post:
+ *     summary: Actualiza el email y/o la contraseña de un usuario
+ *     tags:
+ *       - Usuarios
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - nombre_usuario
+ *             properties:
+ *               nombre_usuario:
+ *                 type: string
+ *                 description: Nombre del usuario cuyo perfil se va a actualizar
+ *               nuevo_email:
+ *                 type: string
+ *                 format: email
+ *                 description: Nuevo correo electrónico del usuario (opcional)
+ *               nueva_contrasena:
+ *                 type: string
+ *                 format: password
+ *                 description: Nueva contraseña del usuario (opcional)
+ *     responses:
+ *       200:
+ *         description: Email y/o contraseña actualizados correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       400:
+ *         description: Error en la solicitud (falta de datos, usuario no existe, email en uso)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Error del servidor al intentar actualizar el perfil
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ */
+router.post("/update-profile", updateEmailOrPassword);
 
 module.exports = router;

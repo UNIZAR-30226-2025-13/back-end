@@ -1,17 +1,19 @@
-const client = require('../db');
-const bcrypt = require('bcrypt');
+const client = require("../db");
+const bcrypt = require("bcrypt");
+const { checkCreatorExists, checkUserExists, checkEmailExists } = require("./utils/exists");
 
 const getProfile = async (req, res) => {
     try {
         const { nombre_usuario } = req.payload; // obtener nombre_usuario
-        const result = await client.execute("SELECT * FROM Usuario WHERE nombre_usuario = ?", [nombre_usuario]); // obtener perfil
-        
+        const result = await client.execute("SELECT * FROM Usuario WHERE nombre_usuario = ?", [
+            nombre_usuario,
+        ]); // obtener perfil
+
         if (result.rows.length === 0) {
             return res.status(400).json({ message: "El usuario no existe" });
         }
-        
+
         res.status(200).json(result.rows[0]); // devolver perfil
-    
     } catch (error) {
         console.error("Error al obtener perfil:", error);
         res.status(500).json({ message: "Hubo un error al obtener el perfil" });
@@ -24,13 +26,14 @@ const changePassword = async (req, res) => {
     try {
         const { nombre_usuario, token, nueva_contrasena } = req.body; // Campos
 
-        if (!nombre_usuario || !token || !nueva_contrasena) { // Ningún campo vacío
+        if (!nombre_usuario || !token || !nueva_contrasena) {
+            // Ningún campo vacío
             return res.status(400).json({ message: "Hay que rellenar todos los campos" });
         }
 
         // Verificar si el token existe en la base de datos
         const result_token = await client.execute(
-            "SELECT token, fecha_exp FROM Token WHERE nombre_usuario = ?", 
+            "SELECT token, fecha_exp FROM Token WHERE nombre_usuario = ?",
             [nombre_usuario]
         );
 
@@ -55,12 +58,12 @@ const changePassword = async (req, res) => {
         const salt = await bcrypt.genSalt(10); // Generamos salt para el hash
         const hashContrasena = await bcrypt.hash(nueva_contrasena, salt); // Generamos el hash de la nueva contraseña
 
-        await client.execute("UPDATE Usuario SET contrasena = ? WHERE nombre_usuario = ?", 
-            [hashContrasena, nombre_usuario]
-        ); // Cambiar contraseña
+        await client.execute("UPDATE Usuario SET contrasena = ? WHERE nombre_usuario = ?", [
+            hashContrasena,
+            nombre_usuario,
+        ]); // Cambiar contraseña
 
         res.status(200).json({ message: "Contraseña cambiada correctamente" }); // Mensaje de éxito
-    
     } catch (error) {
         console.error("Error al cambiar contraseña:", error);
         res.status(500).json({ message: "Hubo un error al cambiar la contraseña" });
@@ -76,18 +79,23 @@ const changeUserPassword = async (req, res) => {
         }
 
         // Comprobamos que exista el usuario
-        const result_usuario = await client.execute("SELECT * FROM Usuario WHERE nombre_usuario = ?", [nombre_usuario]);
+        const result_usuario = await client.execute(
+            "SELECT * FROM Usuario WHERE nombre_usuario = ?",
+            [nombre_usuario]
+        );
         if (result_usuario.rows.length === 0) {
             return res.status(400).json({ message: "El usuario no existe" });
         }
-        
+
         const salt = await bcrypt.genSalt(10); // generamos salt para el hash
         const hashContrasena = await bcrypt.hash(nueva_contrasena, salt); // generamos el hash de la contraseña
-  
-        // insertar usuario
-        await client.execute("UPDATE Usuario SET contrasena = ? WHERE nombre_usuario = ?", [hashContrasena, nombre_usuario]);
-        res.status(200).json({ message: "Contraseña cambiada correctamente" });
 
+        // insertar usuario
+        await client.execute("UPDATE Usuario SET contrasena = ? WHERE nombre_usuario = ?", [
+            hashContrasena,
+            nombre_usuario,
+        ]);
+        res.status(200).json({ message: "Contraseña cambiada correctamente" });
     } catch (error) {
         console.error("Error al cambiar contraseña del usuario:", error);
         res.status(500).json({ message: "Hubo un error al cambiar la contraseña del usuario" });
@@ -96,9 +104,9 @@ const changeUserPassword = async (req, res) => {
 
 // Obtener las listas del usuario para mostrarlas en su biblioteca
 const getLists = async (req, res) => {
-    try{
+    try {
         const { nombre_usuario } = req.query; // obtener nombre_usuario
-         // Obtener listas y carpetas del usuario
+        // Obtener listas y carpetas del usuario
         const listas = await client.execute(
             `SELECT lr.id_lista, lr.nombre 
              FROM Lista_reproduccion lr 
@@ -129,19 +137,22 @@ const getLists = async (req, res) => {
              JOIN Creador c ON p.nombre_podcaster = c.nombre_creador
              WHERE sc.nombre_usuario = ?;`,
             [nombre_usuario]
-        );        
+        );
         res.status(200).json({
             listas: listas.rows.length ? listas.rows : "No hay listas",
             carpetas: carpetas.rows.length ? carpetas.rows : "No hay carpetas",
-            artistas_favoritos: artistas_favoritos.rows.length ? artistas_favoritos.rows : "No hay artistas favoritos",
-            podcasts_favoritos: podcasts_favoritos.rows.length ? podcasts_favoritos.rows : "No hay podcasts favoritos"
+            artistas_favoritos: artistas_favoritos.rows.length
+                ? artistas_favoritos.rows
+                : "No hay artistas favoritos",
+            podcasts_favoritos: podcasts_favoritos.rows.length
+                ? podcasts_favoritos.rows
+                : "No hay podcasts favoritos",
         });
-
     } catch (error) {
         console.error("Error al obtener listas:", error);
         res.status(500).json({ message: "Hubo un error al obtener las listas" });
     }
-}
+};
 
 // Dado un nombre de usuario devuelve todas las playlists que tiene
 const getPlaylists = async (req, res) => {
@@ -173,18 +184,17 @@ const getPlaylists = async (req, res) => {
         const todas_las_listas = [...listas, ...listas_en_carpetas];
 
         // Filtrar las listas específicas que no quieres incluir
-        const listas_filtradas = todas_las_listas.filter(lista => 
-            lista.nombre !== 'Tus canciones favoritas'
+        const listas_filtradas = todas_las_listas.filter(
+            (lista) => lista.nombre !== "Tus canciones favoritas"
         );
 
         // Eliminar duplicados si es necesario, por ejemplo, si las listas tienen el mismo id_lista
         const listas_unicas = [
-            ...new Map(listas_filtradas.map(item => [item.id_lista, item])).values()
+            ...new Map(listas_filtradas.map((item) => [item.id_lista, item])).values(),
         ];
 
         // Devolver el resultado combinado
         res.status(200).json(listas_unicas);
-
     } catch (error) {
         console.error("Error al obtener playlists:", error);
         res.status(500).json({ message: "Hubo un error al obtener las playlists" });
@@ -220,18 +230,17 @@ const getEpisodeLists = async (req, res) => {
         const todas_las_listas = [...listas, ...listas_en_carpetas];
 
         // Filtrar las listas específicas que no quieres incluir
-        const listas_filtradas = todas_las_listas.filter(lista => 
-            lista.nombre !== 'Tus episodios favoritos'
+        const listas_filtradas = todas_las_listas.filter(
+            (lista) => lista.nombre !== "Tus episodios favoritos"
         );
 
         // Eliminar duplicados si es necesario, por ejemplo, si las listas tienen el mismo id_lista
         const listas_unicas = [
-            ...new Map(listas_filtradas.map(item => [item.id_lista, item])).values()
+            ...new Map(listas_filtradas.map((item) => [item.id_lista, item])).values(),
         ];
 
         // Devolver el resultado combinado
         res.status(200).json(listas_unicas);
-
     } catch (error) {
         console.error("Error al obtener listas de episodios:", error);
         res.status(500).json({ message: "Hubo un error al obtener las listas de episodios" });
@@ -245,9 +254,12 @@ const createList = async (req, res) => {
         if (!nombre_lista || !nombre_usuario || !color) {
             return res.status(400).json({ message: "Hay que rellenar todos los campos" });
         }
-        
+
         // Comprobamos que exista el usuario
-        const result_usuario = await client.execute("SELECT * FROM Usuario WHERE nombre_usuario = ?", [nombre_usuario]);
+        const result_usuario = await client.execute(
+            "SELECT * FROM Usuario WHERE nombre_usuario = ?",
+            [nombre_usuario]
+        );
         if (result_usuario.rows.length === 0) {
             return res.status(400).json({ message: "El usuario no existe" });
         }
@@ -260,15 +272,20 @@ const createList = async (req, res) => {
 
         // Obtenemos el id de la lista
         const id_lista = result.rows[0].id_lista;
-        
+
         // Asociamos la lista al usuario
-        await client.execute("INSERT INTO Listas_del_usuario (id_lista, nombre_usuario) VALUES (?, ?)", [id_lista, nombre_usuario]);
-        
+        await client.execute(
+            "INSERT INTO Listas_del_usuario (id_lista, nombre_usuario) VALUES (?, ?)",
+            [id_lista, nombre_usuario]
+        );
+
         // Según el tipo catalogamos la lista
         if (tipo == "canciones") {
             await client.execute("INSERT INTO Playlist (id_playlist) VALUES (?)", [id_lista]);
         } else if (tipo == "episodios") {
-            await client.execute("INSERT INTO Lista_Episodios (id_lista_ep) VALUES (?)", [id_lista]);
+            await client.execute("INSERT INTO Lista_Episodios (id_lista_ep) VALUES (?)", [
+                id_lista,
+            ]);
         }
 
         res.status(200).json({ message: "Lista creada correctamente" });
@@ -286,9 +303,12 @@ const getPublicLists = async (req, res) => {
         if (!nombre_usuario) {
             return res.status(400).json({ message: "Hay que rellenar todos los campos" });
         }
-        
+
         // Comprobamos que exista el usuario
-        const result_usuario = await client.execute("SELECT * FROM Usuario WHERE nombre_usuario = ?", [nombre_usuario]);
+        const result_usuario = await client.execute(
+            "SELECT * FROM Usuario WHERE nombre_usuario = ?",
+            [nombre_usuario]
+        );
         if (result_usuario.rows.length === 0) {
             return res.status(400).json({ message: "El usuario no existe" });
         }
@@ -302,7 +322,6 @@ const getPublicLists = async (req, res) => {
         );
 
         res.status(200).json(result.rows); // devolver listas públicas
-
     } catch (error) {
         console.error("Error al obtener listas públicas:", error);
         res.status(500).json({ message: "Hubo un error al obtener las listas públicas" });
@@ -319,21 +338,31 @@ const changeListPrivacy = async (req, res) => {
         }
 
         // Comprobamos que exista el usuario
-        const result_usuario = await client.execute("SELECT * FROM Usuario WHERE nombre_usuario = ?", [nombre_usuario]);
+        const result_usuario = await client.execute(
+            "SELECT * FROM Usuario WHERE nombre_usuario = ?",
+            [nombre_usuario]
+        );
         if (result_usuario.rows.length === 0) {
             return res.status(400).json({ message: "El usuario no existe" });
         }
 
         // comprobar si la lista existe y pertenece al usuario
-        const result_list = await client.execute("SELECT * FROM Listas_del_usuario WHERE id_lista = ? AND nombre_usuario = ?", [id_lista, nombre_usuario]);
+        const result_list = await client.execute(
+            "SELECT * FROM Listas_del_usuario WHERE id_lista = ? AND nombre_usuario = ?",
+            [id_lista, nombre_usuario]
+        );
         if (result_list.rows.length == 0) {
-            return res.status(400).json({ message: "La lista no existe o no pertenece al usuario" });
+            return res
+                .status(400)
+                .json({ message: "La lista no existe o no pertenece al usuario" });
         }
 
-        await client.execute("UPDATE Lista_reproduccion SET es_publica = NOT es_publica WHERE id_lista = ?", [id_lista]);
+        await client.execute(
+            "UPDATE Lista_reproduccion SET es_publica = NOT es_publica WHERE id_lista = ?",
+            [id_lista]
+        );
 
         res.status(200).json({ message: "Privacidad de la lista actualizada correctamente" });
-
     } catch (error) {
         console.error("Error al cambiar privacidad de la lista:", error);
         res.status(500).json({ message: "Hubo un error al cambiar la privacidad de la lista" });
@@ -349,7 +378,7 @@ const deleteAccount = async (req, res) => {
         }
 
         // Buscar usuario y verificar contraseña
-        const userQuery = 'SELECT contrasena FROM Usuario WHERE nombre_usuario = ?';
+        const userQuery = "SELECT contrasena FROM Usuario WHERE nombre_usuario = ?";
         const result = await client.execute(userQuery, [nombre_usuario]);
 
         if (!result || !result.rows || result.rows.length === 0) {
@@ -366,17 +395,35 @@ const deleteAccount = async (req, res) => {
             "SELECT id_lista FROM Listas_del_usuario WHERE nombre_usuario = ?",
             [nombre_usuario]
         );
-        const listas = listasResult.rows.map(row => row.id_lista);
+        const listas = listasResult.rows.map((row) => row.id_lista);
 
         // Eliminar todas las listas del usuario
         if (listas.length > 0) {
             const placeholders = listas.map(() => "?").join(",");
-            await client.execute(`DELETE FROM Canciones_en_playlist WHERE id_playlist IN (${placeholders})`, listas);
-            await client.execute(`DELETE FROM Episodios_de_lista WHERE id_lista_ep IN (${placeholders})`, listas);
-            await client.execute(`DELETE FROM Listas_del_usuario WHERE id_lista IN (${placeholders})`, listas);
-            await client.execute(`DELETE FROM Playlist WHERE id_playlist IN (${placeholders})`, listas);
-            await client.execute(`DELETE FROM Lista_Episodios WHERE id_lista_ep IN (${placeholders})`, listas);
-            await client.execute(`DELETE FROM Lista_reproduccion WHERE id_lista IN (${placeholders})`, listas);
+            await client.execute(
+                `DELETE FROM Canciones_en_playlist WHERE id_playlist IN (${placeholders})`,
+                listas
+            );
+            await client.execute(
+                `DELETE FROM Episodios_de_lista WHERE id_lista_ep IN (${placeholders})`,
+                listas
+            );
+            await client.execute(
+                `DELETE FROM Listas_del_usuario WHERE id_lista IN (${placeholders})`,
+                listas
+            );
+            await client.execute(
+                `DELETE FROM Playlist WHERE id_playlist IN (${placeholders})`,
+                listas
+            );
+            await client.execute(
+                `DELETE FROM Lista_Episodios WHERE id_lista_ep IN (${placeholders})`,
+                listas
+            );
+            await client.execute(
+                `DELETE FROM Lista_reproduccion WHERE id_lista IN (${placeholders})`,
+                listas
+            );
         }
 
         // Obtener todas las carpetas del usuario
@@ -384,14 +431,23 @@ const deleteAccount = async (req, res) => {
             "SELECT id_carpeta FROM Carpetas_del_Usuario WHERE nombre_usuario = ?",
             [nombre_usuario]
         );
-        const carpetas = carpetasResult.rows.map(row => row.id_carpeta);
+        const carpetas = carpetasResult.rows.map((row) => row.id_carpeta);
 
         // Eliminar todas las carpetas del usuario
         if (carpetas.length > 0) {
             const placeholders = carpetas.map(() => "?").join(",");
-            await client.execute(`DELETE FROM Listas_de_carpeta WHERE id_carpeta IN (${placeholders})`, carpetas);
-            await client.execute(`DELETE FROM Carpetas_del_Usuario WHERE id_carpeta IN (${placeholders})`, carpetas);
-            await client.execute(`DELETE FROM Carpeta WHERE id_carpeta IN (${placeholders})`, carpetas);
+            await client.execute(
+                `DELETE FROM Listas_de_carpeta WHERE id_carpeta IN (${placeholders})`,
+                carpetas
+            );
+            await client.execute(
+                `DELETE FROM Carpetas_del_Usuario WHERE id_carpeta IN (${placeholders})`,
+                carpetas
+            );
+            await client.execute(
+                `DELETE FROM Carpeta WHERE id_carpeta IN (${placeholders})`,
+                carpetas
+            );
         }
 
         // Eliminar la cuenta del usuario
@@ -413,25 +469,31 @@ const getFriendsList = async (req, res) => {
         }
 
         // Comprobamos que exista el usuario
-        const result_usuario = await client.execute("SELECT * FROM Usuario WHERE nombre_usuario = ?", [nombre_usuario]);
+        const result_usuario = await client.execute(
+            "SELECT * FROM Usuario WHERE nombre_usuario = ?",
+            [nombre_usuario]
+        );
         if (result_usuario.rows.length === 0) {
             return res.status(400).json({ message: "El usuario no existe" });
         }
-        
+
         // Obtener la lista de amigos (usuarios que se siguen mutuamente)
         const result_amigos = await client.execute(
             `SELECT s1.nombre_usuario2 AS amigo
              FROM Sigue_a_usuario s1
              JOIN Sigue_a_usuario s2 ON s1.nombre_usuario2 = s2.nombre_usuario1
-             WHERE s1.nombre_usuario1 = ? AND s2.nombre_usuario2 = ?`, [nombre_usuario, nombre_usuario]);
+             WHERE s1.nombre_usuario1 = ? AND s2.nombre_usuario2 = ?`,
+            [nombre_usuario, nombre_usuario]
+        );
 
-        const amigos = result_amigos.rows.map(row => row.amigo);
+        const amigos = result_amigos.rows.map((row) => row.amigo);
 
         res.status(200).json({ amigos });
-
     } catch (error) {
         console.error("Error al mostrar la lista de amigos del usuario:", error);
-        res.status(500).json({ message: "Hubo un error al mostrar la lista de amigos del usuario" });
+        res.status(500).json({
+            message: "Hubo un error al mostrar la lista de amigos del usuario",
+        });
     }
 };
 
@@ -444,7 +506,10 @@ const getNumberFollowersAndFollowing = async (req, res) => {
         }
 
         // Comprobamos que exista el usuario
-        const result_usuario = await client.execute("SELECT * FROM Usuario WHERE nombre_usuario = ?", [nombre_usuario]);
+        const result_usuario = await client.execute(
+            "SELECT * FROM Usuario WHERE nombre_usuario = ?",
+            [nombre_usuario]
+        );
         if (result_usuario.rows.length === 0) {
             return res.status(400).json({ message: "El usuario no existe" });
         }
@@ -453,25 +518,84 @@ const getNumberFollowersAndFollowing = async (req, res) => {
         const result = await client.execute(
             `SELECT COUNT(*) AS num_seguidores
              FROM Sigue_a_usuario
-             WHERE nombre_usuario2 = ?`, [nombre_usuario]);
+             WHERE nombre_usuario2 = ?`,
+            [nombre_usuario]
+        );
 
         const num_seguidores = result.rows[0].num_seguidores;
 
         const result2 = await client.execute(
             `SELECT COUNT(*) AS num_seguidos
              FROM Sigue_a_usuario
-             WHERE nombre_usuario1 = ?`, [nombre_usuario]);
+             WHERE nombre_usuario1 = ?`,
+            [nombre_usuario]
+        );
 
         const num_seguidos = result2.rows[0].num_seguidos;
 
         res.status(200).json({ num_seguidores, num_seguidos });
-
     } catch (error) {
         console.error("Error al obtener el número de seguidores y seguidos:", error);
-        res.status(500).json({ message: "Hubo un error al obtener el número de seguidores y seguidos" });
+        res.status(500).json({
+            message: "Hubo un error al obtener el número de seguidores y seguidos",
+        });
     }
-}
+};
 
+const updateEmailOrPassword = async (req, res) => {
+    try {
+        const { nombre_usuario, nuevo_email, nueva_contrasena } = req.body;
 
-module.exports = { getProfile, changePassword, changeUserPassword, getLists, createList, getPlaylists, getEpisodeLists, getPublicLists, changeListPrivacy, deleteAccount, getFriendsList, getNumberFollowersAndFollowing };
+        if (!nombre_usuario) {
+            return res.status(400).json({ message: "Se necesita un nombre de usuario" });
+        }
 
+        // Comprobamos que exista el usuario
+        if (checkUserExists(nombre_usuario) === false) {
+            return res.status(400).json({ message: "El usuario no existe" });
+        }
+
+        // Actualizar el email si se proporciona
+        if (nuevo_email) {
+            const emailExists = await checkEmailExists(nuevo_email);
+            if (emailExists) {
+                return res.status(400).json({ message: "El email ya está en uso" });
+            }
+            await client.execute("UPDATE Usuario SET correo = ? WHERE nombre_usuario = ?", [
+                nuevo_email,
+                nombre_usuario,
+            ]);
+        }
+
+        if (nueva_contrasena) {
+            const salt = await bcrypt.genSalt(10); // Generamos salt para el hash
+            const hashContrasena = await bcrypt.hash(nueva_contrasena, salt); // Generamos el hash de la nueva contraseña
+
+            await client.execute("UPDATE Usuario SET contrasena = ? WHERE nombre_usuario = ?", [
+                hashContrasena,
+                nombre_usuario,
+            ]);
+        }
+
+        return res.status(200).json({ message: "Email y/o contraseña actualizados correctamente" });
+    } catch (error) {
+        console.error("Error al actualizar el email o la contraseña:", error);
+        res.status(500).json({ message: "Hubo un error al actualizar el email o la contraseña" });
+    }
+};
+
+module.exports = {
+    getProfile,
+    changePassword,
+    changeUserPassword,
+    getLists,
+    createList,
+    getPlaylists,
+    getEpisodeLists,
+    getPublicLists,
+    changeListPrivacy,
+    deleteAccount,
+    getFriendsList,
+    getNumberFollowersAndFollowing,
+    updateEmailOrPassword,
+};
