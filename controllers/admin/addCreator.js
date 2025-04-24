@@ -36,15 +36,34 @@ const uploadCreator = async (req, res) => {
             [nombre_creador, imagenResult.secure_url, biografia]
         );
 
+        const nombre_lista = "This is " + nombre_creador;
+
+        // Insertar en la tabla de creadores
+        const result_playlist = await client.execute(
+            "INSERT INTO Lista_reproduccion (nombre, es_publica) VALUES (?, ?) RETURNING id_lista",
+            [nombre_lista, true, biografia]
+        );
+
+        await client.execute(
+            "INSERT INTO Listas_del_usuario (nombre_usuario, id_lista) VALUES (?, ?) RETURNING id_lista",
+            ["spongefy", result_playlist.rows[0].id_lista]
+        );
+
         if (isPodcaster) {
             // Insertar podcaster
             await client.execute("INSERT INTO Podcaster (nombre_podcaster) VALUES (?)", [
                 nombre_creador,
             ]);
+            await client.execute("INSERT INTO Playlist (id_playlist) VALUES (?)", [
+                result_playlist.rows[0].id_lista,
+            ]);
         } else {
             // Insertar artista
             await client.execute("INSERT INTO Artista (nombre_artista) VALUES (?)", [
                 nombre_creador,
+            ]);
+            await client.execute("INSERT INTO Lista_episodios (id_lista_ep) VALUES (?)", [
+                result_playlist.rows[0].id_lista,
             ]);
         }
         // Respuesta exitosa
