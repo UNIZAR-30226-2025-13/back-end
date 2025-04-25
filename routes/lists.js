@@ -9,7 +9,7 @@ const {
     updateGenerosList,
 } = require("../controllers/listsController");
 
-const { asignarCanciones } = require("../controllers/listsSuggestions");
+//const { asignarCanciones } = require("../controllers/listsSuggestions");
 
 /**
  * @swagger
