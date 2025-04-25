@@ -277,6 +277,6 @@ router.post("/update-this-is-lists-podcaster", updateThisIsListsPodcasters);
  */
 router.post("/update-gender-lists", updateGenerosList);
 
-router.post("/asignar-canciones", asignarCanciones);
+//router.post("/asignar-canciones", asignarCanciones);
 
 module.exports = router;
