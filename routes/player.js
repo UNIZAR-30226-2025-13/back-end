@@ -167,7 +167,7 @@ router.get("/play-cm", playCM);
 
 /**
  * @swagger
- * /play-cm:
+ * /show-cm:
  *   get:
  *     summary: Obtener información de una canción o episodio de podcast
  *     description: Devuelve la información de una canción o episodio de podcast, incluyendo detalles del artista o del podcast correspondiente.
