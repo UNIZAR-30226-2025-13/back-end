@@ -266,17 +266,17 @@ router.post("/update-this-is-lists-podcaster", updateThisIsListsPodcasters);
  * /update-gender-lists:
  *  post:
  *    summary: Actualiza automáticamente las listas de géneros.
- *   description: Actualiza las listas de reproducción tipo "GENERO" para géneros en base a 15 canciones aleatorias.
- *   tags:
- *     - Listas
- *  responses:
- *    200:
- *     description: Listas actualizadas correctamente.
- *    500:
- *     description: Error del servidor al actualizar las listas.
+ *    description: Actualiza las listas de reproducción tipo "GENERO" para géneros en base a 15 canciones aleatorias.
+ *    tags:
+ *      - Listas
+ *    responses:
+ *      200:
+ *        description: Listas actualizadas correctamente.
+ *      500:
+ *        description: Error del servidor al actualizar las listas.
  */
 router.post("/update-gender-lists", updateGenerosList);
 
-//router.post("/asignar-canciones", asignarCanciones);
+router.post("/asignar-canciones", asignarCanciones);
 
 module.exports = router;
