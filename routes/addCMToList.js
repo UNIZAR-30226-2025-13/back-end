@@ -79,7 +79,7 @@ router.post("/add-song-playlist", addSongToPlaylist);
  *           schema:
  *             type: object
  *             properties:
- *               id_ep:
+ *               id_episodio:
  *                 type: integer
  *                 description: El ID del episodio a añadir.
  *               id_lista_ep:

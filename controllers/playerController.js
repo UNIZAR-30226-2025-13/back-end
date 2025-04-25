@@ -136,6 +136,79 @@ const playCM = async (req, res) => {
     }
 };
 
+const showCM = async (req, res) => {
+    try {
+        const { id_cm } = req.query; // obtener id de una canción o episodio
+        const cm_result = await client.execute(
+            "SELECT * FROM Contenido_multimedia WHERE id_cm = ?",
+            [id_cm]
+        ); // obtener contenido multimedia
+
+        if (cm_result.rows.length === 0) {
+            return res.status(400).json({ message: "No existe el contenido solicitado" });
+        }
+
+        // Intentar obtener la canción
+        const song_result = await client.execute("SELECT * FROM Cancion WHERE id_cancion = ?", [
+            id_cm,
+        ]);
+
+        let tipo = "episodio";
+        let nombre_artista = null;
+        let artistas_feat = null;
+        let nombre_podcast = null;
+
+        if (song_result.rows.length > 0) {
+            // Si es una canción, obtenemos autor principal y artistas featuring
+            tipo = "canción";
+            const query = `
+                SELECT ap.nombre_artista, COALESCE(GROUP_CONCAT(DISTINCT f.nombre_artista), '') AS artistas_feat
+                FROM Cancion c
+                JOIN Artista_principal ap ON ap.id_cancion = c.id_cancion
+                LEFT JOIN Featuring f ON f.id_cancion = c.id_cancion
+                WHERE c.id_cancion = ?
+                GROUP BY c.id_cancion, ap.nombre_artista;
+            `;
+
+            const artists_result = await client.execute(query, [id_cm], { prepare: true });
+            nombre_artista = artists_result.rows[0]?.nombre_artista || "Desconocido";
+            artistas_feat = artists_result.rows[0]?.artistas_feat
+                ? artists_result.rows[0].artistas_feat.split(",").join(", ")
+                : "";
+        } else {
+            // Si no es una canción, intentar obtener información del episodio
+            const podcast_query = `
+                SELECT p.nombre
+                FROM Episodio e
+                JOIN Podcast p ON e.id_podcast = p.id_podcast
+                WHERE e.id_ep = ?;
+            `;
+
+            const podcast_result = await client.execute(podcast_query, [id_cm], {
+                prepare: true,
+            });
+            if (podcast_result.rows.length > 0) {
+                nombre_podcast = podcast_result.rows[0].nombre;
+            }
+        }
+
+        res.status(200).json({
+            id_cm: id_cm,
+            link_cm: cm_result.rows[0].link_cm,
+            titulo: cm_result.rows[0].titulo,
+            duracion: cm_result.rows[0].duracion,
+            link_imagen: cm_result.rows[0].link_imagen,
+            tipo: tipo, // "episodio" o "canción"
+            autor: nombre_artista, // Puede ser nulo si es un episodio
+            artistas_featuring: artistas_feat, // Puede ser nulo si es un episodio
+            podcast: nombre_podcast, // Puede ser nulo si es una canción
+        });
+    } catch (error) {
+        console.error("Error al obtener el contenido multimedia:", error);
+        res.status(500).json({ message: "Hubo un error al obtener el contenido multimedia" });
+    }
+};
+
 // Guarda el último contenido multimedia que estuviera escuchando un usuario
 const saveLastThingPlaying = async (req, res) => {
     try {
@@ -198,4 +271,4 @@ const recoverLastThingPlaying = async (req, res) => {
     }
 };
 
-module.exports = { playSong, playCM, saveLastThingPlaying, recoverLastThingPlaying };
+module.exports = { playSong, playCM, showCM, saveLastThingPlaying, recoverLastThingPlaying };

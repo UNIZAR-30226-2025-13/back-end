@@ -367,10 +367,65 @@ const updateThisIsListsPodcasters = async (req, res) => {
     }
 };
 
+const updateGenerosList = async (req, res) => {
+    try {
+        const generos = await client.execute("SELECT DISTINCT genero FROM Generos");
+        for (const row of generos.rows) {
+            const nombre_genero = row.genero;
+            const nombre_lista = nombre_genero.toUpperCase();
+
+            console.log("Actualizando lista: " + nombre_lista);
+
+            const id_lista = await client.execute(
+                `SELECT lr.id_lista 
+                FROM Lista_reproduccion lr 
+                JOIN Playlist p ON lr.id_lista = p.id_playlist
+                JOIN Listas_del_usuario lu ON lr.id_lista = lu.id_lista 
+                WHERE lr.nombre = ? AND lu.nombre_usuario = 'spongefy'
+                `,
+                [nombre_lista]
+            );
+
+            // Obtener 15 canciones random de ese género
+            const canciones_genero = await client.execute(
+                `
+            SELECT DISTINCT g.id_cancion
+            FROM Generos g
+            WHERE g.genero = ?
+            ORDER BY RANDOM()
+            LIMIT 15;
+            `,
+                [nombre_genero]
+            );
+
+            // Borrar las canciones previas de la lista
+            await client.execute(`DELETE FROM Canciones_en_playlist WHERE id_playlist = ?`, [
+                id_lista.rows[0].id_lista,
+            ]);
+
+            // Insertar las nuevas canciones en la lista
+            for (const row of canciones_genero.rows) {
+                await client.execute(
+                    `INSERT INTO Canciones_en_playlist (id_playlist, id_cancion) VALUES (?, ?)`,
+                    [id_lista.rows[0].id_lista, row.id_cancion]
+                );
+            }
+        }
+
+        res.status(200).json({ message: "Listas generos actualizadas correctamente" });
+    } catch (error) {
+        console.error("Error al actualizar listas generos:", error);
+        res.status(500).json({
+            message: "Hubo un error al actualizar las listas generos",
+        });
+    }
+};
+
 module.exports = {
     getListData,
     removeCMFromList,
     deleteList,
     updateThisIsListsArtistas,
     updateThisIsListsPodcasters,
+    updateGenerosList,
 };
