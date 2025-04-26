@@ -157,6 +157,8 @@ const showCM = async (req, res) => {
         let nombre_artista = null;
         let artistas_feat = null;
         let nombre_podcast = null;
+        let id_podcast = null;
+        let id_album = null;
 
         if (song_result.rows.length > 0) {
             // Si es una canción, obtenemos autor principal y artistas featuring
@@ -175,10 +177,19 @@ const showCM = async (req, res) => {
             artistas_feat = artists_result.rows[0]?.artistas_feat
                 ? artists_result.rows[0].artistas_feat.split(",").join(", ")
                 : "";
+
+            const album_result = await client.execute(
+                "SELECT a.id_album FROM Numero_cancion_en_album a WHERE a.id_cancion = ?",
+                [id_cm]
+            );
+
+            if (album_result.rows.length > 0) {
+                id_album = album_result.rows[0].id_album;
+            }
         } else {
             // Si no es una canción, intentar obtener información del episodio
             const podcast_query = `
-                SELECT p.nombre
+                SELECT p.nombre, p.id_podcast
                 FROM Episodio e
                 JOIN Podcast p ON e.id_podcast = p.id_podcast
                 WHERE e.id_ep = ?;
@@ -189,6 +200,7 @@ const showCM = async (req, res) => {
             });
             if (podcast_result.rows.length > 0) {
                 nombre_podcast = podcast_result.rows[0].nombre;
+                id_podcast = podcast_result.rows[0].id_podcast;
             }
         }
 
@@ -202,6 +214,8 @@ const showCM = async (req, res) => {
             autor: nombre_artista, // Puede ser nulo si es un episodio
             artistas_featuring: artistas_feat, // Puede ser nulo si es un episodio
             podcast: nombre_podcast, // Puede ser nulo si es una canción
+            id_podcast: id_podcast, // Puede ser nulo si es una canción
+            id_album: id_album, // Puede ser nulo si es un episodio
         });
     } catch (error) {
         console.error("Error al obtener el contenido multimedia:", error);

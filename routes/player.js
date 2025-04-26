@@ -219,6 +219,14 @@ router.get("/play-cm", playCM);
  *                   type: string
  *                   nullable: true
  *                   description: Nombre del podcast al que pertenece el episodio (nulo si es una canción)
+ *                 id_podcast:
+ *                   type: integer
+ *                   nullable: true
+ *                   description: ID del podcast al que pertenece el episodio (nulo si es una canción)
+ *                 id_album:
+ *                   type: integer
+ *                   nullable: true
+ *                   description: ID del álbum al que pertenece la canción (nulo si es un episodio de podcast)
  *       400:
  *         description: Error si el contenido multimedia no existe
  *         content:
