@@ -421,6 +421,61 @@ const updateGenerosList = async (req, res) => {
     }
 };
 
+const updateLanguajesList = async (req, res) => {
+    try {
+        const idiomas = await client.execute("SELECT DISTINCT idioma FROM Idiomas_multimedia");
+        for (const row of idiomas.rows) {
+            const idioma = row.idioma;
+            const nombre_lista = "TOP " + idioma.toUpperCase();
+
+            console.log("Actualizando lista: " + nombre_lista);
+
+            const id_lista = await client.execute(
+                `SELECT lr.id_lista 
+                FROM Lista_reproduccion lr 
+                JOIN Playlist p ON lr.id_lista = p.id_playlist
+                JOIN Listas_del_usuario lu ON lr.id_lista = lu.id_lista 
+                WHERE lr.nombre = ? AND lu.nombre_usuario = 'spongefy'
+                `,
+                [nombre_lista]
+            );
+
+            // Obtener 15 canciones random de ese género
+            const canciones_genero = await client.execute(
+                `
+            SELECT DISTINCT i.id_cm
+            FROM Idiomas_multimedia i
+            JOIN Cancion c ON i.id_cm = c.id_cancion
+            WHERE i.idioma = ?
+            ORDER BY RANDOM()
+            LIMIT 15;
+            `,
+                [idioma]
+            );
+
+            // Borrar las canciones previas de la lista
+            await client.execute(`DELETE FROM Canciones_en_playlist WHERE id_playlist = ?`, [
+                id_lista.rows[0].id_lista,
+            ]);
+
+            // Insertar las nuevas canciones en la lista
+            for (const row of canciones_genero.rows) {
+                await client.execute(
+                    `INSERT INTO Canciones_en_playlist (id_playlist, id_cancion) VALUES (?, ?)`,
+                    [id_lista.rows[0].id_lista, row.id_cm]
+                );
+            }
+        }
+
+        res.status(200).json({ message: "Listas idomas actualizadas correctamente" });
+    } catch (error) {
+        console.error("Error al actualizar listas idomas:", error);
+        res.status(500).json({
+            message: "Hubo un error al actualizar las listas idomas",
+        });
+    }
+};
+
 module.exports = {
     getListData,
     removeCMFromList,
@@ -428,4 +483,5 @@ module.exports = {
     updateThisIsListsArtistas,
     updateThisIsListsPodcasters,
     updateGenerosList,
+    updateLanguajesList,
 };

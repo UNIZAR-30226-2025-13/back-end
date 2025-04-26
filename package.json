@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/UNIZAR-30226-2025-13/back-end#readme",
   "dependencies": {
+    "@google/genai": "^0.10.0",
     "@libsql/client": "^0.14.0",
     "bcrypt": "^5.1.1",
     "cloudinary": "^2.6.0",

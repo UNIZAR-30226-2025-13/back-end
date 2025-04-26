@@ -7,9 +7,10 @@ const {
     updateThisIsListsArtistas,
     updateThisIsListsPodcasters,
     updateGenerosList,
+    updateLanguajesList,
 } = require("../controllers/listsController");
 
-const { asignarCanciones } = require("../controllers/listsSuggestions");
+const { asignarCanciones, asignarEpisodios } = require("../controllers/listsSuggestions");
 
 /**
  * @swagger
@@ -277,6 +278,82 @@ router.post("/update-this-is-lists-podcaster", updateThisIsListsPodcasters);
  */
 router.post("/update-gender-lists", updateGenerosList);
 
-//router.post("/asignar-canciones", asignarCanciones);
+/**
+ * @swagger
+ * /update-gender-lists:
+ *  post:
+ *    summary: Actualiza automáticamente las listas de géneros.
+ *    description: Actualiza las listas de reproducción tipo "GENERO" para géneros en base a 15 canciones aleatorias.
+ *    tags:
+ *      - Listas
+ *    responses:
+ *      200:
+ *        description: Listas actualizadas correctamente.
+ *      500:
+ *        description: Error del servidor al actualizar las listas.
+ */
+router.post("/update-languages-lists", updateLanguajesList);
+
+/**
+ * @swagger
+ * /asignar-canciones:
+ *   post:
+ *     summary: Asigna canciones a una lista de reproducción.
+ *     description: Asigna canciones a una lista de reproducción utilizando IA.
+ *     tags:
+ *       - Listas
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_playlist:
+ *                 type: integer
+ *                 description: ID de la playlist a la que se le asignarán las canciones.
+ *               playlist:
+ *                 type: string
+ *                 description: Nombre de la playlist en base a la que se asociarán las canciones.
+ *     responses:
+ *       200:
+ *         description: Asignación actualizada con éxito.
+ *       400:
+ *         description: Faltan datos necesarios, respuesta no esperada de la IA.
+ *       500:
+ *         description: Error llamando a la IA o insertando en la base de datos.
+ */
+router.post("/asignar-canciones", asignarCanciones);
+
+/**
+ * @swagger
+ * /asignar-episodios:
+ *   post:
+ *     summary: Asigna episodios a una lista de reproducción.
+ *     description: Asigna episodios a una lista de reproducción utilizando IA.
+ *     tags:
+ *       - Listas
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id_lista_ep:
+ *                 type: integer
+ *                 description: ID de la playlist a la que se le asignarán los episodios.
+ *               lista_ep:
+ *                 type: string
+ *                 description: Nombre de la playlist en base a la que se asociarán los episodios.
+ *     responses:
+ *       200:
+ *         description: Asignación actualizada con éxito.
+ *       400:
+ *         description: Faltan datos necesarios, respuesta no esperada de la IA.
+ *       500:
+ *         description: Error llamando a la IA o insertando en la base de datos.
+ */
+router.post("/asignar-episodios", asignarEpisodios);
 
 module.exports = router;
