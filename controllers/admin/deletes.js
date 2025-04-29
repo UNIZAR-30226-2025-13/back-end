@@ -52,6 +52,20 @@ const deleteCreador = async (req, res) => {
 
         await client.execute("DELETE FROM Creador WHERE nombre_creador = ?", [nombre_creador]);
 
+        const nombre_lista = "This is " + nombre_creador;
+        const result = await client.execute(
+            `SELECT id_lista 
+            FROM Lista_reproduccion lr
+            JOIN Listas_del_usuario lu ON lu.id_lista = lr.id_lista
+            WHERE lu.nombre_usuario = 'spongefy' AND lr.nombre = ?`,
+            [nombre_lista]
+        );
+
+        if (result.rowLength > 0) {
+            await client.execute("DELETE FROM Lista_reproduccion WHERE id_lista = ?", [
+                result.rows[0].id_lista,
+            ]);
+        }
         res.json({
             message: "Creador borrado con éxito",
         });
