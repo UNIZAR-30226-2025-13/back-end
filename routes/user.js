@@ -665,6 +665,54 @@ router.post("/delete-account", deleteAccount);
  */
 router.get("/get-friends-list", getFriendsList);
 
+/**
+ * @swagger
+ * /get-number-followers-and-following:
+ *   get:
+ *     summary: Obtiene las cantidad de seguidores y seguidos del usuario
+ *     tags: [Usuarios]
+ *     parameters:
+ *       - in: query
+ *         name: nombre_usuario
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Nombre de usuario
+ *     responses:
+ *       200:
+ *         description: Número de seguidores y seguidos obtenidos correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                num_seguidores:
+ *                  type: integer
+ *                  example: 100
+ *                num_seguidos:
+ *                  type: integer
+ *                  example: 50
+ *       400:
+ *         description: Error en la solicitud (faltan parámetros o usuario no existe)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Hay que rellenar todos los campos"
+ *       500:
+ *         description: Error al mostrar la lista de amigos del usuario
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Hubo un error al mostrar la lista de amigos del usuario"
+ */
 router.get("/get-number-followers-and-following", getNumberFollowersAndFollowing);
 
 
