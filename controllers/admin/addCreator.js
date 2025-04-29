@@ -41,7 +41,7 @@ const uploadCreator = async (req, res) => {
         // Insertar en la tabla de creadores
         const result_playlist = await client.execute(
             "INSERT INTO Lista_reproduccion (nombre, es_publica) VALUES (?, ?) RETURNING id_lista",
-            [nombre_lista, true, biografia]
+            [nombre_lista, true]
         );
 
         await client.execute(
