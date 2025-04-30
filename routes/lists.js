@@ -10,7 +10,11 @@ const {
     updateLanguajesList,
 } = require("../controllers/listsController");
 
-const { asignarCanciones, asignarEpisodios } = require("../controllers/listsSuggestions");
+const {
+    asignarCanciones,
+    asignarEpisodios,
+    generarPlaylist,
+} = require("../controllers/listsSuggestions");
 
 /**
  * @swagger
@@ -355,5 +359,72 @@ router.post("/asignar-canciones", asignarCanciones);
  *         description: Error llamando a la IA o insertando en la base de datos.
  */
 router.post("/asignar-episodios", asignarEpisodios);
+
+/**
+ * @swagger
+ * /generar-playlist:
+ *   post:
+ *     summary: Genera una playlist basada en un contexto usando IA (Gemini).
+ *     description: Recibe datos como nombre de la playlist, contexto, color y nombre de usuario, y devuelve una playlist generada automáticamente con IA.
+ *     tags:
+ *       - Playlists
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - nombre_playlist
+ *               - contexto
+ *             properties:
+ *               nombre_playlist:
+ *                 type: string
+ *                 example: "Energía Positiva"
+ *               contexto:
+ *                 type: string
+ *                 example: "Música para entrenar en el gimnasio"
+ *               color:
+ *                 type: string
+ *                 example: "#FF5733"
+ *               nombre_usuario:
+ *                 type: string
+ *                 example: "juan123"
+ *     responses:
+ *       200:
+ *         description: Playlist generada con éxito
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Playlist generada con éxito"
+ *                 data:
+ *                   type: string
+ *                   description: Respuesta de texto cruda generada por la IA
+ *       400:
+ *         description: Faltan datos necesarios
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Faltan datos necesarios"
+ *       500:
+ *         description: Error interno al generar la playlist
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Error llamando a la IA"
+ */
+router.post("/generar-playlist", generarPlaylist);
 
 module.exports = router;

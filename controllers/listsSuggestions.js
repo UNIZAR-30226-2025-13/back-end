@@ -4,7 +4,7 @@ const client = require("../db");
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 const generarPromptCanciones = (playlists, canciones) => `
-Te voy a dar el título de una playlist y una lista de 50 canciones. Cada canción tiene un id, nombre, género e idioma. 
+Te voy a dar el título de una playlist y una lista de 100 canciones. Cada canción tiene un id, nombre, género e idioma. 
 Tu tarea es decir qué canciones de las dadas podrían encajar en la playlist. Teniendo en cuenta su título, el género, idioma e información que tengas de esa canción.
 Tienes que escoger 10 canciones. Tienes que devolver el id de la canción y el nombre.
 
@@ -27,8 +27,35 @@ Canciones:
 ${JSON.stringify(canciones, null, 2)}
 `;
 
+const generarPromptCancionesNuevaPlaylist = (nombre_playlists, contexto, canciones) => `
+Te voy a dar el título de una playlist, un contexto y una lista de 100 canciones. Cada canción tiene un id, nombre, género e idioma. 
+Tu tarea es decir qué canciones de las dadas podrían encajar en la playlist. Teniendo en cuenta su título, el género, idioma y el contexto.
+Tienes que escoger 15 canciones. Tienes que devolver el id de la canción y el nombre.
+
+Devuelve la respuesta con el siguiente formato:
+{
+    canciones: [
+        {
+            id_canción: "id de la canción",
+            nombre: "nombre de la canción"
+        }
+    ]
+}
+
+Solo devuelve el JSON, sin ningún texto adicional.
+
+Nombre de la playlist:
+${JSON.stringify(nombre_playlists, null, 2)}
+
+Contexto:
+${JSON.stringify(contexto, null, 2)}
+
+Canciones:
+${JSON.stringify(canciones, null, 2)}
+`;
+
 const generarPromptEpisodios = (playlists, episodios) => `
-Te voy a dar el título de una playlist de episodios y una lista de 50 episodios de podcasts diferentes. Cada episodio tiene un id, título, id_podcast y descripción. 
+Te voy a dar el título de una playlist de episodios y una lista de 100 episodios de podcasts diferentes. Cada episodio tiene un id, título, id_podcast y descripción. 
 Tu tarea es decir qué episodios de las dadas podrían encajar en la playlist. Teniendo en cuenta su título y la descripción del episodio.
 Tienes que escoger 10 episodios. Tienes que devolver el id del episodio, el título y el id_podcast.
 
@@ -65,7 +92,7 @@ const obtenerCanciones = async () => {
             JOIN Generos g ON c.id_cancion = g.id_cancion
             JOIN Idiomas_multimedia i ON c.id_cancion = i.id_cm
             ORDER BY RANDOM()
-            LIMIT 50;
+            LIMIT 100;
         `);
         return result.rows ?? result; // depende del driver que uses
     } catch (error) {
@@ -85,7 +112,7 @@ const obtenerEpisodios = async () => {
             FROM Episodio e
             JOIN Contenido_multimedia cm ON e.id_ep = cm.id_cm
             ORDER BY RANDOM()
-            LIMIT 50;
+            LIMIT 100;
         `);
         return result.rows ?? result; // depende del driver que uses
     } catch (error) {
@@ -220,7 +247,76 @@ const asignarEpisodios = async (req, res) => {
     }
 };
 
+const generarPlaylist = async (req, res) => {
+    const { nombre_playlist, contexto, color, nombre_usuario } = req.body;
+
+    if (!nombre_playlist || !contexto) {
+        return res.status(400).json({ error: "Faltan datos necesarios" });
+    }
+
+    const canciones = await obtenerCanciones();
+
+    const prompt = generarPromptCancionesNuevaPlaylist(nombre_playlist, contexto, canciones);
+
+    try {
+        const result = await ai.models.generateContent({
+            model: "gemini-2.0-flash",
+            contents: prompt,
+        });
+
+        const respuesta = result.candidates[0]?.content?.parts[0]?.text;
+
+        if (!respuesta) {
+            throw new Error("La respuesta de Gemini no contiene texto");
+        }
+
+        // 🔥 Limpiar los bloques markdown tipo ```json ... ```
+        const jsonLimpio = respuesta.replace(/```json|```/g, "").trim();
+
+        let cancionesAI;
+        try {
+            cancionesAI = JSON.parse(jsonLimpio);
+        } catch (error) {
+            console.error("Error al parsear JSON:", error);
+            console.log("Texto sin parsear:", jsonLimpio);
+            return res.status(500).json({ error: "Respuesta de la IA malformada" });
+        }
+
+        // 1. Crear la nueva playlist
+        const lista = await client.execute(
+            `INSERT INTO Lista_reproduccion (nombre, color) VALUES (?, ?) RETURNING id_lista`,
+            [nombre_playlist, color]
+        );
+
+        const id_lista = lista.rows[0].id_lista;
+
+        await client.execute(`INSERT INTO Playlist (id_playlist) VALUES (?)`, [id_lista]);
+
+        await client.execute(
+            `INSERT INTO Listas_del_usuario (id_lista, nombre_usuario) VALUES (?, ?)`,
+            [id_lista, nombre_usuario]
+        );
+
+        for (const cancion of cancionesAI.canciones) {
+            const id = cancion.id_canción || cancion.id_cancion; // por si responde con acento
+            await client.execute(
+                `INSERT INTO Canciones_en_playlist (id_playlist, id_cancion) VALUES (?, ?)`,
+                [id_lista, id]
+            );
+        }
+
+        return res.status(200).json({
+            message: "Playlist generada con éxito",
+            data: respuesta,
+        });
+    } catch (error) {
+        console.error("Error al generar playlist:", error);
+        res.status(500).json({ error: "Error llamando a la IA" });
+    }
+};
+
 module.exports = {
     asignarCanciones,
     asignarEpisodios,
+    generarPlaylist,
 };
