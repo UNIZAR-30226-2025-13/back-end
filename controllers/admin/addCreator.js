@@ -54,7 +54,7 @@ const uploadCreator = async (req, res) => {
             await client.execute("INSERT INTO Podcaster (nombre_podcaster) VALUES (?)", [
                 nombre_creador,
             ]);
-            await client.execute("INSERT INTO Playlist (id_playlist) VALUES (?)", [
+            await client.execute("INSERT INTO Lista_episodios (id_lista_ep) VALUES (?)", [
                 result_playlist.rows[0].id_lista,
             ]);
         } else {
@@ -62,7 +62,7 @@ const uploadCreator = async (req, res) => {
             await client.execute("INSERT INTO Artista (nombre_artista) VALUES (?)", [
                 nombre_creador,
             ]);
-            await client.execute("INSERT INTO Lista_episodios (id_lista_ep) VALUES (?)", [
+            await client.execute("INSERT INTO Playlist (id_playlist) VALUES (?)", [
                 result_playlist.rows[0].id_lista,
             ]);
         }
