@@ -4,8 +4,7 @@
   "description": "This is the repository with the code of the Backend",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "test": "jest"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
