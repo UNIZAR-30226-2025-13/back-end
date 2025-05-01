@@ -1,16 +1,6 @@
 const client = require('../db');
 const { getRating, getAverageRating } = require('./ratesController');
 
-/*
-por query se me pasa el id del episodio
-
-PANTALLA EPISODIO:
-- titulo
-- podcast (id, nombre, foto)
-- descripcion episodio
-- fecha de publicacion
-*/
-
 // Muestra la información para la pantalla de un episodio
 const getEpisode = async (req, res) => {
     try {
@@ -51,19 +41,6 @@ const getEpisode = async (req, res) => {
     }
 };
 
-/*
-por query se me pasa el usuario y el id del podcast
-
-PANTALLA PODCAST:
-- foto podcast
-- nombre podcast
-- descripcion podcast
-- nombres creadores (1 o más)
-- episodios (id, nombre, (no mostrar)fecha de publicacion(ordenado más reciente), duracion, descripcion)
-- valoraciones del usuario de cada episodio
-- valoraciones generales de cada episodio (media de valoraciones de todos los usuarios)
-*/
-
 // Muestra la información para la pantalla de un podcast
 const getPodcast = async (req, res) => {
     try {
@@ -102,10 +79,18 @@ const getPodcast = async (req, res) => {
             FROM Podcast p
             WHERE p.id_podcast = ?`, [id_podcast]);
         info_podcast = result_podcast_info.rows.map(row => ({
+            id_podcast: id_podcast,
             nombre_podcast: row.nombre,
             descripcion: row.descripcion,
             link_imagen: row.link_imagen
         }))[0];
+        // obtener temáticas del podcast
+        const result_tematica = await client.execute(`
+            SELECT tematica
+            FROM Tematica_podcast
+            WHERE id_podcast = ?`, [id_podcast]);
+        const tematicas = result_tematica.rows.map(row => row.tematica);
+        info_podcast.tematicas = tematicas;
 
         let info_ep = [];
         // mostrar episodios del podcast
