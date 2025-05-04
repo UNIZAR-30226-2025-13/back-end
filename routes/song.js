@@ -59,6 +59,12 @@ const { showSong, showLyrics } = require("../controllers/songController");
  *                 artistas_featuring:
  *                   type: string
  *                   description: Nombres de los artistas en colaboración (separados por coma).
+ *                 idiomas:
+ *                   type: string
+ *                   description: Idiomas de la canción (separados por coma).
+ *                 generos:
+ *                   type: string
+ *                   description: Géneros de la canción (separados por coma).
  *       400:
  *         description: Parámetros inválidos en la solicitud.
  *       500:
