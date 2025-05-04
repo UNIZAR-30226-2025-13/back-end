@@ -193,13 +193,20 @@ router.post("/remove-cm-from", removeCMFromList);
  *     description: Elimina una lista de reproducción si existe en la tabla Playlist o una lista de episodios si está en Lista_Episodios.
  *     tags:
  *       - Lists
- *     parameters:
- *       - in: query
- *         name: id_lista
- *         required: true
- *         schema:
- *           type: string
- *         description: ID de la lista de reproducción o lista de episodios a eliminar.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id_lista
+ *               - contexto
+ *             properties:
+ *               id_lista:
+ *                 type: integer
+ *                 description: ID de la lista de reproducción o lista de episodios a eliminar.
+ *                 example: 1
  *     responses:
  *       200:
  *         description: Lista eliminada correctamente.
