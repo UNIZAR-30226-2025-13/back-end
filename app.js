@@ -14,12 +14,35 @@ const io = new Server(server, {
             "http://localhost:8081",
             "https://front-end-web-5130.onrender.com",
         ],
-        methods: ["GET", "POST", "PUT", "DELETE"],
-        allowedHeaders: ["Content-Type", "Authorization"],
+        methods: ["GET", "POST"],
         credentials: true,
     },
 });
+// Como el frontend está en otro puerto
+const cors = require("cors");
+// Definir los orígenes permitidos
+const allowedOrigins = [
+    "http://localhost:4200",
+    "http://localhost:8081",
+    "https://front-end-web-5130.onrender.com",
+];
 
+// Configurar CORS con una función personalizada
+app.use(
+    cors({
+        origin: function (origin, callback) {
+            // Permitir orígenes que estén en el arreglo o solicitudes sin origen (como las de "same-origin")
+            if (allowedOrigins.includes(origin) || !origin) {
+                callback(null, true); // Origen permitido
+            } else {
+                callback(new Error("No permitido por CORS")); // Origen no permitido
+            }
+        },
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+        credentials: true,
+    })
+);
 
 require("dotenv").config();
 
