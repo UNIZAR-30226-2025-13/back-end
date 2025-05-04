@@ -210,7 +210,7 @@ const removeCMFromList = async (req, res) => {
 
 const deleteList = async (req, res) => {
     try {
-        const { id_lista } = req.query;
+        const { id_lista } = req.body;
 
         // Verificar si la lista existe en Playlist
         const checkPlaylist = await client.execute(
