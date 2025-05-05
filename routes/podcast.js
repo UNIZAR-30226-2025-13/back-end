@@ -102,6 +102,9 @@ router.get('/get-episode', getEpisode);
  *                     items:
  *                       type: object
  *                       properties:
+ *                         id_podcast:
+ *                           type: integer
+ *                           description: Identificador único del podcast
  *                         nombre_podcast:
  *                           type: string
  *                           description: El nombre del podcast.
@@ -111,6 +114,12 @@ router.get('/get-episode', getEpisode);
  *                         link_imagen:
  *                           type: string
  *                           description: Enlace a la imagen del podcast.
+ *                         tematicas:
+ *                           type: array
+ *                           description: Lista de temáticas asociadas al podcast
+ *                           items:
+ *                             type: string
+ *                             description: Nombre de la temática
  *                   episodios:
  *                     type: array
  *                     description: Información sobre los episodios del podcast

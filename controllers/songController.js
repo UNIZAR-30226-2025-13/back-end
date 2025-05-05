@@ -31,6 +31,22 @@ const showSong = async (req, res) => {
         const artistas_feat = artists_result.rows[0]?.artistas_feat
             ? artists_result.rows[0].artistas_feat.split(",").join(", ")
             : "";
+        
+        // Obtener generos e idiomas
+        const generos_result = await client.execute(
+            `SELECT genero 
+             FROM Generos
+             WHERE id_cancion = ?`,
+            [id_cancion]
+        );
+        const idiomas_result = await client.execute(
+            `SELECT idioma 
+             FROM Idiomas_multimedia 
+             WHERE id_cm = ?`,
+            [id_cancion]
+        );
+        const generos = generos_result.rows.map(row => row.genero).join(", ");
+        const idiomas = idiomas_result.rows.map(row => row.idioma).join(", ");
 
         res.status(200).json({
             id_cancion: id_cancion,
@@ -42,6 +58,8 @@ const showSong = async (req, res) => {
             link_imagen: cm_result.rows[0].link_imagen,
             autor: nombre_artista,
             artistas_featuring: artistas_feat,
+            idiomas: idiomas,
+            generos: generos
         });
     } catch (error) {
         console.error("Error al seguir al usuario:", error);

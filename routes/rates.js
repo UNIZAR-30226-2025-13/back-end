@@ -197,7 +197,7 @@ router.post('/delete-rate', deleteRate);
  *             schema:
  *                type: object
  *                properties:
- *                   valoracion:
+ *                   valoracion_media:
  *                     type: integer
  *                     example: 4
  *       400:
