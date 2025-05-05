@@ -7,6 +7,7 @@ const { getSimilarMultimedia } = require("../controllers/buscador/buscadorMultim
 const { getSimilarAlbum } = require("../controllers/buscador/buscadorAlbum");
 const { getSimilarListas } = require("../controllers/buscador/buscadorLista");
 const { getSimilarPodcasts } = require("../controllers/buscador/buscadorPodcast");
+const { getSimilarEpisodios } = require("../controllers/buscador/buscadorEpisodios");
 const { searchGlobal } = require("../controllers/buscador/buscador");
 
 /**
@@ -513,6 +514,68 @@ router.get("/search-lista", getSimilarListas);
  *           message: "Hubo un error al obtener podcasts similares"
  */
 router.get("/search-podcast", getSimilarPodcasts);
+
+/**
+ *  @swagger
+ * /search-episodios:
+ *  get:
+ *    summary: Obtiene episodios similares basados en una cadena de búsqueda
+ *    tags: [Buscador]
+ *    description: Devuelve una lista de episodios que coinciden con una cadena de búsqueda proporcionada. Los resultados incluyen el ID del episodio, el nombre del podcast, la imagen, duración, fecha de publicación y nivel de similitud.
+ *    parameters:
+ *      - in: query
+ *        name: cadena
+ *        required: true
+ *        description: Cadena de texto para buscar episodios similares.
+ *        schema:
+ *          type: string
+ *    responses:
+ *      200:
+ *        description: Lista de episodios similares encontrada correctamente
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                top10Episodios:
+ *                  type: array
+ *                  items:
+ *                    type: object
+ *                    properties:
+ *                      id_cm:
+ *                        type: string
+ *                        description: ID del contenido multimedia (episodio)
+ *                      titulo:
+ *                        type: string
+ *                        description: Título del episodio
+ *                      link_imagen:
+ *                        type: string
+ *                        description: URL de la imagen del episodio
+ *                      duracion:
+ *                        type: integer
+ *                        description: Duración del episodio en segundos
+ *                      fecha_pub:
+ *                        type: string
+ *                        format: date
+ *                        description: Fecha de publicación del episodio
+ *                      similitud:
+ *                        type: number
+ *                        description: Nivel de similitud (menor es más similar)
+ *                      tipo:
+ *                        type: string
+ *                        example: "Episodio"
+ *                      id_podcast:
+ *                        type: string
+ *                        description: ID del podcast al que pertenece
+ *                      podcast:
+ *                        type: string
+ *                        description: Nombre del podcast
+ *      400:
+ *        description: Falta el parámetro requerido `cadena`
+ *      500:
+ *        description: Error interno al buscar episodios similares
+ */
+router.get("/search-episodios", getSimilarEpisodios);
 
 /**
  *   @swagger
