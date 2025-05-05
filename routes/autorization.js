@@ -9,7 +9,6 @@ const router = express.Router();
  *   description: Endpoints relacionados el proceso de autenticación de la aplicación
  */
 
-
 /**
  * @swagger
  * /register:
@@ -118,6 +117,8 @@ router.post("/register", register);
  *                       type: string
  *                     correo:
  *                       type: string
+ *                 es_admin:
+ *                   type: boolean
  *       400:
  *         description: Credenciales incorrectas o campos faltantes.
  *         content:
