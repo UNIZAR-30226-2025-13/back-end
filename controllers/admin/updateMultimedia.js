@@ -151,7 +151,7 @@ const updateMultimedia = async (req, res) => {
                     "DELETE FROM Numero_cancion_en_album WHERE id_cancion = ? AND id_album = ?",
                     [id_cm, id_album]
                 );
-
+                console.log("id_album", id_album);
                 await client.execute(
                     `INSERT INTO Numero_cancion_en_album (id_album, id_cancion, numero_cancion)
                      VALUES (?, ?, COALESCE(
