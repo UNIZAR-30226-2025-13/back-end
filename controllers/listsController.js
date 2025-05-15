@@ -151,7 +151,7 @@ const getListData = async (req, res) => {
 
 const removeCMFromList = async (req, res) => {
     try {
-        const { id_cm, id_lista } = req.query;
+        const { id_cm, id_lista } = req.body;
 
         // Verificar si la lista es de episodios o de canciones
         const checkPlaylistType = await client.execute(
