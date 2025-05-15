@@ -1,6 +1,7 @@
 const client = require("../../db");
 const utils = require("../utils/buscadorUtils");
 const { distance } = require("fastest-levenshtein");
+const { getAverageRating } = require("../ratesController");
 
 const obtenerEpisodiosSimilares = async (cadena) => {
     if (!cadena) {
@@ -39,7 +40,7 @@ const obtenerEpisodiosSimilares = async (cadena) => {
     // Obtener nombres de los podcasts
     const idsTop10 = episodiosSimilares.map((e) => e.id_cm);
     const podcastResult = await client.execute(
-        `SELECT e.id_ep AS id_ep, p.nombre AS nombre_podcast 
+        `SELECT e.id_ep AS id_ep, p.id_podcast,p.nombre AS nombre_podcast, e.descripcion
          FROM Episodio e
          JOIN Podcast p ON e.id_podcast = p.id_podcast
          WHERE e.id_ep IN (${idsTop10.map(() => "?").join(",")})`,
@@ -48,15 +49,27 @@ const obtenerEpisodiosSimilares = async (cadena) => {
 
     const podcastMap = new Map();
     podcastResult.rows.forEach((row) => {
-        podcastMap.set(row.id_ep, row.nombre_podcast);
+        podcastMap.set(row.id_ep, {
+            nombre_podcast: row.nombre_podcast,
+            id_podcast: row.id_podcast,
+            descripcion: row.descripcion,
+        });
     });
 
-    return episodiosSimilares.map((ep) => ({
-        ...ep,
-        tipo: "Episodio",
-        id_podcast: podcastMap.get(ep.id_ep) || null,
-        podcast: podcastMap.get(ep.id_cm) || null,
-    }));
+    return await Promise.all(
+        episodiosSimilares.map(async (ep) => {
+            const info = podcastMap.get(ep.id_cm) || {};
+            const valoracion = await getAverageRating(ep.id_cm);
+            return {
+                ...ep,
+                tipo: "Episodio",
+                podcast: info.nombre_podcast || null,
+                id_podcast: info.id_podcast || null,
+                descripcion: info.descripcion || null,
+                valoracion_media: valoracion,
+            };
+        })
+    );
 };
 
 const getSimilarEpisodios = async (req, res) => {

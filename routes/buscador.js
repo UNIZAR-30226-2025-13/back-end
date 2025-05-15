@@ -570,6 +570,12 @@ router.get("/search-podcast", getSimilarPodcasts);
  *                      podcast:
  *                        type: string
  *                        description: Nombre del podcast
+ *                      descripcion:
+ *                        type: string
+ *                        description: Descripción del episodio
+ *                      valoracion:
+ *                        type: number
+ *                        description: Valoración promedio del episodio
  *      400:
  *        description: Falta el parámetro requerido `cadena`
  *      500:

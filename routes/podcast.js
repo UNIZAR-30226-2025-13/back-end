@@ -39,6 +39,9 @@ const { getEpisode, getPodcast } = require('../controllers/podcastController');
  *                   descripcion:
  *                     type: string
  *                     example: "Descripcion del episodio"
+ *                   idioma:
+ *                     type: string
+ *                     example: "Español"
  *                   fecha_pub:
  *                     type: string
  *                     format: date

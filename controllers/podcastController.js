@@ -20,10 +20,11 @@ const getEpisode = async (req, res) => {
         // mostrar información del episodio
         const result_ep_info = await client.execute(`
             SELECT cm.titulo AS nombre_ep, ep.id_podcast, p.nombre AS nombre_podcast, 
-                   p.link_imagen, ep.descripcion, cm.fecha_pub
+                   p.link_imagen, ep.descripcion, cm.fecha_pub, i.idioma
             FROM Episodio ep
             JOIN Contenido_multimedia cm ON cm.id_cm = ep.id_ep
             JOIN Podcast p ON ep.id_podcast = p.id_podcast
+            JOIN Idiomas_multimedia i on i.id_cm = cm.id_cm
             WHERE ep.id_ep = ?`, [id_ep]);
         info_ep = result_ep_info.rows[0];
         res.status(200).json({
@@ -32,7 +33,8 @@ const getEpisode = async (req, res) => {
             nombre_podcast: info_ep.nombre_podcast,
             link_imagen: info_ep.link_imagen,
             descripcion: info_ep.descripcion,
-            fecha_pub: info_ep.fecha_pub
+            fecha_pub: info_ep.fecha_pub,
+            idioma: info_ep.idioma
         });
 
     } catch (error) {
